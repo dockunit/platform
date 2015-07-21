@@ -7,6 +7,7 @@ var NPromise = require('promise');
 var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var github = require('./github');
+var constants = require('../constants');
 
 var debug = console.log;
 
@@ -144,19 +145,23 @@ Builder.prototype.finish = function() {
 Builder.prototype.startContainer = function() {
 	var self = this;
 
-	debug('Start container');
-
 	return new NPromise(function(fulfill, reject) {
 		debug('Starting git clone');
 
-		debug('Running - git clone https://github.com/' + self.repository + '.git /temp/' + self.repository + '/' + self.commit + ' && cd /temp/' + self.repository + '/' + self.commit + ' && git reset --hard ' + self.commit);
+		debug('Start container');
+
+		var directory = '/temp';
+		if (constants.isDevelopment) {
+			directory = process.env.HOME + '/buildfiles'
+		}
+
+		debug('Running - git clone https://github.com/' + self.repository + '.git ' + directory + '/' + self.repository + '/' + self.commit + ' && cd ' + directory + '/' + self.repository + '/' + self.commit + ' && git reset --hard ' + self.commit);
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
-		exec('git clone https://github.com/' + self.repository + '.git /temp/' + self.repository + '/' + self.commit + ' && cd /temp/' + self.repository + '/' + self.commit + ' && git reset --hard ' + self.commit, function(error, stdout, stderr) {
+		exec('git clone https://github.com/' + self.repository + '.git ' + directory + '/' + self.repository + '/' + self.commit + ' && cd ' + directory + '/' + self.repository + '/' + self.commit + ' && git reset --hard ' + self.commit, function(error, stdout, stderr) {
 			debug('Git clone finished');
 
-			var cmd = spawn('dockunit', [ self.repository]);
-
+			var cmd = spawn('dockunit', [directory + '/' + self.repository + '/' + self.commit]);
 			cmd.stdout.on('data', function(data) {
 				console.log('' + data);
 				self.output += '' + data;
@@ -168,13 +173,15 @@ Builder.prototype.startContainer = function() {
 			});
 
 			function dockunitCallback(code, signal) {
+				console.log(arguments);
+
 				debug('Dockunit command exited with code ' + code);
 				self.outputCode = code;
 
-				exec('rm -rf /temp/' + self.repository + '/' + self.commit, function(error, stdout, stderr) {
+				/*exec('rm -rf ' + directory + '/' + self.repository + '/' + self.commit, function(error, stdout, stderr) {
 					debug('Removed repo files');
 					fulfill(self.output);
-				});
+				});*/
 			}
 
 			cmd.on('exit', dockunitCallback);
