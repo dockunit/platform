@@ -8,6 +8,8 @@ var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var github = require('./github');
 
+var debug = console.log;
+
 var Builder = function(repository, commit, branch, commitUser, user) {
 	var self = this;
 
@@ -146,6 +148,8 @@ Builder.prototype.startContainer = function() {
 
 	return new NPromise(function(fulfill, reject) {
 		debug('Starting git clone');
+
+		debug('Running - git clone https://github.com/' + self.repository + '.git /temp/' + self.repository + '/' + self.commit + ' && cd /temp/' + self.repository + '/' + self.commit + ' && git reset --hard ' + self.commit);
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
 		exec('git clone https://github.com/' + self.repository + '.git /temp/' + self.repository + '/' + self.commit + ' && cd /temp/' + self.repository + '/' + self.commit + ' && git reset --hard ' + self.commit, function(error, stdout, stderr) {
