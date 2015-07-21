@@ -1,0 +1,15 @@
+body {
+	padding-top: 50px;
+	padding-bottom: 20px;
+}
+
+.page-header .breadcrumb-link {
+	display: inline-block;
+	background-color: $gray-lighter;
+	font-size: $font-size-base;
+	padding-top: $padding-base-vertical;
+	padding-bottom: $padding-base-vertical;
+	padding-left: $padding-base-horizontal;
+	padding-right: $padding-base-horizontal;
+	vertical-align: middle;
+}

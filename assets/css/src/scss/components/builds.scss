@@ -1,0 +1,89 @@
+.builds {
+	margin-top: $component-distance;
+}
+
+.build-item:first-child {
+	border-top: 1px solid #ddd;
+}
+
+.build-item:nth-child(even) {
+	background-color: #fff;
+}
+
+.no-builds {
+	text-align: center;
+}
+
+.build-item {
+	overflow: auto;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+	border-bottom: 1px solid #ddd;
+	position: relative;
+	background-color: $gray-lighter;
+	padding-top: $panel-body-padding;
+	padding-bottom: $panel-body-padding;
+	padding-right: $panel-body-padding;
+	padding-left: (30px + $panel-body-padding);
+
+	.status {
+		&.passed {
+			background-color: green;
+		}
+
+		&.failed {
+			background-color: orange;
+		}
+
+		&.errored {
+			background-color: red;
+		}
+
+		&.running {
+			background-color: yellow;
+		}
+
+		display: block;
+		width: 30px;
+		position: absolute;
+		width: 2em;
+		top: 0;
+		left: 0;
+		bottom: 0;
+	}
+
+	.left {
+		float: left;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.right {
+		float: right;
+		text-align: right;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.right .expand {
+		margin-left: $padding-small-horizontal;
+	}
+
+	.build-details {
+		margin-top: $panel-body-padding;
+		overflow: auto;
+		clear: both;
+		padding-top: $panel-body-padding;
+	}
+
+	.build-details .toolbar {
+		text-align: right;
+		margin-bottom: $panel-body-padding;
+	}
+
+	.build-details .output {
+		background-color: #000;
+		color: #fff;
+		padding: $panel-body-padding;
+	}
+}
