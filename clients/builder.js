@@ -173,15 +173,14 @@ Builder.prototype.startContainer = function() {
 			});
 
 			function dockunitCallback(code, signal) {
-				console.log(arguments);
 
 				debug('Dockunit command exited with code ' + code);
 				self.outputCode = code;
 
-				/*exec('rm -rf ' + directory + '/' + self.repository + '/' + self.commit, function(error, stdout, stderr) {
+				exec('rm -rf ' + directory + '/' + self.repository + '/' + self.commit, function(error, stdout, stderr) {
 					debug('Removed repo files');
 					fulfill(self.output);
-				});*/
+				});
 			}
 
 			cmd.on('exit', dockunitCallback);
