@@ -47,10 +47,10 @@ var LatestBuildListItem = React.createClass({
     	var buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
     	
     	var passFail = 'Passed';
-    	if (0 < this.props.build.result) {
-    		passFail = 'Errored';
-    	} else if (255 === this.props.build.result) {
+    	if (255 === this.props.build.result) {
     		passFail = 'Failed';
+    	} else if (0 < this.props.build.result) {
+    		passFail = 'Erroed';
     	}
 
     	var runTime = '';
@@ -79,11 +79,11 @@ var LatestBuildListItem = React.createClass({
 						<h2>Build #{buildIdShort}</h2>
 
 						<div className="item">
-							<If test={this.props.build.result === 2 && this.props.build.finished}>
+							<If test={this.props.build.result === 255 && this.props.build.finished}>
 								<div>Status: <strong>No Dockunit.json file found</strong></div>
 							</If>
 
-							<If test={this.props.build.result !== 2 && this.props.build.finished}>
+							<If test={this.props.build.result !== 255 && this.props.build.finished}>
 								<div>Status: <strong>{passFail} in {runTime}</strong></div>
 							</If>
 
