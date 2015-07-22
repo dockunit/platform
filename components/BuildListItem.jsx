@@ -27,10 +27,10 @@ var BuildListItem = React.createClass({
 		var dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
 
 		if (this.props.build.finished) {
-			if (1 === this.props.build.result) {
-				statusClasses += 'errored';
-			} else if (2 === this.props.build.result) {
+			if (255 === this.props.build.result) {
 				statusClasses += 'failed';
+			} else if (0 < this.props.build.result) {
+				statusClasses += 'errored';
 			} else {
 				statusClasses += 'passed';
 			}

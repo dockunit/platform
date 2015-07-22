@@ -26,10 +26,10 @@ var LatestBuildListItem = React.createClass({
 		var dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
 
 		if (this.props.build.finished) {
-			if (0 < this.props.build.result) {
-				statusClasses += 'glyphicon-remove';
-			} else if (-500 === this.props.build.result) {
+			if (255 === this.props.build.result) {
 				statusClasses += 'glyphicon-exclamation-sign';
+			} else if (0 < this.props.build.result) {
+				statusClasses += 'glyphicon-remove';
 			} else {
 				statusClasses += 'glyphicon-ok';
 			}
@@ -49,7 +49,7 @@ var LatestBuildListItem = React.createClass({
     	var passFail = 'Passed';
     	if (0 < this.props.build.result) {
     		passFail = 'Errored';
-    	} else if ( -500 === this.props.build.result) {
+    	} else if (255 === this.props.build.result) {
     		passFail = 'Failed';
     	}
 

@@ -35,10 +35,10 @@ var ProjectListItem = React.createClass({
 
 			if (latestBuild) {
 				if (latestBuild.finished) {
-					if (0 < latestBuild.result) {
-						statusClasses += 'glyphicon-remove';
-					} else if (-500 === latestBuild.result) {
+					if (255 === latestBuild.result) {
 						statusClasses += 'glyphicon-exclamation-sign';
+					} else if (0 < latestBuild.result) {
+						statusClasses += 'glyphicon-remove';
 					} else {
 						statusClasses += 'glyphicon-ok';
 					}
