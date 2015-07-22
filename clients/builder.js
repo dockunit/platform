@@ -8,6 +8,7 @@ var spawn = require('child_process').spawn;
 var exec = require('child_process').exec;
 var github = require('./github');
 var constants = require('../constants');
+var Convert = require('ansi-to-html');
 
 var debug = console.log;
 
@@ -177,6 +178,9 @@ Builder.prototype.startContainer = function() {
 				debug('Dockunit command exited with code ' + code);
 				self.outputCode = code;
 
+				var convert = new Convert();
+				self.output = convert.toHtml(self.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(\r\n|\n|\r)$/g, ''));
+				
 				exec('rm -rf ' + directory + '/' + self.repository + '/' + self.commit, function(error, stdout, stderr) {
 					debug('Removed repo files');
 					fulfill(self.output);

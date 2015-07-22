@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "MD5": "^1.2.2",
+    "ansi-to-html": "^0.3.0",
     "babel": "^4.6.3",
     "bcryptjs": "^2.1.0",
     "body-parser": "^1.12.2",

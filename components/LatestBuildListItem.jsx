@@ -68,7 +68,7 @@ var LatestBuildListItem = React.createClass({
 			}
     	}
 
-    	var output = this.props.build.output.replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
+    	var output = this.props.build.output.replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 		return (
 			<div className="project-item latest-build jumbo">
