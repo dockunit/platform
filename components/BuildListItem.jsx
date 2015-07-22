@@ -48,7 +48,7 @@ var BuildListItem = React.createClass({
     	var buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
     	var passFail = (this.props.build.result) ? 'Passed' : 'Failed';
 
-    	var output = this.props.build.output.replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
+    	var output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 		return (
 			<div className="build-item">
