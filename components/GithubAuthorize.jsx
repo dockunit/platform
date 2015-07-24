@@ -13,7 +13,7 @@ var GithubAuthorize = React.createClass({
 		var redirect = 'http://dockunit.io/projects/authorize';
 		var clientId = require('../constants').githubClientId;
 
-		var url = 'https://github.com/login/oauth/authorize?client_id=' + clientId + '&amp;scope=admin:repo_hook,admin:org_hook,repo:status&amp;state=' + state + '&amp;redirect_uri=' + redirect;
+		var url = 'https://github.com/login/oauth/authorize?client_id=' + clientId + '&amp;scope=admin:repo_hook,admin:org_hook,repo:status,repo&amp;state=' + state + '&amp;redirect_uri=' + redirect;
 
 		window.document.cookie = 'state=' + state;
 		window.document.location = url;

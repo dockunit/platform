@@ -37,6 +37,11 @@ var AddProjectForm = React.createClass({
 				errors: {},
 				validators: [this.validateRequired('branch')]
 			},
+			private: {
+				value: 'No',
+				errors: {},
+				validators: [this.validateRequired('private')]
+			},
 			csrf: this.getStore(ApplicationStore).getCsrfToken(),
 			repositories: false,
 			projects: this.getStore(ProjectsStore).getProjects()
@@ -122,6 +127,12 @@ var AddProjectForm = React.createClass({
 					validators: this.state.repository.validators
 				};
 
+				state.private = {
+					value: repositories[Object.keys(repositories)[0]].private,
+					errors: {},
+					validators: this.state.private.validators
+				};
+
 				this.executeAction(readGithubRepoBranches, {
 					repository: state.repository.value,
 					token: this.getStore(UserStore).getCurrentUser().githubAccessToken
@@ -169,13 +180,20 @@ var AddProjectForm = React.createClass({
 			};
 		}
 
+		object.private = {
+			value: this.state.repositories[event.target.value].private,
+			errors: {},
+			validators: this.state.private.validators
+		};
+
 		this.setState(object);
 	},
 
 	submit: function() {
 		this.props.onAdd({
 			repository: this.state.repository.value,
-			branch: this.state.branch.value
+			branch: this.state.branch.value,
+			private: ('Yes' === this.state.private.value) ? true : false
 		});
 	},
 
@@ -184,7 +202,7 @@ var AddProjectForm = React.createClass({
 
 		var errors = {};
 
-		['branch', 'repository'].forEach(function(field) {
+		['branch', 'repository', 'private'].forEach(function(field) {
 			var newErrors = self.validate.call(self, field)();
 			errors = _.extend(errors, newErrors);
 		});
@@ -242,6 +260,17 @@ var AddProjectForm = React.createClass({
 							errors={this.state.branch.errors}
 							options={branches}
 							helpText="This branches status will be featured more prominently in your dashboard."
+						/>
+
+						<SelectField
+							label="Private"
+							name="private"
+							onChange={this.handleFormChange}
+							className="form-control"
+							id="private"
+							options={['No', 'Yes']}
+							helpText="Private projects will only be viewable to those who have access to the Github project."
+							errors={this.state.private.errors}
 						/>
 
 						<input
