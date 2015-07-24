@@ -12,7 +12,9 @@ var repos = {
 
 			debug('Get github repos');
 
-			httpInvoke('https://api.github.com/user/repos?access_token=' + token, 'GET', {
+			// @Todo: Need to paginate
+
+			httpInvoke('https://api.github.com/user/repos?per_page=300&access_token=' + token, 'GET', {
 				headers: {
 					'User-Agent': 'Dockunit'
 				}
