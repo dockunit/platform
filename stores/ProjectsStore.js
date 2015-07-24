@@ -66,6 +66,20 @@ var ProjectsStore = createStore({
 		return this.projects;
 	},
 
+	getMyProjects: function() {
+		this.projects = this.projects || {};
+
+		var myProjects = {};
+
+		for (var repo in this.projects) {
+			if (this.projects[repo].mine) {
+				myProjects[repo] = this.projects[repo];
+			}
+		}
+
+		return this.projects;
+	},
+
 	dehydrate: function() {
 		return this.getState();
 	},

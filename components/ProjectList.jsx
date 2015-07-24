@@ -17,13 +17,13 @@ var Projects = React.createClass({
 
 	getInitialState: function () {
 		return {
-			projects: this.getStore(ProjectsStore).getProjects()
+			projects: this.getStore(ProjectsStore).getMyProjects()
 		};
 	},
 
 	onProjectsStoreChange: function() {
 		this.setState({
-			projects: this.getStore(ProjectsStore).getProjects()
+			projects: this.getStore(ProjectsStore).getMyProjects()
 		});
 	},
 

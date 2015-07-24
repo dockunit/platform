@@ -7,6 +7,7 @@ var github = require('../clients/github');
 var NPromise = require('promise');
 var kue = require('kue');
 var queue = kue.createQueue();
+var github = require('../clients/github');
 
 module.exports = {
 	name: 'projects',
@@ -71,8 +72,23 @@ module.exports = {
 				projects.forEach(function(project) {
 					project.mine = false;
 
-					if (user && String(user._id) === String(project.user)) {
-						project.mine = true;
+					if (user && user.githubAccessToken) {
+						if (String(user._id) === String(project.user)) {
+							project.mine = true;
+						} else {
+							if (project.private) {
+								/**
+								 * Logged in but this is not our project and it's private
+								 * we need to see if our Github account has perms
+								 */
+
+								/*github.repos.get(user.githubAccessToken).then(function(repos) {
+									callback(false, repos);
+								}, function() {
+									callback(true);
+								});*/
+							}
+						}
 					} else {
 						if (project.private) {
 							return false;
