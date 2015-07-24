@@ -11,7 +11,8 @@ var builds= Schema({
 	commitUser: { type: String, required: true },
 	output: { type: Object, required: true },
 	result: { type: Number, default: 0 },
-	passed: { type: Boolean, default: false }
+	passed: { type: Boolean, default: false },
+	private: { type: Boolean, default: false }
 });
 
 var schema = Schema({

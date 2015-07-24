@@ -25,10 +25,8 @@ var repos = {
 
 					var repos = {};
 					for (var i = 0; i < bodyObject.length; i++) {
-						if (bodyObject[i].permissions.admin) {
-							repos[bodyObject[i].full_name] = bodyObject[i];
-							repos[bodyObject[i].full_name].branches = [];
-						}
+						repos[bodyObject[i].full_name] = bodyObject[i];
+						repos[bodyObject[i].full_name].branches = [];
 					}
 
 					fulfill(repos);
@@ -70,7 +68,8 @@ var webhooks = {
 				name: 'web',
 				active: true,
 				events: [
-					'push'
+					'push',
+					'public'
 				],
 				config: {
 					url: 'http://dockunit.io/webhooks',

@@ -13,7 +13,7 @@ module.exports = function(context, payload, done) {
 		context.dispatch('CREATE_PROJECT_SUCCESS', response.project);
 
 		navigate(context, {
-	        url: '/projects/' + response.user + '/' + payload.repository.replace(/^.*?\/(.*)$/, '$1')
+	        url: '/projects/' + payload.repository
 	    }, function() {
 	    	context.service.create('builds', payload, {}, function() {
 				done();

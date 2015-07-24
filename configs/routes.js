@@ -165,18 +165,18 @@ module.exports = {
 			var user = actionContext.getStore(UserStore).getCurrentUser(),
 				navKey;
 
-			if (!user) {
+			/*if (!user) {
 				navKey = 'login';
 
 				payload.name = navKey;
 				payload.url = module.exports[navKey].path;
 				payload.config = module.exports[navKey];
 				payload.redirectPath = '/projects/' + payload.params[0] + '/' + payload.params[1];
-			} else {
-				payload.redirectPath = '/projects/' + payload.params[0] + '/' + payload.params[1];
-				payload.config = _.extend({}, payload.config);
-				payload.config.path = payload.redirectPath;
-			}
+			} else {*/
+			payload.redirectPath = '/projects/' + payload.params[0] + '/' + payload.params[1];
+			payload.config = _.extend({}, payload.config);
+			payload.config.path = payload.redirectPath;
+			//}
 
 			loadPage(actionContext, payload, done);
 		}

@@ -123,6 +123,15 @@ fetchrPlugin.registerService(require('./services/builds'));
 // Set up the fetchr middleware
 server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
+server.get('/*.svg', function(req, res, next) {
+	var ImageBuilder = require('./clients/image-builder');
+
+	var image = new ImageBuilder(req);
+
+    res.write(image.toString());
+    res.end();
+});
+
 // Handle login
 server.post('/login', function(req, res, next) {
 	passport.authenticate('local', function(error, user, info) {
