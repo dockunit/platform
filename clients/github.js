@@ -5,6 +5,7 @@ var debug = require('debug')('dockunit');
 var constants = require('../constants');
 var querystring = require('querystring');
 var constants = require('../constants');
+var parseLinkHeader = require('parse-link-header');
 
 var repos = {
 	get: function(token) {
@@ -12,28 +13,37 @@ var repos = {
 
 			debug('Get github repos');
 
-			// @Todo: Need to paginate
+			var repos = {};
 
-			httpInvoke('https://api.github.com/user/repos?per_page=300&access_token=' + token, 'GET', {
-				headers: {
-					'User-Agent': 'Dockunit'
-				}
-			}, function(error, body, statusCode, headers) {
-				if (error) {
-					debug('Failed to get Github repos: ' + error);
-					reject(error);
-				} else {
-					var bodyObject = JSON.parse(body);
-
-					var repos = {};
-					for (var i = 0; i < bodyObject.length; i++) {
-						repos[bodyObject[i].full_name] = bodyObject[i];
-						repos[bodyObject[i].full_name].branches = [];
+			function fetch(page) {
+				httpInvoke('https://api.github.com/user/repos?page=' + page + '&access_token=' + token, 'GET', {
+					headers: {
+						'User-Agent': 'Dockunit'
 					}
+				}, function(error, body, statusCode, headers) {
+					if (error) {
+						debug('Failed to get Github repos: ' + error);
+						reject(error);
+					} else {
+						var parsedHeaders = (headers.link) ? parseLinkHeader(headers.link) : {};
 
-					fulfill(repos);
-				}
-			});
+						var bodyObject = JSON.parse(body);
+
+						for (var i = 0; i < bodyObject.length; i++) {
+							repos[bodyObject[i].full_name] = bodyObject[i];
+							repos[bodyObject[i].full_name].branches = [];
+						}
+
+						if (parsedHeaders.next) {
+							fetch(parsedHeaders.next.page);
+						} else {
+							fulfill(repos);
+						}
+					}
+				});
+			}
+
+			fetch(1);
 		});
 	}
 };

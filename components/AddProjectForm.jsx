@@ -145,6 +145,12 @@ var AddProjectForm = React.createClass({
 					errors: {},
 					validators: this.state.repository.validators
 				};
+
+				state.private = {
+					value: repositories[this.state.repository.value].private,
+					errors: {},
+					validators: this.state.private.validators
+				};
 			}
 
 			this.setState(state);
