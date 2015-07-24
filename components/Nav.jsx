@@ -48,7 +48,9 @@ var Nav = React.createClass({
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<NavLink className="navbar-brand" routeName="home">Dockunit.io</NavLink>
+						<NavLink className="navbar-brand" routeName="home">
+							<img src="/public/img/logo.png" />
+						</NavLink>
 					</div>
 					<div id="navbar" className="navbar-collapse collapse">
 						<ul className="nav navbar-nav">

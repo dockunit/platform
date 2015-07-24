@@ -19,6 +19,16 @@
 	}
 }
 
+.navbar-brand {
+	padding: 0;
+	vertical-align: middle;
+	line-height: 50px;
+}
+
+.navbar-brand > img {
+	display: inline-block;
+}
+
 .navbar-user {
 	display: inline-block;
 	float: right;
