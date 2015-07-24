@@ -13,7 +13,7 @@ var GithubAuthorize = require('./GithubAuthorize.jsx');
 var ApplicationStore = require('../stores/ApplicationStore');
 var RouterMixin = require('flux-router-component').RouterMixin;
 var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
-var readProjects = require('../actions/readProjects');
+var readMyProjects = require('../actions/readMyProjects');
 var UserStore = require('../stores/UserStore');
 
 var Application = React.createClass({
@@ -28,7 +28,7 @@ var Application = React.createClass({
 
     getInitialState: function() {
         if (this.getStore(UserStore).getCurrentUser()) {
-            this.executeAction(readProjects);
+            this.executeAction(readMyProjects, { mine: true });
         }
 
         return this.getState();

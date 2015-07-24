@@ -29,6 +29,7 @@ module.exports = {
 		
 		project.repository = params.repository;
 		project.branch = params.branch;
+		project.private = params.private;
 		project.user = user._id;
 
 		project.save(function(error) {
@@ -43,13 +44,23 @@ module.exports = {
 	read: function(req, resource, params, config, callback) {
 		debug('Read projects');
 
-		var user = req.user;
+		var query = {};
+		var user = req.user || false;
 
-		if (!user) {
-			callback('Not logged in');
+		if (params.mine) {
+			if (!user) {
+				callback('Not logged in');
+				return;
+			}
+
+			query.user = user._id;
 		}
 
-		Project.find({ user: user._id }).sort('-created').exec(function(error, projects) {
+		if (params.repository) {
+			query.repository = params.repository;
+		}
+
+		Project.find(query).sort('-created').exec(function(error, projects) {
 			if (error) {
 				debug('No projects found for ' + user._id);
 
@@ -58,6 +69,16 @@ module.exports = {
 				var projectObjects = {};
 					
 				projects.forEach(function(project) {
+					project.mine = false;
+
+					if (user && String(user._id) === String(project.user)) {
+						project.mine = true;
+					} else {
+						if (project.private) {
+							return false;
+						}
+					}
+
 					projectObjects[project.repository] = project;
 				});
 

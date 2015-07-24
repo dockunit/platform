@@ -3,7 +3,7 @@
 var mongoose = require('mongoose'),
 	Schema = mongoose.Schema;
 
-var builds= Schema({
+var builds = Schema({
 	ran: { type: Date, default: Date.now },
 	finished: { type: Date },
 	commit: { type: String, required: true },
@@ -11,8 +11,7 @@ var builds= Schema({
 	commitUser: { type: String, required: true },
 	output: { type: Object, required: true },
 	result: { type: Number, default: 0 },
-	passed: { type: Boolean, default: false },
-	private: { type: Boolean, default: false }
+	passed: { type: Boolean, default: false }
 });
 
 var schema = Schema({
@@ -24,7 +23,8 @@ var schema = Schema({
         type: Schema.ObjectId,
         ref: 'User'
     },
-    builds: [builds]
+    builds: [builds],
+	private: { type: Boolean, default: false }
 });
 
 module.exports = global.db.model('Project', schema);

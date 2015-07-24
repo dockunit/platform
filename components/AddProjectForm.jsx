@@ -128,7 +128,7 @@ var AddProjectForm = React.createClass({
 				};
 
 				state.private = {
-					value: repositories[Object.keys(repositories)[0]].private,
+					value: (repositories[Object.keys(repositories)[0]].private) ? 'Yes' : 'No',
 					errors: {},
 					validators: this.state.private.validators
 				};
@@ -147,7 +147,7 @@ var AddProjectForm = React.createClass({
 				};
 
 				state.private = {
-					value: repositories[this.state.repository.value].private,
+					value: (repositories[this.state.repository.value].private) ? 'Yes' : 'No',
 					errors: {},
 					validators: this.state.private.validators
 				};
@@ -187,7 +187,7 @@ var AddProjectForm = React.createClass({
 		}
 
 		object.private = {
-			value: this.state.repositories[event.target.value].private,
+			value: (this.state.repositories[event.target.value].private) ? 'Yes' : 'No',
 			errors: {},
 			validators: this.state.private.validators
 		};

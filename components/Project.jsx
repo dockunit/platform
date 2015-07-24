@@ -6,6 +6,7 @@ var BuildList = require('./BuildList');
 var If = require('./If');
 var ProjectsStore = require('../stores/ProjectsStore');
 var NavLink = require('flux-router-component').NavLink;
+var readProject = require('../actions/readProject');
 
 var Project = React.createClass({
 	mixins: [FluxibleMixin],
@@ -17,17 +18,20 @@ var Project = React.createClass({
 	},
 
 	onProjectsStoreChange: function() {
-		var projects = this.getStore(ProjectsStore).getProjects();
+		var projects = this.getStore(ProjectsStore).getProjects(),
+			state = {};
 
-		if (projects) {
-			var state = { project: projects[this.props.repository] };
+		if (projects && projects[this.props.repository]) {
+			state.project = projects[this.props.repository];
 
 			if (!this.statecurrentBranch) {
 				state.currentBranch = projects[this.props.repository].branch;
 			}
-
-			this.setState(state);
+		} else {
+			state.project = false;
 		}
+
+		this.setState(state);
 	},
 
 	getInitialState: function() {
@@ -41,6 +45,8 @@ var Project = React.createClass({
 		if (projects && projects[this.props.repository]) {
 			state.project = projects[this.props.repository];
 			state.currentBranch = state.project.branch;
+		} else {
+			this.executeAction(readProject, { repository: this.props.repository });
 		}
 
 		return state;
@@ -79,9 +85,9 @@ var Project = React.createClass({
             <div className="container">
 				<h1 className="page-header"><NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> {this.props.repository}</h1>
 
-				<If test={this.state.project instanceof Object && Object.keys(this.state.project).length === 0}>
-					<div className="no-project">
-						<h2>An error has occured. Sorry!</h2>
+				<If test={false === this.state.project}>
+					<div className="no-projects">
+						<h3>We couldn't find this project. Maybe you don't have access?</h3>
 					</div>
 				</If>
 

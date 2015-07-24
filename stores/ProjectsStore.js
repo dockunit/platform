@@ -1,12 +1,14 @@
 'use strict';
 
 var createStore = require('fluxible/addons').createStore;
+var _ = require('lodash');
 
 var ProjectsStore = createStore({
 	storeName: 'ProjectsStore',
 
 	handlers: {
-		'READ_PROJECTS_SUCCESS': 'readProjectsSuccess',
+		'READ_MY_PROJECTS_SUCCESS': 'readMyProjectsSuccess',
+		'READ_PROJECT_SUCCESS': 'readProjectSuccess',
 		'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
 		'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
 		'NEW_PROJECT_BUILD': 'newProjectBuild'
@@ -32,8 +34,16 @@ var ProjectsStore = createStore({
 		this.emitChange();
 	},
 
-	readProjectsSuccess: function(projects) {
+	readMyProjectsSuccess: function(projects) {
 		this.projects = projects;
+		this.emitChange();
+	},
+
+	readProjectSuccess: function(project) {
+		this.projects = this.projects || {};
+
+		this.projects = _.extend(this.projects, project);
+
 		this.emitChange();
 	},
 
