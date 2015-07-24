@@ -19,8 +19,6 @@ var Webhooks = function() {
 
 		debug('Received webhooks request');
 
-		console.log(req.body);
-
 		var stepIndex = 0;
 
 		var steps = [

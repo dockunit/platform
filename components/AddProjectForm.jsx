@@ -226,6 +226,11 @@ var AddProjectForm = React.createClass({
 			branches = Object.keys(this.state.repositories[this.state.repository.value].branches);
 		}
 
+		var statuses = ['No', 'Yes'];
+		if (this.state.repository.value && this.state.repositories[this.state.repository.value] && this.state.repositories[this.state.repository.value].private) {
+			statuses = ['Yes', 'No'];
+		}
+
 		return (
 			<div className="container">
 				<div className="page-header">
@@ -274,7 +279,7 @@ var AddProjectForm = React.createClass({
 							onChange={this.handleFormChange}
 							className="form-control"
 							id="private"
-							options={['No', 'Yes']}
+							options={statuses}
 							helpText="Private projects will only be viewable to those who have access to the Github project."
 							errors={this.state.private.errors}
 						/>
