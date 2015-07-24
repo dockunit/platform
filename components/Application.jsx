@@ -51,7 +51,7 @@ var Application = React.createClass({
 
     onUserStoreChange: function() {
         if (this.getStore(UserStore).getCurrentUser()) {
-            this.executeAction(readProjects);
+            this.executeAction(readMyProjects);
         }
     },
 
