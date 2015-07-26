@@ -93,13 +93,13 @@ var Project = React.createClass({
 
 				<If test={null === this.state.project}>
 					<div className="loading-section">
-						<h2>Hey there, we are loading your project. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h2>
+						<h3>Hey there, we are loading your project. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h3>
 					</div>
 				</If>
 
 				<If test={this.state.project && !this.state.project.builds.length}>
 					<div className="no-builds">
-						<h2>This project currently has no builds. Sorry!</h2>
+						<h3>This project currently has no builds. Sorry!</h3>
 					</div>
 				</If>
 
