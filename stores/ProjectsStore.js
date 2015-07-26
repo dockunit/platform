@@ -51,7 +51,7 @@ var ProjectsStore = createStore({
 
 	readProjectFailure: function(params) {
 		this.projectsNotFound[params.repository] = true;
-		
+
 		this.emitChange();
 	},
 
@@ -73,6 +73,10 @@ var ProjectsStore = createStore({
 
 	getProjects: function() {
 		return this.projects;
+	},
+
+	getProjectsNotFound: function() {
+		return this.projectsNotFound;
 	},
 
 	getMyProjects: function() {

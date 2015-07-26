@@ -19,6 +19,7 @@ var Project = React.createClass({
 
 	onProjectsStoreChange: function() {
 		var projects = this.getStore(ProjectsStore).getProjects(),
+			projectsNotFound = this.getStore(ProjectsStore).getProjectsNotFound(),
 			state = {};
 
 		if (projects && projects[this.props.repository]) {
@@ -27,7 +28,7 @@ var Project = React.createClass({
 			if (!this.statecurrentBranch) {
 				state.currentBranch = projects[this.props.repository].branch;
 			}
-		} else {
+		} else if (projectsNotFound[this.props.repository]) {
 			state.project = false;
 		}
 
