@@ -7,7 +7,7 @@ var isDevelopment = false;
 
 if (process.env.BASE_URL) {
 	baseUrl = process.env.BASE_URL;
-} else if (process.env.NODE_ENV && 'dev' === process.env.NODE_ENV) {
+} else if (process.env.NODE_ENV && 'production' !== process.env.NODE_ENV) {
 	baseUrl = 'http://localhost:3000';
 	isDevelopment = true;
 }

@@ -1,5 +1,15 @@
 var webpack = require('webpack');
 
+var plugins = [];
+
+plugins.push(
+	new webpack.DefinePlugin({
+		'process.env': {
+			NODE_ENV: JSON.stringify(process.env.NODE_ENV)
+		}
+	})
+);
+
 module.exports = {
 	resolve: {
 		extensions: ['', '.js', '.jsx']
@@ -20,6 +30,7 @@ module.exports = {
 	stats: {
 		colors: true
 	},
+	plugins: plugins,
 	node: {
 		fs: 'empty',
 		net: 'empty',
