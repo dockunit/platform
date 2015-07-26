@@ -9,8 +9,6 @@ var kue = require('kue');
 var queue = kue.createQueue();
 var github = require('../clients/github');
 
-var debug = console.log;
-
 module.exports = {
 	name: 'projects',
 	create: function (req, resource, params, body, config, callback) {
