@@ -1,13 +1,14 @@
 'use strict';
 var React = require('react');
 var ProjectsStore = require('../stores/ProjectsStore');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var ProjectListItem = require('./ProjectListItem');
 var If = require('./If');
 var NavLink = require('flux-router-component').NavLink;
 
 var Projects = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	statics: {
 		storeListeners: {
@@ -17,13 +18,13 @@ var Projects = React.createClass({
 
 	getInitialState: function () {
 		return {
-			projects: this.getStore(ProjectsStore).getMyProjects()
+			projects: this.context.getStore(ProjectsStore).getMyProjects()
 		};
 	},
 
 	onProjectsStoreChange: function() {
 		this.setState({
-			projects: this.getStore(ProjectsStore).getMyProjects()
+			projects: this.context.getStore(ProjectsStore).getMyProjects()
 		});
 	},
 

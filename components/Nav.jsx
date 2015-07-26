@@ -1,12 +1,13 @@
 'use strict';
 var React = require('react');
 var NavLink = require('flux-router-component').NavLink;
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var UserNav = require('./UserNav');
 var If = require('./If');
 
 var Nav = React.createClass({
-	mixins: [ FluxibleMixin ],
+	contextTypes: {
+        getStore: React.PropTypes.func.isRequired
+    },
 
     getDefaultProps: function () {
         return {

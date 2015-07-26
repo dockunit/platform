@@ -1,15 +1,16 @@
 'use strict';
 var React = require('react');
 var AddProjectForm = require('./AddProjectForm.jsx');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var createProject = require('../actions/createProject');
 var navigate = require('flux-router-component').navigateAction;
 
 var AddProject = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        executeAction: React.PropTypes.func.isRequired
+    },
 
 	add: function(project, done) {
-		this.executeAction(createProject, project);
+		this.context.executeAction(createProject, project);
 	},
 
 	render: function() {

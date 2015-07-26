@@ -1,17 +1,14 @@
 'use strict';
 var React = require('react');
 var ApplicationStore = require('../stores/ApplicationStore');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 
 var Html = React.createClass({
-    mixins: [FluxibleMixin],
-
     render: function() {
         return (
             <html>
             <head>
                 <meta charSet="utf-8"  />
-                <title>{this.getStore(ApplicationStore).getPageTitle()}</title>
+                <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="apple-touch-icon" sizes="57x57" href="/public/img/apple-icon-57x57.png" />
                 <link rel="apple-touch-icon" sizes="60x60" href="/public/img/apple-icon-60x60.png" />

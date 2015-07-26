@@ -3,18 +3,19 @@ var React = require('react');
 var RegisterForm = require('./RegisterForm.jsx');
 var UserStore = require('../stores/UserStore');
 var createUser = require('../actions/createUser');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var navigate = require('flux-router-component').navigateAction;
 
 var Register = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        executeAction: React.PropTypes.func.isRequired
+    },
 
 	register: function(user) {
-		this.executeAction(createUser, user);
+		this.context.executeAction(createUser, user);
 	},
 
 	success: function() {
-		this.executeAction(navigate, {
+		this.context.executeAction(navigate, {
 	        url: '/login'
 	    });
 	},

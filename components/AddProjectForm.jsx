@@ -1,6 +1,5 @@
 'use strict';
 var React = require('react');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var UserStore = require('../stores/UserStore');
 var ProjectsStore = require('../stores/ProjectsStore');
 var ApplicationStore = require('../stores/ApplicationStore');
@@ -14,7 +13,10 @@ var SubmitButton = require('./SubmitButton');
 var _ = require('lodash');
 
 var AddProjectForm = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        executeAction: React.PropTypes.func.isRequired,
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	statics: {
 		storeListeners: {
@@ -24,7 +26,7 @@ var AddProjectForm = React.createClass({
 	},
 
 	getInitialState: function () {
-		this.executeAction(readGithubRepositories, { token: this.getStore(UserStore).getCurrentUser().githubAccessToken });
+		this.context.executeAction(readGithubRepositories, { token: this.context.getStore(UserStore).getCurrentUser().githubAccessToken });
 
 		return {
 			repository: {
@@ -42,15 +44,15 @@ var AddProjectForm = React.createClass({
 				errors: {},
 				validators: [this.validateRequired('private')]
 			},
-			csrf: this.getStore(ApplicationStore).getCsrfToken(),
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
 			repositories: false,
-			projects: this.getStore(ProjectsStore).getProjects()
+			projects: this.context.getStore(ProjectsStore).getProjects()
 		};
 	},
 
 	onApplicationStoreChange: function() {
 		var state = {
-			csrf: this.getStore(ApplicationStore).getCsrfToken()
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken()
 		};
 
 		this.setState(state);
@@ -100,10 +102,10 @@ var AddProjectForm = React.createClass({
 	},
 
 	onUserStoreChange: function() {
-		var user = this.getStore(UserStore).getCurrentUser();
+		var user = this.context.getStore(UserStore).getCurrentUser();
 
 		if (user.repositories) {
-			var projects = this.getStore(ProjectsStore).getProjects();
+			var projects = this.context.getStore(ProjectsStore).getProjects();
 			var repositories = user.repositories;
 
 			if (repositories && Object.keys(repositories)) {
@@ -133,9 +135,9 @@ var AddProjectForm = React.createClass({
 					validators: this.state.private.validators
 				};
 
-				this.executeAction(readGithubRepoBranches, {
+				this.context.executeAction(readGithubRepoBranches, {
 					repository: state.repository.value,
-					token: this.getStore(UserStore).getCurrentUser().githubAccessToken
+					token: this.context.getStore(UserStore).getCurrentUser().githubAccessToken
 				});
 			}
 
@@ -174,9 +176,9 @@ var AddProjectForm = React.createClass({
 		};
 
 		if (!_.size(this.state.repositories[event.target.value].branches)) {
-			this.executeAction(readGithubRepoBranches, {
+			this.context.executeAction(readGithubRepoBranches, {
 				repository: event.target.value,
-				token: this.getStore(UserStore).getCurrentUser().githubAccessToken
+				token: this.context.getStore(UserStore).getCurrentUser().githubAccessToken
 			});
 		} else {
 			object.branch = {

@@ -3,12 +3,13 @@ var React = require('react');
 var NavLink = require('flux-router-component').NavLink;
 var UserStore = require('../stores/UserStore');
 var ApplicationStore = require('../stores/ApplicationStore');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var If = require('./If');
 var ImageLoader = require('react-imageloader');
 
 var UserNav = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	statics: {
 		storeListeners: {
@@ -26,16 +27,16 @@ var UserNav = React.createClass({
 
 	getInitialState: function() {
 		return {
-			currentUser: this.getStore(UserStore).getCurrentUser(),
-			csrf: this.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.getStore(ApplicationStore).getCurrentRoute().config.path,
+			currentUser: this.context.getStore(UserStore).getCurrentUser(),
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
+			redirectPath: this.context.getStore(ApplicationStore).getCurrentRoute().config.path,
 			passwordClasses: this.getPasswordClasses(),
-			loginStatus: this.getStore(UserStore).getLoginHeaderStatus()
+			loginStatus: this.context.getStore(UserStore).getLoginHeaderStatus()
 		};
 	},
 
 	getPasswordClasses: function() {
-		var loginStatus = this.getStore(UserStore).getLoginHeaderStatus();
+		var loginStatus = this.context.getStore(UserStore).getLoginHeaderStatus();
 
 		if (1 === loginStatus) {
 			return 'navbar-form navbar-right failed-login';
@@ -46,7 +47,7 @@ var UserNav = React.createClass({
 
 	onUserStoreChange: function () {
 		var newState = {};
-		newState.currentUser = this.getStore(UserStore).getCurrentUser();
+		newState.currentUser = this.context.getStore(UserStore).getCurrentUser();
 		newState.passwordClasses = this.getPasswordClasses();
 
 		this.setState(newState);
@@ -54,8 +55,8 @@ var UserNav = React.createClass({
 
 	onApplicationStoreChange: function () {
 		var newState = {
-			csrf: this.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.getStore(ApplicationStore).getCurrentRoute().config.path
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
+			redirectPath: this.context.getStore(ApplicationStore).getCurrentRoute().config.path
 		};
 
 		this.setState(newState);

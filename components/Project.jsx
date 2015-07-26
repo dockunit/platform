@@ -1,6 +1,5 @@
 'use strict';
 
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var React = require('react');
 var BuildList = require('./BuildList');
 var If = require('./If');
@@ -10,7 +9,9 @@ var NavLink = require('flux-router-component').NavLink;
 var readProject = require('../actions/readProject');
 
 var Project = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	statics: {
 		storeListeners: {
@@ -20,8 +21,8 @@ var Project = React.createClass({
 	},
 
 	onProjectsStoreChange: function() {
-		var projects = this.getStore(ProjectsStore).getProjects(),
-			projectsNotFound = this.getStore(ProjectsStore).getProjectsNotFound(),
+		var projects = this.context.getStore(ProjectsStore).getProjects(),
+			projectsNotFound = this.context.getStore(ProjectsStore).getProjectsNotFound(),
 			state = {};
 
 		if (projects && projects[this.props.repository]) {
@@ -39,25 +40,25 @@ var Project = React.createClass({
 
 	onUserStoreChange: function () {
 		var newState = {};
-		newState.currentUser = this.getStore(UserStore).getCurrentUser();
+		newState.currentUser = this.context.getStore(UserStore).getCurrentUser();
 
 		this.setState(newState);
 	},
 
 	getInitialState: function() {
-		var projects = this.getStore(ProjectsStore).getProjects();
+		var projects = this.context.getStore(ProjectsStore).getProjects();
 
 		var state = {
 			project: null,
 			currentBranch: null,
-			currentUser: this.getStore(UserStore).getCurrentUser()
+			currentUser: this.context.getStore(UserStore).getCurrentUser()
 		};
 
 		if (projects && projects[this.props.repository]) {
 			state.project = projects[this.props.repository];
 			state.currentBranch = state.project.branch;
 		} else {
-			this.executeAction(readProject, { repository: this.props.repository });
+			this.context.executeAction(readProject, { repository: this.props.repository });
 		}
 
 		return state;

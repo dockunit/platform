@@ -12,12 +12,11 @@ var Project = require('./Project.jsx');
 var GithubAuthorize = require('./GithubAuthorize.jsx');
 var ApplicationStore = require('../stores/ApplicationStore');
 var RouterMixin = require('flux-router-component').RouterMixin;
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var readMyProjects = require('../actions/readMyProjects');
 var UserStore = require('../stores/UserStore');
 
 var Application = React.createClass({
-    mixins: [RouterMixin, FluxibleMixin],
+    mixins: [RouterMixin],
 
     statics: {
         storeListeners: {
@@ -26,16 +25,21 @@ var Application = React.createClass({
         }
     },
 
+    contextTypes: {
+        executeAction: React.PropTypes.func.isRequired,
+        getStore: React.PropTypes.func.isRequired
+    },
+
     getInitialState: function() {
-        if (this.getStore(UserStore).getCurrentUser()) {
-            this.executeAction(readMyProjects, { mine: true });
+        if (this.context.getStore(UserStore).getCurrentUser()) {
+            this.context.executeAction(readMyProjects, { mine: true });
         }
 
         return this.getState();
     },
 
     getState: function() {
-        var appStore = this.getStore(ApplicationStore);
+        var appStore = this.context.getStore(ApplicationStore);
 
         return {
             currentPageName: appStore.getCurrentPageName(),
@@ -50,8 +54,8 @@ var Application = React.createClass({
     },
 
     onUserStoreChange: function() {
-        if (this.getStore(UserStore).getCurrentUser()) {
-            this.executeAction(readMyProjects);
+        if (this.context.getStore(UserStore).getCurrentUser()) {
+            this.context.executeAction(readMyProjects);
         }
     },
 

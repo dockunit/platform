@@ -3,11 +3,12 @@
 var React = require('react');
 var ApplicationStore = require('../stores/ApplicationStore');
 var UserStore = require('../stores/UserStore');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var If = require('./If');
 
 var LoginForm = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	statics: {
 		storeListeners: {
@@ -18,15 +19,15 @@ var LoginForm = React.createClass({
 
 	getInitialState: function() {
 		return {
-			csrf: this.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.getStore(ApplicationStore).getRedirectPath(),
-			loginStatus: this.getStore(UserStore).getLoginFormStatus()
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
+			redirectPath: this.context.getStore(ApplicationStore).getRedirectPath(),
+			loginStatus: this.context.getStore(UserStore).getLoginFormStatus()
 		};
 	},
 
 	onUserStoreChange: function() {
 		var newState = {
-			loginStatus: this.getStore(UserStore).getLoginStatus()
+			loginStatus: this.context.getStore(UserStore).getLoginStatus()
 		};
 
 		this.setState(newState);
@@ -34,8 +35,8 @@ var LoginForm = React.createClass({
 
 	onApplicationStoreChange: function() {
 		var newState = {
-			csrf: this.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.getStore(ApplicationStore).getRedirectPath()
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
+			redirectPath: this.context.getStore(ApplicationStore).getRedirectPath()
 		};
 
 		this.setState(newState);

@@ -1,15 +1,16 @@
 'use strict';
 var React = require('react');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var UserStore = require('../stores/UserStore');
 
 var GithubAuthorize = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	handleClick: function(event) {
 		event.preventDefault();
 
-		var state = this.getStore(UserStore).getCurrentUser().githubStateToken;
+		var state = this.context.getStore(UserStore).getCurrentUser().githubStateToken;
 		var redirect = 'http://dockunit.io/projects/authorize';
 		var clientId = require('../constants').githubClientId;
 

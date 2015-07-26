@@ -36,6 +36,7 @@ var updateLoginFormStatus = require('./actions/updateLoginFormStatus');
 var constants = require('./constants');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var createElement = require('fluxible-addons-react/createElementWithContext');
 
 var server = express();
 
@@ -261,7 +262,7 @@ server.use(function(req, res, next) {
         var html = React.renderToStaticMarkup(htmlComponent({
             context: context.getComponentContext(),
             state: exposed,
-            markup: React.renderToString(context.createElement())
+            markup: React.renderToString(createElement(context))
         }));
 
         debug('Sending markup');

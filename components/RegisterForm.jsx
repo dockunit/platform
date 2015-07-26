@@ -1,6 +1,5 @@
 'use strict';
 var React = require('react');
-var FluxibleMixin = require('fluxible/addons/FluxibleMixin');
 var UserStore = require('../stores/UserStore');
 var ApplicationStore = require('../stores/ApplicationStore');
 var userExists = require('../actions/userExists');
@@ -8,7 +7,10 @@ var InputField = require('./InputField');
 var SubmitButton = require('./SubmitButton');
 
 var RegisterForm = React.createClass({
-	mixins: [FluxibleMixin],
+	contextTypes: {
+        executeAction: React.PropTypes.func.isRequired,
+        getStore: React.PropTypes.func.isRequired
+    },
 
 	statics: {
 		storeListeners: {
@@ -44,16 +46,16 @@ var RegisterForm = React.createClass({
 				errors: {},
 				validators: [this.validateRequired('password'), this.validatePassword]
 			},
-			csrf: this.getStore(ApplicationStore).getCsrfToken()
+			csrf: this.context.getStore(ApplicationStore).getCsrfToken()
 		};
 	},
 
 	onApplicationStoreChange: function() {
-		this.csrf = this.getStore(ApplicationStore).getCsrfToken();
+		this.csrf = this.context.getStore(ApplicationStore).getCsrfToken();
 	},
 
 	onUserStoreChange: function() {
-		this.userCache = this.getStore(UserStore).getUserCache();
+		this.userCache = this.context.getStore(UserStore).getUserCache();
 
 		if (this.userCache[this.state.username.value]) {
 			var newState = {};
@@ -127,7 +129,7 @@ var RegisterForm = React.createClass({
 	},
 
 	validateUsername: function() {
-		this.executeAction(userExists, { username: this.state.username.value });
+		this.context.executeAction(userExists, { username: this.state.username.value });
 
 		return true;
 	},
