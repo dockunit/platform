@@ -9,6 +9,7 @@ var ProjectsStore = createStore({
 	handlers: {
 		'READ_MY_PROJECTS_SUCCESS': 'readMyProjectsSuccess',
 		'READ_PROJECT_SUCCESS': 'readProjectSuccess',
+		'READ_PROJECT_FAILURE': 'readProjectFailure',
 		'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
 		'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
 		'NEW_PROJECT_BUILD': 'newProjectBuild'
@@ -16,6 +17,7 @@ var ProjectsStore = createStore({
 
 	initialize: function () {
 		this.projects = null;
+		this.projectsNotFound = {};
 	},
 
 	updateProjectBuild: function(payload) {
@@ -47,6 +49,12 @@ var ProjectsStore = createStore({
 		this.emitChange();
 	},
 
+	readProjectFailure: function(params) {
+		this.projectsNotFound[params.repository] = true;
+		
+		this.emitChange();
+	},
+
 	createProjectSuccess: function(project) {
 		if (!this.projects) {
 			this.projects = {};
@@ -58,7 +66,8 @@ var ProjectsStore = createStore({
 
 	getState: function() {
 		return {
-			projects: this.projects
+			projects: this.projects,
+			projectsNotFound: this.projectsNotFound
 		};
 	},
 
@@ -86,6 +95,7 @@ var ProjectsStore = createStore({
 
 	rehydrate: function(state) {
 		this.projects = state.projects;
+		this.projectsNotFound = state.projectsNotFound;
 	}
 });
 
