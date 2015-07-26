@@ -34,16 +34,22 @@ var updateCurrentUser = require('./actions/updateCurrentUser');
 var updateLoginHeaderStatus = require('./actions/updateLoginHeaderStatus');
 var updateLoginFormStatus = require('./actions/updateLoginFormStatus');
 var constants = require('./constants');
+var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 
 var server = express();
 
 server.set('state namespace', 'App');
 server.use('/public', express.static(__dirname + '/build'));
 server.use(cookieParser());
-server.use(require('express-session')({
+server.use(session({
 	secret: constants.sessionSecret,
 	resave: false,
-	saveUninitialized: false
+	saveUninitialized: false,
+	store: new RedisStore({
+		host: '127.0.0.1',
+		port: 6379
+	})
 }));
 
 server.use(bodyParser.json());
