@@ -9,6 +9,8 @@ var kue = require('kue');
 var queue = kue.createQueue();
 var github = require('../clients/github');
 
+var debug = console.log;
+
 module.exports = {
 	name: 'projects',
 	create: function (req, resource, params, body, config, callback) {
@@ -51,6 +53,7 @@ module.exports = {
 
 		if (params.mine) {
 			// Get all my projects
+			debug('Getting my projects');
 
 			if (!user) {
 				callback('Not logged in');
@@ -77,6 +80,7 @@ module.exports = {
 
 		} else if (!params.mine && params.repository) {
 			// Get a specific project
+			debug('Getting a single project');
 
 			query.repository = params.repository;
 			
@@ -89,10 +93,14 @@ module.exports = {
 					var project = projects[0];
 					project.mine = false;
 
+					debug('Found one project');
+
 					if (user && user.githubAccessToken) {
 						if (String(user._id) === String(project.user)) {
 							project.mine = true;
 							projectObjects[project.repository] = project;
+
+							debug('Returning a project that I own');
 
 							callback(null, projectObjects);
 						} else {
@@ -106,20 +114,31 @@ module.exports = {
 									if (repos[params.repository]) {
 										projectObjects[project.repository] = project;
 
+										debug("Returning a project that isn't mine but I have access to");
+
+										callback(null, projectObjects);
+									} else {
+										debug("Returning no project since I don't have access");
+
 										callback(null, projectObjects);
 									}
 								}, function() {
 									debug('Could not retrieve repos to verify access for private project');
-									callback(true);
+									callback(null, projectObjects);
 								});
 							} else {
+								debug('Return a non private project that isnt mine');
+								projectObjects[project.repository] = project;
+
 								callback(null, projectObjects);
 							}
 						}
 					} else {
 						if (project.private) {
 							// No access!
+							debug("Returning no project since it's private and I'm not logged in");
 						} else {
+							debug("Returning a project since it's public and I'm not logged in");
 							projectObjects[project.repository] = project;
 						}
 
