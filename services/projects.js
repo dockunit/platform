@@ -46,35 +46,55 @@ module.exports = {
 		debug('Read projects');
 
 		var query = {};
+		var projectObjects = {};
 		var user = req.user || false;
 
 		if (params.mine) {
+			// Get all my projects
+
 			if (!user) {
 				callback('Not logged in');
 				return;
 			}
 
 			query.user = user._id;
-		}
 
-		if (params.repository) {
+			Project.find(query).sort('-created').exec(function(error, projects) {
+				if (error) {
+					debug('No projects found for ' + user._id);
+
+					callback(error);
+				} else {
+					projects.forEach(function(project) {
+						project.mine = true;
+
+						projectObjects[project.repository] = project;
+					});
+
+					callback(null, projectObjects);
+				}
+			});
+
+		} else if (!params.mine && params.repository) {
+			// Get a specific project
+
 			query.repository = params.repository;
-		}
+			
+			Project.find(query).exec(function(error, projects) {
+				if (error || !projects.length) {
+					debug('Project not found');
 
-		Project.find(query).sort('-created').exec(function(error, projects) {
-			if (error) {
-				debug('No projects found for ' + user._id);
-
-				callback(error);
-			} else {
-				var projectObjects = {};
-					
-				projects.forEach(function(project) {
+					callback(error);
+				} else {
+					var project = projects[0];
 					project.mine = false;
 
 					if (user && user.githubAccessToken) {
 						if (String(user._id) === String(project.user)) {
 							project.mine = true;
+							projectObjects[project.repository] = project;
+
+							callback(null, projectObjects);
 						} else {
 							if (project.private) {
 								/**
@@ -82,25 +102,32 @@ module.exports = {
 								 * we need to see if our Github account has perms
 								 */
 
-								/*github.repos.get(user.githubAccessToken).then(function(repos) {
-									callback(false, repos);
+								github.repos.get(user.githubAccessToken).then(function(repos) {
+									if (repos[params.repository]) {
+										projectObjects[project.repository] = project;
+
+										callback(null, projectObjects);
+									}
 								}, function() {
+									debug('Could not retrieve repos to verify access for private project');
 									callback(true);
-								});*/
+								});
+							} else {
+								callback(null, projectObjects);
 							}
 						}
 					} else {
 						if (project.private) {
-							return false;
+							// No access!
+						} else {
+							projectObjects[project.repository] = project;
 						}
+
+						callback(null, projectObjects);
 					}
-
-					projectObjects[project.repository] = project;
-				});
-
-				callback(null, projectObjects);
-			}
-		});
+				}
+			});
+		}
 	},
 
 	update: function (req, resource, params, body, config, callback) {
