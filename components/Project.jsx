@@ -5,6 +5,7 @@ var React = require('react');
 var BuildList = require('./BuildList');
 var If = require('./If');
 var ProjectsStore = require('../stores/ProjectsStore');
+var UserStore = require('../stores/UserStore');
 var NavLink = require('flux-router-component').NavLink;
 var readProject = require('../actions/readProject');
 
@@ -13,7 +14,8 @@ var Project = React.createClass({
 
 	statics: {
 		storeListeners: {
-			onProjectsStoreChange: [ProjectsStore]
+			onProjectsStoreChange: [ProjectsStore],
+			onUserStoreChange: [UserStore]
 		}
 	},
 
@@ -35,12 +37,20 @@ var Project = React.createClass({
 		this.setState(state);
 	},
 
+	onUserStoreChange: function () {
+		var newState = {};
+		newState.currentUser = this.getStore(UserStore).getCurrentUser();
+
+		this.setState(newState);
+	},
+
 	getInitialState: function() {
 		var projects = this.getStore(ProjectsStore).getProjects();
 
 		var state = {
 			project: null,
-			currentBranch: null
+			currentBranch: null,
+			currentUser: this.getStore(UserStore).getCurrentUser()
 		};
 
 		if (projects && projects[this.props.repository]) {
@@ -84,7 +94,13 @@ var Project = React.createClass({
 
         return (
             <div className="container">
-				<h1 className="page-header"><NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> {this.props.repository}</h1>
+				<h1 className="page-header">
+					<If test={this.state.currentUser}>
+						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
+					</If>
+
+					{this.props.repository}
+				</h1>
 
 				<If test={false === this.state.project}>
 					<div className="no-projects">
@@ -130,7 +146,7 @@ var Project = React.createClass({
 							</div>
 						</div>
 
-						<BuildList builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
+						<BuildList currentUser={this.state.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
 					</div>
                 </If>
 			</div>

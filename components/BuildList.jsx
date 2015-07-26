@@ -11,11 +11,11 @@ var BuildList = React.createClass({
 
 		return (
 			<div className="build-wrapper">
-				<LatestBuildListItem build={latestBuild} branch={this.props.branch} repository={this.props.repository} />
+				<LatestBuildListItem currentUser={this.props.currentUser} build={latestBuild} branch={this.props.branch} repository={this.props.repository} />
 
 				<div className="builds">
 					{this.props.builds.map(function(build) {
-	                    return <BuildListItem build={build} branch={this.props.branch} repository={this.props.repository} />     
+	                    return <BuildListItem currentUser={this.props.currentUser} build={build} branch={this.props.branch} repository={this.props.repository} />     
 	                }, this)}
                 </div>
             </div>

@@ -114,11 +114,11 @@ module.exports = {
 									if (repos[params.repository]) {
 										projectObjects[project.repository] = project;
 
-										debug("Returning a project that isn't mine but I have access to");
+										debug('Returning a project that isn\'t mine but I have access to');
 
 										callback(null, projectObjects);
 									} else {
-										debug("Returning no project since I don't have access");
+										debug('Returning no project since I don\'t have access');
 
 										callback(null, projectObjects);
 									}
@@ -136,9 +136,9 @@ module.exports = {
 					} else {
 						if (project.private) {
 							// No access!
-							debug("Returning no project since it's private and I'm not logged in");
+							debug('Returning no project since it\'s private and I\'m not logged in');
 						} else {
-							debug("Returning a project since it's public and I'm not logged in");
+							debug('Returning a project since it\'s public and I\'m not logged in');
 							projectObjects[project.repository] = project;
 						}
 

@@ -98,7 +98,10 @@ var LatestBuildListItem = React.createClass({
 						<div className="item">Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{this.props.build.commitUser}</strong></a></div>
 
 						<div className="toolbar">
-							<a className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
+							<If test={this.props.currentUser}>
+								<a className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
+							</If>
+
 							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>
 							<a className="btn btn-default" href={githubUrl}>Repo <span className="icomoon icomoon-github"></span></a>
 							<a className="btn btn-default expand" onClick={this.toggleBuildDetails}>
