@@ -15,9 +15,10 @@ import _ from 'lodash';
 import {connectToStores, provideContext} from 'fluxible-addons-react';
 
 @provideContext
-@connectToStores([ApplicationStore, UserStore], (context, props) => ({
+@connectToStores([ApplicationStore, UserStore, ProjectsStore], (context, props) => ({
     ApplicationStore: context.getStore(ApplicationStore).getState(),
     UserStore: context.getStore(UserStore).getState()
+    ProjectsStore: context.getStore(ProjectsStore).getState()
 }))
 class About extends React.Component {
 	constructor(props, context) {
@@ -30,38 +31,33 @@ class About extends React.Component {
     }
 
     componentWillMount() {
-        this.context.executeAction(readGithubRepositories, { token: this.context.getStore(UserStore).getCurrentUser().githubAccessToken });
+        this.context.executeAction(readGithubRepositories, { token: this.context.UserStore.currentUser.githubAccessToken });
     }
 
-	getInitialState() {
-
-		return {
-			repository: {
-				value: '',
-				errors: {},
-				validators: [this.validateRequired('repository')]
-			},
-			branch: {
-				value: '',
-				errors: {},
-				validators: [this.validateRequired('branch')]
-			},
-			private: {
-				value: 'No',
-				errors: {},
-				validators: [this.validateRequired('private')]
-			},
-			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
-			repositories: false,
-			projects: this.context.getStore(ProjectsStore).getProjects()
-		};
-	},
+    static defaultProps = {
+		repository: {
+			value: '',
+			errors: {},
+			validators: [this.validateRequired('repository')]
+		},
+		branch: {
+			value: '',
+			errors: {},
+			validators: [this.validateRequired('branch')]
+		},
+		private: {
+			value: 'No',
+			errors: {},
+			validators: [this.validateRequired('private')]
+		},
+		repositories: false
+	}
 
 	validate(field) {
 		var self = this;
 
 		return function() {
-			var validators = self.state[field].validators,
+			var validators = self.props[field].validators,
 				errors = {};
 
 			if (validators.length) {
@@ -71,7 +67,7 @@ class About extends React.Component {
 			}
 
 			var newState = {};
-			newState[field] = _.extend({}, self.state[field]);
+			newState[field] = _.extend({}, self.props[field]);
 
 			if (errors.required) {
 				newState[field].errors = {};
@@ -92,7 +88,7 @@ class About extends React.Component {
 		return function() {
 			var errors = {};
 
-			if ('' === self.state[field].value) {
+			if ('' === self.props[field].value) {
 				errors.required = 'This field is required.';
 			}
 
@@ -101,10 +97,10 @@ class About extends React.Component {
 	}
 
 	_onChange() {
-		var user = this.context.getStore(UserStore).getCurrentUser();
+		var user = this.context.UserStore.currentUser;
 
 		if (user.repositories) {
-			var projects = this.context.getStore(ProjectsStore).getProjects();
+			var projects = this.context.ProjectsStore.projects;
 			var repositories = user.repositories;
 
 			if (repositories && Object.keys(repositories)) {
@@ -120,37 +116,37 @@ class About extends React.Component {
 				repositories: repositories
 			};
 
-			if (!this.state.repositories && Object.keys(repositories).length) {
+			if (!this.props.repositories && Object.keys(repositories).length) {
 
 				state.repository = {
 					value: repositories[Object.keys(repositories)[0]].full_name,
 					errors: {},
-					validators: this.state.repository.validators
+					validators: this.props.repository.validators
 				};
 
 				state.private = {
 					value: (repositories[Object.keys(repositories)[0]].private) ? 'Yes' : 'No',
 					errors: {},
-					validators: this.state.private.validators
+					validators: this.props.private.validators
 				};
 
 				this.context.executeAction(readGithubRepoBranches, {
 					repository: state.repository.value,
-					token: this.context.getStore(UserStore).getCurrentUser().githubAccessToken
+					token: this.context.UserStore.getCurrentUser().githubAccessToken
 				});
 			}
 
-			if (this.state.repository.value && repositories[this.state.repository.value] && _.size(repositories[this.state.repository.value].branches)) {
+			if (this.props.repository.value && repositories[this.props.repository.value] && _.size(repositories[this.props.repository.value].branches)) {
 				state.branch = {
-					value: Object.keys(repositories[this.state.repository.value].branches)[0],
+					value: Object.keys(repositories[this.props.repository.value].branches)[0],
 					errors: {},
-					validators: this.state.repository.validators
+					validators: this.props.repository.validators
 				};
 
 				state.private = {
-					value: (repositories[this.state.repository.value].private) ? 'Yes' : 'No',
+					value: (repositories[this.props.repository.value].private) ? 'Yes' : 'No',
 					errors: {},
-					validators: this.state.private.validators
+					validators: this.props.private.validators
 				};
 			}
 
@@ -160,7 +156,7 @@ class About extends React.Component {
 
 	handleFormChange(event) {
 		var object = {};
-		object[event.target.id] = _.extend({}, this.state[event.target.id]);
+		object[event.target.id] = _.extend({}, this.props[event.target.id]);
 		object[event.target.id].value = event.target.value;
 
 		this.setState(object);
@@ -170,27 +166,27 @@ class About extends React.Component {
 		var object = {};
 		object[event.target.id] = {
 			value: event.target.value,
-			errors: this.state[event.target.id].errors,
-			validators: this.state[event.target.id].validators
+			errors: this.props[event.target.id].errors,
+			validators: this.props[event.target.id].validators
 		};
 
-		if (!_.size(this.state.repositories[event.target.value].branches)) {
+		if (!_.size(this.props.repositories[event.target.value].branches)) {
 			this.context.executeAction(readGithubRepoBranches, {
 				repository: event.target.value,
-				token: this.context.getStore(UserStore).getCurrentUser().githubAccessToken
+				token: this.context.UserStore.getCurrentUser().githubAccessToken
 			});
 		} else {
 			object.branch = {
-				value: Object.keys(this.state.repositories[event.target.value].branches)[0],
+				value: Object.keys(this.props.repositories[event.target.value].branches)[0],
 				errors: {},
-				validators: this.state.repository.validators
+				validators: this.props.repository.validators
 			};
 		}
 
 		object.private = {
-			value: (this.state.repositories[event.target.value].private) ? 'Yes' : 'No',
+			value: (this.props.repositories[event.target.value].private) ? 'Yes' : 'No',
 			errors: {},
-			validators: this.state.private.validators
+			validators: this.props.private.validators
 		};
 
 		this.setState(object);
@@ -198,9 +194,9 @@ class About extends React.Component {
 
 	submit() {
 		this.context.executeAction(createProject, {
-			repository: this.state.repository.value,
-			branch: this.state.branch.value,
-			private: ('Yes' === this.state.private.value) ? true : false
+			repository: this.props.repository.value,
+			branch: this.props.branch.value,
+			private: ('Yes' === this.props.private.value) ? true : false
 		});
 	}
 
@@ -223,12 +219,12 @@ class About extends React.Component {
 
 	render() {
 		var branches = [];
-		if (this.state.repository.value && this.state.repositories[this.state.repository.value] && this.state.repositories[this.state.repository.value].branches) {
-			branches = Object.keys(this.state.repositories[this.state.repository.value].branches);
+		if (this.props.repository.value && this.props.repositories[this.props.repository.value] && this.props.repositories[this.props.repository.value].branches) {
+			branches = Object.keys(this.props.repositories[this.props.repository.value].branches);
 		}
 
 		var statuses = ['No', 'Yes'];
-		if (this.state.repository.value && this.state.repositories[this.state.repository.value] && this.state.repositories[this.state.repository.value].private) {
+		if (this.props.repository.value && this.props.repositories[this.props.repository.value] && this.props.repositories[this.props.repository.value].private) {
 			statuses = ['Yes', 'No'];
 		}
 
@@ -238,19 +234,19 @@ class About extends React.Component {
 					<h1>Create a Project</h1>
 				</div>
 
-				<If test={!this.state.repositories}>
+				<If test={!this.props.repositories}>
 					<div className="loading-section">
 						<h3>Hey there, we are looking up your Github repositories. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h3>
 					</div>
 				</If>
 
-				<If test={this.state.repositories && !Object.keys(this.state.repositories).length}>
+				<If test={this.props.repositories && !Object.keys(this.props.repositories).length}>
 					<div className="loading-section">
 						<h3>Sorry, you either have no Github repositories, or you have already created projects for each repository.</h3>
 					</div>
 				</If>
 
-				<If test={this.state.repositories && Object.keys(this.state.repositories).length}>
+				<If test={this.props.repositories && Object.keys(this.props.repositories).length}>
 					<form method="post" noValidate>
 						<SelectField
 							label="Github Repository"
@@ -258,9 +254,9 @@ class About extends React.Component {
 							onChange={this.handleRepositoryChange}
 							className="form-control"
 							id="repository"
-							options={Object.keys(this.state.repositories)}
+							options={Object.keys(this.props.repositories)}
 							helpText="Tell us which repository you want to use."
-							errors={this.state.repository.errors}
+							errors={this.props.repository.errors}
 						/>
 						
 						<SelectField
@@ -269,7 +265,7 @@ class About extends React.Component {
 							className="form-control"
 							onChange={this.handleFormChange}
 							id="branch"
-							errors={this.state.branch.errors}
+							errors={this.props.branch.errors}
 							options={branches}
 							helpText="This branches status will be featured more prominently in your dashboard."
 						/>
@@ -282,16 +278,16 @@ class About extends React.Component {
 							id="private"
 							options={statuses}
 							helpText="Private projects will only be viewable to those who have access to the Github project."
-							errors={this.state.private.errors}
+							errors={this.props.private.errors}
 						/>
 
 						<input
 							type="hidden"
 							name="_csrf"
-							value={this.state.csrf}
+							value={this.props.ApplicationStore.csrf}
 						/>
 
-						<SubmitButton value="Create Project" repository={this.state.repository.value} onSubmit={this.submit} onClick={this.click} />
+						<SubmitButton value="Create Project" repository={this.props.repository.value} onSubmit={this.submit} onClick={this.click} />
 					</form>
 				</If>
 			</div>
