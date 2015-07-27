@@ -1,28 +1,25 @@
 'use strict';
-var React = require('react');
-var NavLink = require('flux-router-component').NavLink;
-var UserNav = require('./UserNav');
-var If = require('./If');
 
-var Nav = React.createClass({
-	contextTypes: {
-        getStore: React.PropTypes.func.isRequired
-    },
+import React from 'react';
+import {NavLink} from 'fluxible-router';
+import UserNav from './UserNav';
+import If from './If';
+import {provideContext} from 'fluxible-addons-react';
 
-    getDefaultProps: function () {
-        return {
-            selected: 'home',
-            links: {}
-        };
-    },
+@provideContext
+class Nav extends React.Component {
+	static defaultProps = {
+		selected: 'home',
+		links: {}
+    }
 
-    render: function() {
-        var selected = this.props.selected;
-        var links = this.props.links;
+    render() {
+        let selected = this.props.selected;
+        let links = this.props.links;
 
-        var exploreLinkHTML = Object.keys(links).map(function(name) {
-            var className = '';
-            var link = links[name];
+        let exploreLinkHTML = Object.keys(links).map(function(name) {
+            let className = '';
+            let link = links[name];
 
 			if (!link.type || 'explore' !== link.type) {
 				return false;
@@ -64,13 +61,13 @@ var Nav = React.createClass({
 						</ul>
 
 						<If test={('login' !== this.props.selected)}>
-							<UserNav selected={this.props.selected} links={this.props.links}  />
+							<UserNav context={this.props.context} selected={this.props.selected} links={this.props.links}  />
 						</If>
 					</div>
 				</div>
 			</nav>
         );
     }
-});
+}
 
-module.exports = Nav;
+export default Nav;

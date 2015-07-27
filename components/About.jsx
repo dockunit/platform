@@ -1,8 +1,9 @@
 'use strict';
-var React = require('react');
 
-var About = React.createClass({
-    render: function() {
+import React from 'react';
+
+class About extends React.Component {
+    render() {
         return (
             <div className="container">
 				<h1 className="page-header">The Story</h1>
@@ -16,6 +17,6 @@ var About = React.createClass({
 			</div>
         );
     }
-});
+}
 
-module.exports = About;
+export default About;

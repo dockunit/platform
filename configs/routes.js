@@ -1,15 +1,16 @@
 'use strict';
 
-var loadPage = require('../actions/loadPage');
-var UserStore = require('../stores/UserStore');
-var _ = require('lodash');
+import loadPage from '../actions/loadPage';
+import UserStore from '../stores/UserStore';
+import _ from 'lodash';
 
-module.exports = {
+export default {
     home: {
         path: '/',
         method: 'get',
         page: 'home',
         title: 'Home',
+        handler: require('../components/Home'),
         action: loadPage
     },
 	register: {
@@ -18,12 +19,14 @@ module.exports = {
 		page: 'register',
 		title: 'Sign Up',
 		type: 'explore',
+		handler: require('../components/Register'),
 		action: loadPage
 	},
 	login: {
 		path: '/login',
 		method: 'get',
 		page: 'login',
+		handler: require('../components/Login'),
 		title: 'Login',
 		action: function (actionContext, payload, done) {
 			var user = actionContext.getStore(UserStore).getCurrentUser();
@@ -46,6 +49,7 @@ module.exports = {
 		path: '/projects/add',
 		method: 'get',
 		page: 'addProject',
+		handler: require('../components/AddProject'),
 		title: 'Add a Project',
 		action: function (actionContext, payload, done) {
 			var user = actionContext.getStore(UserStore).getCurrentUser(),
@@ -78,6 +82,7 @@ module.exports = {
 	},
 	githubAuthorize: {
 		path: '/projects/authorize',
+		handler: require('../components/GithubAuthorize'),
 		method: 'get',
 		page: 'githubAuthorize',
 		title: 'Authorize Github Account',
@@ -118,6 +123,7 @@ module.exports = {
 		method: 'get',
 		page: 'about',
 		title: 'The Story',
+		handler: require('../components/About'),
 		type: 'explore',
 		action: loadPage
 	},
@@ -126,6 +132,7 @@ module.exports = {
 		method: 'get',
 		page: 'projects',
 		title: 'Projects',
+		handler: require('../components/Projects'),
 		type: 'account',
 		action: function (actionContext, payload, done) {
 			var user = actionContext.getStore(UserStore).getCurrentUser(),
@@ -159,6 +166,7 @@ module.exports = {
 	project: {
 		path: '/projects/([^/]+)/(.*)',
 		method: 'get',
+		handler: require('../components/Project'),
 		page: 'project',
 		title: 'Project',
 		action: function (actionContext, payload, done) {

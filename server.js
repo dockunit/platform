@@ -20,7 +20,7 @@ require('babel/register');
 
 var express = require('express');
 var serialize = require('serialize-javascript');
-var navigateAction = require('flux-router-component').navigateAction;
+var navigateAction = require('fluxible-router').navigateAction;
 var debug = require('debug')('dockunit');
 var React = require('react');
 var app = require('./app');
@@ -242,7 +242,7 @@ server.use(function(req, res, next) {
 	context.executeAction(updateCsrfToken, req.csrfToken());
 
 	debug('Executing navigate action');
-    context.getActionContext().executeAction(navigateAction, {
+    context.executeAction(navigateAction, {
         url: req.url,
 		method: req.method
     }, function (err) {

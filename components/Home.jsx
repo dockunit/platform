@@ -1,24 +1,11 @@
 'use strict';
-var React = require('react');
-var UserStore = require('../stores/UserStore');
-var NavLink = require('flux-router-component').NavLink;
 
-var Home = React.createClass({
-	statics: {
-		storeListeners: {
-			onUserStoreChange: [UserStore]
-		}
-	},
+import React from 'react';
+import {NavLink} from 'fluxible-router';
 
-	onUserStoreChange: function() {
-		this.setState(this.getState());
-	},
-
-    getInitialState: function () {
-        return {};
-    },
+class Home extends React.Component {
     
-    render: function() {
+    render() {
         return (
 			<div>
 				<div className="jumbotron">
@@ -49,6 +36,6 @@ var Home = React.createClass({
 			</div>
         );
     }
-});
+}
 
-module.exports = Home;
+export default Home;

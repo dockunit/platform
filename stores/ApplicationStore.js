@@ -1,11 +1,12 @@
 'use strict';
+
 var createStore = require('fluxible/addons').createStore;
 var routesConfig = require('../configs/routes');
 
 var ApplicationStore = createStore({
     storeName: 'ApplicationStore',
     handlers: {
-		'CHANGE_ROUTE_SUCCESS': 'handleNavigate',
+		'CHANGE_ROUTE': 'handleNavigate',
 		'UPDATE_CSRF_TOKEN': 'setCsrfToken'
     },
 
@@ -18,10 +19,6 @@ var ApplicationStore = createStore({
         this.pageTitle = '';
 		this.csrfToken = null;
 		this.redirectPath = null;
-    },
-
-    handleProjectCreate: function() {
-
     },
 
     handleNavigate: function(route) {
@@ -45,46 +42,27 @@ var ApplicationStore = createStore({
 		this.csrfToken = token;
 	},
 
-	getCsrfToken: function() {
-		return this.csrfToken;
-	},
-
-	getRedirectPath: function() {
-		return this.redirectPath;
-	},
-
-    getCurrentPageName: function() {
-        return this.currentPageName;
-    },
-
-    getPageTitle: function() {
-        return this.pageTitle;
-    },
-    getCurrentRoute: function() {
-        return this.currentRoute;
-    },
-
-    getPages: function() {
-        return this.pages;
-    },
-
-    dehydrate: function() {
+    getState: function() {
         return {
             currentPageName: this.currentPageName,
             currentPage: this.currentPage,
             pages: this.pages,
-            route: this.currentRoute,
+            currentRoute: this.currentRoute,
             pageTitle: this.pageTitle,
-			csrfToken: this.csrfToken,
-			redirectPath: this.redirectPath
+            csrfToken: this.csrfToken,
+            redirectPath: this.redirectPath
         };
+    },
+
+    dehydrate: function() {
+        return this.getState();
     },
 
     rehydrate: function (state) {
         this.currentPageName = state.currentPageName;
         this.currentPage = state.currentPage;
         this.pages = state.pages;
-        this.currentRoute = state.route;
+        this.currentRoute = state.currentRoute;
         this.pageTitle = state.pageTitle;
 		this.csrfToken = state.csrfToken;
 		this.redirectPath = state.redirectPath;

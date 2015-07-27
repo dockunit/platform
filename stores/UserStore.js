@@ -73,20 +73,8 @@ var UserStore = createStore({
 		this.emitChange();
 	},
 
-	getUserCache: function() {
-		return this.userCache;
-	},
-
 	getCurrentUser: function() {
 		return this.currentUser;
-	},
-
-	getLoginHeaderStatus: function() {
-		return this.loginHeaderStatus;
-	},
-
-	getLoginFormStatus: function() {
-		return this.loginFormStatus;
 	},
 
 	getState: function() {

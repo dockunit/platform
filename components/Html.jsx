@@ -1,14 +1,15 @@
 'use strict';
-var React = require('react');
-var ApplicationStore = require('../stores/ApplicationStore');
 
-var Html = React.createClass({
-    render: function() {
+import React from 'react';
+import ApplicationStore from '../stores/ApplicationStore';
+
+class Html extends React.Component {
+    render() {
         return (
             <html>
             <head>
                 <meta charSet="utf-8"  />
-                <title>{this.props.context.getStore(ApplicationStore).getPageTitle()}</title>
+                <title>{this.props.context.getStore(ApplicationStore).pageTitle}</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
                 <link rel="apple-touch-icon" sizes="57x57" href="/public/img/apple-icon-57x57.png" />
                 <link rel="apple-touch-icon" sizes="60x60" href="/public/img/apple-icon-60x60.png" />
@@ -40,6 +41,6 @@ var Html = React.createClass({
             </html>
         );
     }
-});
+}
 
-module.exports = Html;
+export default Html;

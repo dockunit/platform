@@ -2,10 +2,12 @@
 
 'use strict';
 
-var React = require('react');
+import React from 'react';
+import app from './app';
+import {createElementWithContext} from 'fluxible-addons-react';
 var debug = require('debug')('dockunit');
-var app = require('./app');
-var dehydratedState = window.App; // Sent from the server
+
+let dehydratedState = window.App; // Sent from the server
 
 window.React = React; // For chrome dev tool support
 
@@ -18,10 +20,10 @@ app.rehydrate(dehydratedState, function(error, context) {
     }
     
     window.context = context;
-    var mountNode = document.getElementById('app');
+    let mountNode = document.getElementById('app');
 
     debug('React Rendering');
-    React.render(context.createElement(), mountNode, function() {
+    React.render(createElementWithContext(context), mountNode, function() {
         debug('React Rendered');
     });
 });

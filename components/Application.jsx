@@ -1,99 +1,65 @@
 'use strict';
 
-var React = require('react');
-var Nav = require('./Nav.jsx');
-var Register = require('./Register.jsx');
-var Home = require('./Home.jsx');
-var Projects = require('./Projects.jsx');
-var AddProject = require('./AddProject.jsx');
-var About = require('./About.jsx');
-var Login = require('./Login.jsx');
-var Project = require('./Project.jsx');
-var GithubAuthorize = require('./GithubAuthorize.jsx');
-var ApplicationStore = require('../stores/ApplicationStore');
-var RouterMixin = require('flux-router-component').RouterMixin;
-var readMyProjects = require('../actions/readMyProjects');
-var UserStore = require('../stores/UserStore');
+import React from 'react';
+import Nav from './Nav';
+import Register from './Register';
+import Projects from './Projects';
+import AddProject from './AddProject';
+import About from './About';
+import Login from './Login';
+import Project from './Project';
+import GithubAuthorize from './GithubAuthorize';
+import ApplicationStore from '../stores/ApplicationStore';
+import readMyProjects from '../actions/readMyProjects';
+import UserStore from '../stores/UserStore';
+import {connectToStores, provideContext} from 'fluxible-addons-react';
+import {handleHistory} from 'fluxible-router';
 
-var Application = React.createClass({
-    mixins: [RouterMixin],
+@provideContext
+@handleHistory({enableScroll: false})
+@connectToStores([ApplicationStore, UserStore], (context, props) => ({
+    ApplicationStore: context.getStore(ApplicationStore).getState(),
+    UserStore: context.getStore(UserStore).getState()
+}))
+class Application extends React.Component {
 
-    statics: {
-        storeListeners: {
-            onApplicationStoreChange: [ApplicationStore],
-            onUserStoreChange: [UserStore]
-        }
-    },
+    constructor(props, context) {
+        super(props, context);
+    }
 
-    contextTypes: {
-        executeAction: React.PropTypes.func.isRequired,
-        getStore: React.PropTypes.func.isRequired
-    },
+    static contextTypes = {
+        getStore: React.PropTypes.func,
+        executeAction: React.PropTypes.func
+    }
 
-    getInitialState: function() {
+    componentWillMount() {
         if (this.context.getStore(UserStore).getCurrentUser()) {
             this.context.executeAction(readMyProjects, { mine: true });
         }
+    }
 
-        return this.getState();
-    },
-
-    getState: function() {
-        var appStore = this.context.getStore(ApplicationStore);
-
-        return {
-            currentPageName: appStore.getCurrentPageName(),
-            pageTitle: appStore.getPageTitle(),
-            route: appStore.getCurrentRoute(),
-            pages: appStore.getPages()
-        };
-    },
-
-    onApplicationStoreChange: function() {
-        this.setState(this.getState());
-    },
-
-    onUserStoreChange: function() {
+    _onChange() {
         if (this.context.getStore(UserStore).getCurrentUser()) {
             this.context.executeAction(readMyProjects);
         }
-    },
 
-    render: function() {
-        var output = '';
-        var repository = this.state.route.params[0] + '/' + this.state.route.params[1];
+        this.setState(this.getStateFromStores());
+    }
 
-        switch (this.state.currentPageName) {
-			case 'home':
-                output = <Home />;
-                break;
-            case 'about':
-                output = <About />;
-                break;
-			case 'projects':
-				output = <Projects />;
-				break;
-			case 'login':
-				output = <Login />;
-				break;
-			case 'addProject':
-				output = <AddProject />;
-				break;
-			case 'githubAuthorize':
-				output = <GithubAuthorize />;
-				break;
-			case 'register':
-                output = <Register />;
-                break;
-            case 'project':
-                output = <Project repository={repository} />;
-                break;
+    render() {
+        var Handler = this.props.currentRoute.get('handler');
+
+        var repository = false;
+
+        if ('project' === this.props.ApplicationStore.currentPageName) {
+            repository = this.props.currentRoute.params[0] + '/' + this.props.currentRoute.params[1];
         }
+
         return (
             <div>
-                <Nav selected={this.state.currentPageName} links={this.state.pages} />
+                <Nav context={this.props.context} selected={this.props.ApplicationStore.currentPageName} links={this.props.ApplicationStore.pages} />
 
-				{output}
+				<Handler context={this.props.context} repository={repository} />
 
 				<div className="container">
 					<hr />
@@ -103,15 +69,14 @@ var Application = React.createClass({
 				</div>
             </div>
         );
-    },
+    }
 
-    componentDidUpdate: function(prevProps, prevState) {
-        var newState = this.state;
-        if (newState.pageTitle === prevState.pageTitle) {
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.ApplicationStore.pageTitle === prevProps.ApplicationStore.pageTitle) {
             return;
         }
-        document.title = newState.pageTitle;
+        document.title = this.props.ApplicationStore.pageTitle;
     }
-});
+}
 
-module.exports = Application;
+export default Application

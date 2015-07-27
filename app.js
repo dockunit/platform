@@ -1,26 +1,26 @@
 'use strict';
 
-var Fluxible = require('fluxible');
-var routrPlugin = require('fluxible-plugin-routr');
-var fetchrPlugin = require('fluxible-plugin-fetchr');
+import Fluxible from 'fluxible';
+import Application from './components/Application';
+import RouteStore from './stores/RouteStore';
+import fetchrPlugin from 'fluxible-plugin-fetchr';
+import ApplicationStore from './stores/ApplicationStore';
+import UserStore from './stores/UserStore';
+import ProjectsStore from './stores/ProjectsStore';
 
 // create new fluxible instance
-var app = new Fluxible({
-    component: require('./components/Application.jsx')
+let app = new Fluxible({
+    component: Application,
+    stores: [
+		RouteStore,
+		ApplicationStore,
+		UserStore,
+		ProjectsStore
+	]
 });
-
-// add routes to the routr plugin
-app.plug(routrPlugin({
-    routes: require('./configs/routes')
-}));
 
 app.plug(fetchrPlugin({
 	xhrPath: '/api'
 }));
 
-// register stores
-app.registerStore(require('./stores/ApplicationStore'));
-app.registerStore(require('./stores/UserStore'));
-app.registerStore(require('./stores/ProjectsStore'));
-
-module.exports = app;
+export default app;

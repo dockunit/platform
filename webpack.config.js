@@ -23,7 +23,7 @@ module.exports = {
 	module: {
 		loaders: [
 			{ test: /\.css$/, loader: 'style!css' },
-			{ test: /\.(js|jsx)$/, exclude: /node_modules/, loader: require.resolve('babel-loader') },
+			{ test: /\.(js|jsx)$/, exclude: /node_modules/, loader: require.resolve('babel-loader'), query: { stage: 0 } },
 			{ test: /\.json$/, loader: 'json-loader'}
 		]
 	},

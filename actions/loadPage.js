@@ -2,7 +2,7 @@
 
 module.exports = function(context, payload, done) {
     context.dispatch('UPDATE_PAGE_TITLE', {
-        pageTitle: payload.config.title,
+        pageTitle: payload.title,
 		redirectPath: payload.redirectPath
     });
     

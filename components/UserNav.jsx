@@ -1,74 +1,48 @@
 'use strict';
-var React = require('react');
-var NavLink = require('flux-router-component').NavLink;
-var UserStore = require('../stores/UserStore');
-var ApplicationStore = require('../stores/ApplicationStore');
-var If = require('./If');
-var ImageLoader = require('react-imageloader');
+import React from 'react';
+import {NavLink} from 'fluxible-router';
+import If from './If';
+import ImageLoader from 'react-imageloader';
+import ApplicationStore from '../stores/ApplicationStore';
+import UserStore from '../stores/UserStore';
+import {connectToStores, provideContext} from 'fluxible-addons-react';
 
-var UserNav = React.createClass({
-	contextTypes: {
-        getStore: React.PropTypes.func.isRequired
-    },
+@provideContext
+@connectToStores([ApplicationStore, UserStore], (context, props) => ({
+    ApplicationStore: context.getStore(ApplicationStore).getState(),
+    UserStore: context.getStore(UserStore).getState()
+}))
+class UserNav extends React.Component {
+	static contextTypes = {
+        getStore: React.PropTypes.func
+    }
 
-	statics: {
-		storeListeners: {
-			onUserStoreChange: [UserStore],
-			onApplicationStoreChange: [ApplicationStore]
-		}
-	},
+    constructor(props, context) {
+        super(props, context);
+    }
 
-	getDefaultProps: function () {
-		return {
-			selected: null,
-			links: {}
-		};
-	},
+	static defaultProps = {
+		selected: 'home',
+		links: {}
+    }
 
-	getInitialState: function() {
-		return {
-			currentUser: this.context.getStore(UserStore).getCurrentUser(),
-			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.context.getStore(ApplicationStore).getCurrentRoute().config.path,
-			passwordClasses: this.getPasswordClasses(),
-			loginStatus: this.context.getStore(UserStore).getLoginHeaderStatus()
-		};
-	},
-
-	getPasswordClasses: function() {
-		var loginStatus = this.context.getStore(UserStore).getLoginHeaderStatus();
+	getPasswordClasses() {
+		var loginStatus = this.props.UserStore.loginHeaderStatus;
 
 		if (1 === loginStatus) {
 			return 'navbar-form navbar-right failed-login';
 		} else {
 			return 'navbar-form navbar-right';
 		}
-	},
+	}
 
-	onUserStoreChange: function () {
-		var newState = {};
-		newState.currentUser = this.context.getStore(UserStore).getCurrentUser();
-		newState.passwordClasses = this.getPasswordClasses();
+	render() {
+		let selected = this.props.selected;
+		let links = this.props.links;
 
-		this.setState(newState);
-	},
-
-	onApplicationStoreChange: function () {
-		var newState = {
-			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.context.getStore(ApplicationStore).getCurrentRoute().config.path
-		};
-
-		this.setState(newState);
-	},
-
-	render: function() {
-		var selected = this.props.selected;
-		var links = this.props.links;
-
-		var accountLinkHTML = Object.keys(links).map(function(name) {
-			var className = '';
-			var link = links[name];
+		let accountLinkHTML = Object.keys(links).map(function(name) {
+			let className = '';
+			let link = links[name];
 
 			if (!link.type || 'account' !== link.type) {
 				return false;
@@ -82,17 +56,17 @@ var UserNav = React.createClass({
 				<li className={className} key={link.path}>
 					<NavLink routeName={link.page}>{link.title}</NavLink>
 				</li>
-				);
+			);
 		});
 
-		var gravatar = '';
-		if (this.state.currentUser && this.state.currentUser.emailHash) {
-			gravatar = 'http://www.gravatar.com/avatar/' + this.state.currentUser.emailHash + '?s=36&d=404';
+		let gravatar = '';
+		if (this.props.UserStore.currentUser && this.props.UserStore.currentUser.emailHash) {
+			gravatar = 'http://www.gravatar.com/avatar/' + this.props.UserStore.currentUser.emailHash + '?s=36&d=404';
 		}
 
 		return (
 			<div className="navbar-user">
-				<If test={this.state.currentUser}>
+				<If test={this.props.UserStore.currentUser}>
 					<div className="navbar-profile">
 						<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
 							<ImageLoader className="avatar" src={gravatar}>
@@ -100,7 +74,7 @@ var UserNav = React.createClass({
 							</ImageLoader>
 							
 							<div className="username navbar-right">
-								Hello <strong>{this.state.currentUser ? this.state.currentUser.username : ''}</strong> <span className="caret"></span>
+								Hello <strong>{this.props.UserStore.currentUser ? this.props.UserStore.currentUser.username : ''}</strong> <span className="caret"></span>
 							</div>
 						</a>
 						<ul className="dropdown-menu" role="menu">
@@ -111,8 +85,8 @@ var UserNav = React.createClass({
 						</ul>
 					</div>
 				</If>
-				<If test={!this.state.currentUser}>
-					<form method="post" action="/login" className={this.state.passwordClasses} noValidate>
+				<If test={!this.props.UserStore.currentUser}>
+					<form method="post" action="/login" className={this.props.UserStore.passwordClasses} noValidate>
 						<div className="form-group">
 							<input type="text" name="username" placeholder="Username" className="form-control"/>
 						</div>
@@ -122,16 +96,16 @@ var UserNav = React.createClass({
 						<input
 							type="hidden"
 							name="_csrf"
-							value={this.state.csrf}
+							value={this.props.ApplicationStore.csrfToken}
 						/>
-						<input type="hidden" name="redirectPath" value={this.state.redirectPath} />
+						<input type="hidden" name="redirectPath" value={this.props.ApplicationStore.redirectPath} />
 						<input type="hidden" name="type" value="header" />
 						<button type="submit" className="btn btn-primary">Sign in</button>
 					</form>
 				</If>
 			</div>
-			);
+		);
 	}
-});
+}
 
-module.exports = UserNav;
+export default UserNav;
