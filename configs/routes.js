@@ -125,7 +125,15 @@ export default {
 		title: 'The Story',
 		handler: require('../components/About'),
 		type: 'explore',
-		action: loadPage
+		action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', {
+		        pageTitle: payload.title,
+				redirectPath: payload.redirectPath
+		    });
+
+		    console.log('load page');
+		    done();
+        }
 	},
 	projects: {
 		path: '/projects',

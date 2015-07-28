@@ -57,9 +57,7 @@ class Application extends React.Component {
 
         return (
             <div>
-                <Nav context={this.props.context} selected={this.props.ApplicationStore.currentPageName} links={this.props.ApplicationStore.pages} />
-
-				<Handler context={this.props.context} repository={repository} />
+                <Handler repository={repository} />
 
 				<div className="container">
 					<hr />

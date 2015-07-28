@@ -22,6 +22,8 @@ var ApplicationStore = createStore({
     },
 
     handleNavigate: function(route) {
+        console.log(route);
+        
         if (this.currentRoute && (this.currentRoute.url === route.url)) {
             return;
         }

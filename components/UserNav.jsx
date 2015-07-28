@@ -13,12 +13,12 @@ import {connectToStores, provideContext} from 'fluxible-addons-react';
     UserStore: context.getStore(UserStore).getState()
 }))
 class UserNav extends React.Component {
-	static contextTypes = {
-        getStore: React.PropTypes.func
+	constructor(props, context) {
+        super(props, context);
     }
 
-    constructor(props, context) {
-        super(props, context);
+	static contextTypes = {
+        getStore: React.PropTypes.func
     }
 
 	static defaultProps = {

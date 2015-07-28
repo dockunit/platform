@@ -12,10 +12,10 @@ import ProjectsStore from './stores/ProjectsStore';
 let app = new Fluxible({
     component: Application,
     stores: [
-		RouteStore,
 		ApplicationStore,
 		UserStore,
-		ProjectsStore
+		ProjectsStore,
+		RouteStore
 	]
 });
 

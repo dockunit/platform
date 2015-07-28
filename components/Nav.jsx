@@ -61,7 +61,7 @@ class Nav extends React.Component {
 						</ul>
 
 						<If test={('login' !== this.props.selected)}>
-							<UserNav context={this.props.context} selected={this.props.selected} links={this.props.links}  />
+							<UserNav selected={this.props.selected} links={this.props.links}  />
 						</If>
 					</div>
 				</div>
