@@ -1,51 +1,28 @@
 'use strict';
 
-var React = require('react');
-var ApplicationStore = require('../stores/ApplicationStore');
-var UserStore = require('../stores/UserStore');
-var If = require('./If');
+import React from 'react';
+import ApplicationStore from '../stores/ApplicationStore';
+import UserStore from '../stores/UserStore';
+import If from './If';
+import {connectToStores} from 'fluxible-addons-react';
 
-var LoginForm = React.createClass({
-	contextTypes: {
+@connectToStores(['ApplicationStore', 'UserStore'], (context, props) => ({
+    ApplicationStore: context.getStore(ApplicationStore).getState(),
+    UserStore: context.getStore(UserStore).getState()
+}))
+class LoginForm extends React.Component {
+	constructor(props, context) {
+        super(props, context);
+    }
+
+	static contextTypes = {
         getStore: React.PropTypes.func.isRequired
-    },
+    }
 
-	statics: {
-		storeListeners: {
-			onUserStoreChange: [UserStore],
-			onApplicationStoreChange: [ApplicationStore]
-		}
-	},
-
-	getInitialState: function() {
-		return {
-			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.context.getStore(ApplicationStore).getRedirectPath(),
-			loginStatus: this.context.getStore(UserStore).getLoginFormStatus()
-		};
-	},
-
-	onUserStoreChange: function() {
-		var newState = {
-			loginStatus: this.context.getStore(UserStore).getLoginStatus()
-		};
-
-		this.setState(newState);
-	},
-
-	onApplicationStoreChange: function() {
-		var newState = {
-			csrf: this.context.getStore(ApplicationStore).getCsrfToken(),
-			redirectPath: this.context.getStore(ApplicationStore).getRedirectPath()
-		};
-
-		this.setState(newState);
-	},
-
-	render: function () {
+	render() {
 		return (
 			<form method="post" action="/login" noValidate>
-				<If test={(1 === this.state.loginStatus)}>
+				<If test={(1 === this.props.UserStore.loginStatus)}>
 					<div className="alert alert-danger" role="alert">
 						<span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 						<span className="sr-only">Error:</span>
@@ -59,14 +36,14 @@ var LoginForm = React.createClass({
 				<div className="form-group">
 					<input type="password" name="password" placeholder="Password" className="form-control" />
 				</div>
-				<input type="hidden" name="_csrf" value={this.state.csrf} />
-				<input type="hidden" name="redirectPath" value={this.state.redirectPath} />
+				<input type="hidden" name="_csrf" value={this.props.ApplicationStore.csrf} />
+				<input type="hidden" name="redirectPath" value={this.props.ApplicationStore.redirectPath} />
 				<input type="hidden" name="type" value="form" />
 
 				<button type="submit" className="btn btn-primary btn-lg">Sign in</button>
 			</form>
 		);
 	}
-});
+}
 
-module.exports = LoginForm;
+export default LoginForm;

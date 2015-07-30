@@ -1,18 +1,19 @@
 'use strict';
-var React = require('react');
-var LoginForm = require('./LoginForm.jsx');
 
-var Login = React.createClass({
+import React from 'react';
+import LoginFrom from './LoginForm';
 
-	render: function() {
+class Login extends React.Component {
+
+	render() {
 		return (
 			<div className="container login">
 				<h2>Login</h2>
 
 				<LoginForm />
 			</div>
-			);
+		);
 	}
-});
+}
 
-module.exports = Login;
+export default Login;
