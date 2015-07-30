@@ -26,7 +26,7 @@ class UserNav extends React.Component {
     }
 
 	getPasswordClasses() {
-		var loginStatus = this.props.UserStore.loginHeaderStatus;
+		let loginStatus = this.props.UserStore.loginHeaderStatus;
 
 		if (1 === loginStatus) {
 			return 'navbar-form navbar-right failed-login';

@@ -75,7 +75,7 @@ class Register extends React.Component {
 		this.userCache = this.context.getStore(UserStore).getUserCache();
 
 		if (this.userCache[this.state.username.value]) {
-			var newState = {};
+			let newState = {};
 			newState.username = _.extend({}, this.state.username);
 			newState.username.errors.taken = 'This username is already in use.';
 
@@ -84,7 +84,7 @@ class Register extends React.Component {
 	}
 
 	handleFormChange(event) {
-		var object = {};
+		let object = {};
 		object[event.target.id] = _.extend({}, this.state[event.target.id]);
 		object[event.target.id].value = event.target.value;
 

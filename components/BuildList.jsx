@@ -1,13 +1,14 @@
 'use strict';
-var React = require('react');
-var BuildListItem = require('./BuildListItem');
-var LatestBuildListItem = require('./LatestBuildListItem');
-var If = require('./If');
 
-var BuildList = React.createClass({
+import React from 'react';
+import If from './If';
+import BuildListItem from './BuildListItem';
+import LatestBuildListItem from './LatestBuildListItem';
+
+class BuildList extends React.Component;
 
 	render: function() {
-		var latestBuild = this.props.builds.shift();
+		let latestBuild = this.props.builds.shift();
 
 		return (
 			<div className="build-wrapper">
@@ -23,4 +24,4 @@ var BuildList = React.createClass({
 	}
 });
 
-module.exports = BuildList;
+export default BuildList;
