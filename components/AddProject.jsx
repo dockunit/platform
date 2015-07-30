@@ -12,9 +12,9 @@ import InputField from './InputField';
 import SelectField from './SelectField';
 import SubmitButton from './SubmitButton';
 import _ from 'lodash';
-import {connectToStores, provideContext} from 'fluxible-addons-react';
+import {connectToStores} from 'fluxible-addons-react';
 
-@connectToStores([ApplicationStore, UserStore, ProjectsStore], (context, props) => ({
+@connectToStores(['ApplicationStore', 'UserStore', 'ProjectsStore'], (context, props) => ({
     ApplicationStore: context.getStore(ApplicationStore).getState(),
     UserStore: context.getStore(UserStore).getState(),
     ProjectsStore: context.getStore(ProjectsStore).getState()
@@ -46,23 +46,23 @@ class AddProject extends React.Component {
 			errors: {},
 			validators: [this.validateRequired('branch')]
 		},
-		private: {
+		privateRepository: {
 			value: 'No',
 			errors: {},
-			validators: [this.validateRequired('private')]
+			validators: [this.validateRequired('privateRepository')]
 		},
 		repositories: false
     }
 
     componentWillMount() {
-        this.context.executeAction(readGithubRepositories, { token: this.context.UserStore.currentUser.githubAccessToken });
+        this.context.executeAction(readGithubRepositories, { token: this.props.UserStore.currentUser.githubAccessToken });
     }
 
 	validate(field) {
 		var self = this;
 
 		return function() {
-			var validators = self.props[field].validators,
+			var validators = self.state[field].validators,
 				errors = {};
 
 			if (validators.length) {
@@ -72,7 +72,7 @@ class AddProject extends React.Component {
 			}
 
 			var newState = {};
-			newState[field] = _.extend({}, self.props[field]);
+			newState[field] = _.extend({}, self.state[field]);
 
 			if (errors.required) {
 				newState[field].errors = {};
@@ -87,25 +87,11 @@ class AddProject extends React.Component {
 		};
 	}
 
-	validateRequired(field) {
-		var self = this;
-
-		return function() {
-			var errors = {};
-
-			if ('' === self.props[field].value) {
-				errors.required = 'This field is required.';
-			}
-
-			return errors;
-		};
-	}
-
-	_onChange() {
-		var user = this.context.UserStore.currentUser;
+	componentWillReceiveProps() {
+		var user = this.props.UserStore.currentUser;
 
 		if (user.repositories) {
-			var projects = this.context.ProjectsStore.projects;
+			var projects = this.props.ProjectsStore.projects;
 			var repositories = user.repositories;
 
 			if (repositories && Object.keys(repositories)) {
@@ -121,37 +107,37 @@ class AddProject extends React.Component {
 				repositories: repositories
 			};
 
-			if (!this.props.repositories && Object.keys(repositories).length) {
+			if (!this.state.repositories && Object.keys(repositories).length) {
 
 				state.repository = {
 					value: repositories[Object.keys(repositories)[0]].full_name,
 					errors: {},
-					validators: this.props.repository.validators
+					validators: this.state.repository.validators
 				};
 
-				state.private = {
-					value: (repositories[Object.keys(repositories)[0]].private) ? 'Yes' : 'No',
+				state.privateRepository = {
+					value: (repositories[Object.keys(repositories)[0]].privateRepository) ? 'Yes' : 'No',
 					errors: {},
-					validators: this.props.private.validators
+					validators: this.state.privateRepository.validators
 				};
 
 				this.context.executeAction(readGithubRepoBranches, {
 					repository: state.repository.value,
-					token: this.context.UserStore.getCurrentUser().githubAccessToken
+					token: this.props.UserStore.currentUser.githubAccessToken
 				});
 			}
 
-			if (this.props.repository.value && repositories[this.props.repository.value] && _.size(repositories[this.props.repository.value].branches)) {
+			if (this.state.repository.value && repositories[this.state.repository.value] && _.size(repositories[this.state.repository.value].branches)) {
 				state.branch = {
-					value: Object.keys(repositories[this.props.repository.value].branches)[0],
+					value: Object.keys(repositories[this.state.repository.value].branches)[0],
 					errors: {},
-					validators: this.props.repository.validators
+					validators: this.state.repository.validators
 				};
 
-				state.private = {
-					value: (repositories[this.props.repository.value].private) ? 'Yes' : 'No',
+				state.privateRepository = {
+					value: (repositories[this.state.repository.value].privateRepository) ? 'Yes' : 'No',
 					errors: {},
-					validators: this.props.private.validators
+					validators: this.state.privateRepository.validators
 				};
 			}
 
@@ -159,9 +145,23 @@ class AddProject extends React.Component {
 		}
 	}
 
+	validateRequired(field) {
+		var self = this;
+
+		return function() {
+			var errors = {};
+
+			if ('' === self.state[field].value) {
+				errors.required = 'This field is required.';
+			}
+
+			return errors;
+		};
+	}
+
 	handleFormChange(event) {
 		var object = {};
-		object[event.target.id] = _.extend({}, this.props[event.target.id]);
+		object[event.target.id] = _.extend({}, this.state[event.target.id]);
 		object[event.target.id].value = event.target.value;
 
 		this.setState(object);
@@ -171,27 +171,27 @@ class AddProject extends React.Component {
 		var object = {};
 		object[event.target.id] = {
 			value: event.target.value,
-			errors: this.props[event.target.id].errors,
-			validators: this.props[event.target.id].validators
+			errors: this.state[event.target.id].errors,
+			validators: this.state[event.target.id].validators
 		};
 
-		if (!_.size(this.props.repositories[event.target.value].branches)) {
+		if (!_.size(this.state.repositories[event.target.value].branches)) {
 			this.context.executeAction(readGithubRepoBranches, {
 				repository: event.target.value,
-				token: this.context.UserStore.getCurrentUser().githubAccessToken
+				token: this.props.UserStore.currentUser.githubAccessToken
 			});
 		} else {
 			object.branch = {
-				value: Object.keys(this.props.repositories[event.target.value].branches)[0],
+				value: Object.keys(this.state.repositories[event.target.value].branches)[0],
 				errors: {},
-				validators: this.props.repository.validators
+				validators: this.state.repository.validators
 			};
 		}
 
-		object.private = {
-			value: (this.props.repositories[event.target.value].private) ? 'Yes' : 'No',
+		object.privateRepository = {
+			value: (this.state.repositories[event.target.value].private) ? 'Yes' : 'No',
 			errors: {},
-			validators: this.props.private.validators
+			validators: this.state.privateRepository.validators
 		};
 
 		this.setState(object);
@@ -199,9 +199,9 @@ class AddProject extends React.Component {
 
 	submit() {
 		this.context.executeAction(createProject, {
-			repository: this.props.repository.value,
-			branch: this.props.branch.value,
-			private: ('Yes' === this.props.private.value) ? true : false
+			repository: this.state.repository.value,
+			branch: this.state.branch.value,
+			privateRepository: ('Yes' === this.state.privateRepository.value) ? true : false
 		});
 	}
 
@@ -210,7 +210,7 @@ class AddProject extends React.Component {
 
 		var errors = {};
 
-		['branch', 'repository', 'private'].forEach(function(field) {
+		['branch', 'repository', 'privateRepository'].forEach(function(field) {
 			var newErrors = self.validate.call(self, field)();
 			errors = _.extend(errors, newErrors);
 		});
@@ -283,7 +283,7 @@ class AddProject extends React.Component {
 							id="private"
 							options={statuses}
 							helpText="Private projects will only be viewable to those who have access to the Github project."
-							errors={this.props.private.errors}
+							errors={this.state.privateRepository.errors}
 						/>
 
 						<input

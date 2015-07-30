@@ -1,26 +1,38 @@
 'use strict';
-var React = require('react');
-var UserStore = require('../stores/UserStore');
 
-var GithubAuthorize = React.createClass({
+import React from 'react';
+import UserStore from '../stores/UserStore';
+import constants from '../constants';
+import {connectToStores} from 'fluxible-addons-react';
+
+@connectToStores(['UserStore'], (context, props) => ({
+    UserStore: context.getStore(UserStore).getState()
+}))
+class GithubAuthorize extends React.Component {
+	constructor(props, context) {
+        super(props, context);
+
+        this.handleClick = this.handleClick.bind(this);
+    }
+
 	contextTypes: {
         getStore: React.PropTypes.func.isRequired
-    },
+    }
 
-	handleClick: function(event) {
+	handleClick(event) {
 		event.preventDefault();
 
-		var state = this.context.getStore(UserStore).getCurrentUser().githubStateToken;
-		var redirect = 'http://dockunit.io/projects/authorize';
-		var clientId = require('../constants').githubClientId;
+		let state = this.props.UserStore.currentUser.githubStateToken;
+		let redirect = 'http://dockunit.io/projects/authorize';
+		let clientId = constants.githubClientId;
 
-		var url = 'https://github.com/login/oauth/authorize?client_id=' + clientId + '&amp;scope=admin:repo_hook,admin:org_hook,repo:status,repo&amp;state=' + state + '&amp;redirect_uri=' + redirect;
+		let url = 'https://github.com/login/oauth/authorize?client_id=' + clientId + '&amp;scope=admin:repo_hook,admin:org_hook,repo:status,repo&amp;state=' + state + '&amp;redirect_uri=' + redirect;
 
 		window.document.cookie = 'state=' + state;
 		window.document.location = url;
-	},
+	}
 
-	render: function() {
+	render() {
 		return (
 			<div className="container">
 				<div className="page-header">
@@ -29,17 +41,13 @@ var GithubAuthorize = React.createClass({
 
 				<p>We need read access to your Github account so we can get a list of your repositories.</p>
 
-				<a
-					type="submit"
-					className="btn btn-lg btn-primary"
-					onClick={this.handleClick}
-				>
+				<a type="submit" className="btn btn-lg btn-primary" onClick={this.handleClick}>
 					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 					Connect Github Account
 				</a>
 			</div>
-			);
+		);
 	}
-});
+}
 
-module.exports = GithubAuthorize;
+export default GithubAuthorize;

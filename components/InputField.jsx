@@ -1,10 +1,10 @@
 'use strict';
 
-var React = require('react');
-var If = require('./If');
+import React from 'react';
+import If from './If';
 
-var Field = React.createClass({
-	render: function() {
+class Field extends React.Component {
+	render() {
 		var errorsHTML = [];
 		if (this.props.errors) {
 			var errorsHTML = Object.keys(this.props.errors).map(function(errorKey) {
@@ -42,6 +42,6 @@ var Field = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
-module.exports = Field;
+export default Field;

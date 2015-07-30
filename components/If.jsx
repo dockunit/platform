@@ -1,15 +1,15 @@
 'use strict';
-var React = require('react');
 
-var If = React.createClass({
-	render: function() {
+import React from 'react';
+
+class If extends React.Component {
+	render() {
 		if (this.props.test) {
 			return this.props.children;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-});
+}
 
-module.exports = If;
+export default If;

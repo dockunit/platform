@@ -1,16 +1,20 @@
 'use strict';
 
-var React = require('react');
-var _ = require('lodash');
+import React from 'react';
+import _ from 'lodash';
 
-var SubmitButton = React.createClass({
-	getInitialState: function() {
-		return {
-			classes: 'submit-notification-icon glyphicon'
-		}
-	},
+class SubmitButton extends React.Component {
+	constructor(props, context) {
+		super(props, context);
 
-	onClick: function(event) {
+		this.onClick = this.onClick.bind(this);
+	}
+
+	state: {
+		classes: 'submit-notification-icon glyphicon'
+	}
+
+	onClick(event) {
 		var self = this;
 		event.preventDefault();
 
@@ -29,9 +33,9 @@ var SubmitButton = React.createClass({
 				}
 			}, 2000), 1000);
 		}
-	},
+	}
 
-	render: function() {
+	render() {
 		return (
 			<div>
 				<input
@@ -42,8 +46,8 @@ var SubmitButton = React.createClass({
 				/>
 				<span className={this.state.classes}></span>
 			</div>
-			);
+		);
 	}
-});
+}
 
-module.exports = SubmitButton;
+export default SubmitButton;

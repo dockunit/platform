@@ -1,10 +1,10 @@
 'use strict';
 
-var React = require('react');
-var If = require('./If');
+import React from 'react';
+import If from './If';
 
-var SelectField = React.createClass({
-	render: function() {
+class SelectField extends React.Component {
+	render() {
 		var errorsHTML = [];
 		if (this.props.errors) {
 			var errorsHTML = Object.keys(this.props.errors).map(function(errorKey) {
@@ -54,6 +54,6 @@ var SelectField = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
-module.exports = SelectField;
+export default SelectField;

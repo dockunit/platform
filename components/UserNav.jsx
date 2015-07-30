@@ -7,8 +7,7 @@ import ApplicationStore from '../stores/ApplicationStore';
 import UserStore from '../stores/UserStore';
 import {connectToStores, provideContext} from 'fluxible-addons-react';
 
-@provideContext
-@connectToStores([ApplicationStore, UserStore], (context, props) => ({
+@connectToStores(['ApplicationStore', 'UserStore'], (context, props) => ({
     ApplicationStore: context.getStore(ApplicationStore).getState(),
     UserStore: context.getStore(UserStore).getState()
 }))

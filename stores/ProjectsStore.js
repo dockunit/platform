@@ -1,26 +1,18 @@
 'use strict';
 
-var createStore = require('fluxible/addons').createStore;
-var _ = require('lodash');
+import {BaseStore} from 'fluxible/addons';
+import routesConfig from '../configs/routes';
+import _ from 'lodash';
 
-var ProjectsStore = createStore({
-	storeName: 'ProjectsStore',
+class ProjectsStore extends BaseStore {
+	constructor(dispatcher) {
+		super(dispatcher);
 
-	handlers: {
-		'READ_MY_PROJECTS_SUCCESS': 'readMyProjectsSuccess',
-		'READ_PROJECT_SUCCESS': 'readProjectSuccess',
-		'READ_PROJECT_FAILURE': 'readProjectFailure',
-		'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
-		'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
-		'NEW_PROJECT_BUILD': 'newProjectBuild'
-	},
-
-	initialize: function () {
 		this.projects = null;
 		this.projectsNotFound = {};
-	},
+	}
 
-	updateProjectBuild: function(payload) {
+	updateProjectBuild(payload) {
 		// Todo: this needs to be more efficient
 		for (var i = 0; i < this.projects[payload.repository].builds.length; i++) {
 			if (this.projects[payload.repository].builds[i]._id === payload.build._id) {
@@ -29,49 +21,49 @@ var ProjectsStore = createStore({
 				return;
 			}
 		}
-	},
+	}
 
-	newProjectBuild: function(payload) {
+	newProjectBuild(payload) {
 		this.projects[payload.repository].builds.unshift(payload.build);
 		this.emitChange();
-	},
+	}
 
-	readMyProjectsSuccess: function(projects) {
+	readMyProjectsSuccess(projects) {
 		this.projects = projects;
 		this.emitChange();
-	},
+	}
 
-	readProjectSuccess: function(project) {
+	readProjectSuccess(project) {
 		this.projects = this.projects || {};
 
 		this.projects = _.extend(this.projects, project);
 
 		this.emitChange();
-	},
+	}
 
-	readProjectFailure: function(params) {
+	readProjectFailure(params) {
 		this.projectsNotFound[params.repository] = true;
 
 		this.emitChange();
-	},
+	}
 
-	createProjectSuccess: function(project) {
+	createProjectSuccess(project) {
 		if (!this.projects) {
 			this.projects = {};
 		}
 
 		this.projects[project.repository] = project;
 		this.emitChange();
-	},
+	}
 
-	getState: function() {
+	getState() {
 		return {
 			projects: this.projects,
 			projectsNotFound: this.projectsNotFound
 		};
-	},
+	}
 
-	getMyProjects: function() {
+	getMyProjects() {
 		this.projects = this.projects || {};
 
 		var myProjects = {};
@@ -83,16 +75,27 @@ var ProjectsStore = createStore({
 		}
 
 		return this.projects;
-	},
+	}
 
-	dehydrate: function() {
+	dehydrate() {
 		return this.getState();
-	},
+	}
 
-	rehydrate: function(state) {
+	rehydrate(state) {
 		this.projects = state.projects;
 		this.projectsNotFound = state.projectsNotFound;
 	}
-});
+}
 
-module.exports = ProjectsStore;
+ProjectsStore.handlers = {
+	'READ_MY_PROJECTS_SUCCESS': 'readMyProjectsSuccess',
+	'READ_PROJECT_SUCCESS': 'readProjectSuccess',
+	'READ_PROJECT_FAILURE': 'readProjectFailure',
+	'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
+	'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
+	'NEW_PROJECT_BUILD': 'newProjectBuild'
+};
+
+ProjectsStore.storeName = 'ProjectsStore';
+
+export default ProjectsStore;

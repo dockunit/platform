@@ -6,7 +6,6 @@ import UserNav from './UserNav';
 import If from './If';
 import {provideContext} from 'fluxible-addons-react';
 
-@provideContext
 class Nav extends React.Component {
 	static defaultProps = {
 		selected: 'home',

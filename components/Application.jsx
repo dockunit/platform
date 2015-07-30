@@ -17,7 +17,7 @@ import {handleHistory} from 'fluxible-router';
 
 @provideContext
 @handleHistory({enableScroll: false})
-@connectToStores([ApplicationStore, UserStore], (context, props) => ({
+@connectToStores(['ApplicationStore', 'UserStore'], (context, props) => ({
     ApplicationStore: context.getStore(ApplicationStore).getState(),
     UserStore: context.getStore(UserStore).getState()
 }))
@@ -57,6 +57,8 @@ class Application extends React.Component {
 
         return (
             <div>
+                <Nav />
+                
                 <Handler repository={repository} />
 
 				<div className="container">

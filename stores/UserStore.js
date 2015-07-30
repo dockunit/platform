@@ -2,32 +2,21 @@
 
 'use strict';
 
-var createStore = require('fluxible/addons').createStore;
-var _ = require('lodash');
+import {BaseStore} from 'fluxible/addons';
+import routesConfig from '../configs/routes';
+import _ from 'lodash';
 
-var UserStore = createStore({
-	storeName: 'UserStore',
+class UserStore extends BaseStore {
+	constructor(dispatcher) {
+		super(dispatcher);
 
-	handlers: {
-		'CREATE_USER_FAILURE': 'createUserFailure',
-		'CREATE_USER_SUCCESS': 'createUserSuccess',
-		'UPDATE_CURRENT_USER': 'updateCurrentUser',
-		'USER_EXISTS_SUCCESS': 'cacheUser',
-		'USER_EXISTS_FAILURE': 'cacheUser',
-		'UPDATE_LOGIN_FORM_STATUS': 'updateLoginFormStatus',
-		'UPDATE_LOGIN_HEADER_STATUS': 'updateLoginHeaderStatus',
-		'READ_GITHUB_REPOSITORIES_SUCCESS': 'updateCurrentUser',
-		'READ_GITHUB_REPO_BRANCHES_SUCCESS': 'updateRepoBranches'
-	},
-
-	initialize: function () {
 		this.currentUser = null;
 		this.userCache = {};
 		this.loginFormStatus = 0;
 		this.loginHeadertatus = 0;
-	},
+	}
 
-	updateRepoBranches: function(branchObject) {
+	updateRepoBranches(branchObject) {
 		this.currentUser = this.currentUser || {};
 
 		if (this.currentUser.repositories && this.currentUser.repositories[branchObject.repository]) {
@@ -35,33 +24,33 @@ var UserStore = createStore({
 		}
 
 		this.emitChange();
-	},
+	}
 
-	cacheUser: function(user) {
+	cacheUser(user) {
 		this.userCache[user.username] = user.exists;
 		this.emitChange();
-	},
+	}
 
-	updateLoginFormStatus: function(status) {
+	updateLoginFormStatus(status) {
 		this.loginFormStatus = status;
 		this.emitChange();
-	},
+	}
 
-	updateLoginHeaderStatus: function(status) {
+	updateLoginHeaderStatus(status) {
 		this.loginHeaderStatus = status;
 		this.emitChange();
-	},
+	}
 
-	createUserSuccess: function(newUser) {
+	createUserSuccess(newUser) {
 		this.newRegistration = true;
 		this.emitChange();
-	},
+	}
 
-	createUserFailure: function(failedUser) {
+	createUserFailure(failedUser) {
 		//console.log('user failure');
-	},
+	}
 
-	updateCurrentUser: function(newUser) {
+	updateCurrentUser(newUser) {
 		// We don't want to save the password
 		delete newUser.password;
 
@@ -71,30 +60,45 @@ var UserStore = createStore({
 		_.assign(this.currentUser, newUser);
 
 		this.emitChange();
-	},
+	}
 
-	getCurrentUser: function() {
+	getCurrentUser() {
 		return this.currentUser;
-	},
+	}
 
-	getState: function() {
+	getState() {
 		return {
 			currentUser: this.currentUser,
 			userCache: this.userCache,
 			loginFormStatus: this.loginFormStatus,
 			loginHeaderStatus: this.loginHeaderStatus
 		};
-	},
+	}
 
-	dehydrate: function() {
+	dehydrate() {
 		return this.getState();
-	},
-	rehydrate: function(state) {
+	}
+
+	rehydrate(state) {
 		this.currentUser = state.currentUser;
 		this.userCache = state.userCache;
 		this.loginFormStatus = state.loginFormStatus;
 		this.loginHeaderStatus = state.loginHeaderStatus;
 	}
-});
+}
 
-module.exports = UserStore;
+UserStore.storeName = 'UserStore';
+
+UserStore.handlers = {
+	'CREATE_USER_FAILURE': 'createUserFailure',
+	'CREATE_USER_SUCCESS': 'createUserSuccess',
+	'UPDATE_CURRENT_USER': 'updateCurrentUser',
+	'USER_EXISTS_SUCCESS': 'cacheUser',
+	'USER_EXISTS_FAILURE': 'cacheUser',
+	'UPDATE_LOGIN_FORM_STATUS': 'updateLoginFormStatus',
+	'UPDATE_LOGIN_HEADER_STATUS': 'updateLoginHeaderStatus',
+	'READ_GITHUB_REPOSITORIES_SUCCESS': 'updateCurrentUser',
+	'READ_GITHUB_REPO_BRANCHES_SUCCESS': 'updateRepoBranches'
+};
+
+export default UserStore;
