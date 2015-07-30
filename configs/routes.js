@@ -29,7 +29,7 @@ export default {
 		handler: require('../components/Login'),
 		title: 'Login',
 		action: function (actionContext, payload, done) {
-			var user = actionContext.getStore(UserStore).getCurrentUser();
+			var user = actionContext.getStore(UserStore).currentUser;
 
 			if (user) {
 				var navKey = 'home';
@@ -52,7 +52,7 @@ export default {
 		handler: require('../components/AddProject'),
 		title: 'Add a Project',
 		action: function (actionContext, payload, done) {
-			var user = actionContext.getStore(UserStore).getCurrentUser(),
+			var user = actionContext.getStore(UserStore).currentUser,
 				navKey;
 
 			if (!user) {
@@ -92,7 +92,7 @@ export default {
 			state: true
 		},
 		action: function (actionContext, payload, done) {
-			var user = actionContext.getStore(UserStore).getCurrentUser(),
+			var user = actionContext.getStore(UserStore).currentUser,
 				navKey;
 
 			if (!user) {
@@ -143,7 +143,7 @@ export default {
 		handler: require('../components/Projects'),
 		type: 'account',
 		action: function (actionContext, payload, done) {
-			var user = actionContext.getStore(UserStore).getCurrentUser(),
+			var user = actionContext.getStore(UserStore).currentUser,
 				navKey;
 
 			if (!user) {
@@ -178,7 +178,7 @@ export default {
 		page: 'project',
 		title: 'Project',
 		action: function (actionContext, payload, done) {
-			var user = actionContext.getStore(UserStore).getCurrentUser(),
+			var user = actionContext.getStore(UserStore).currentUser,
 				navKey;
 
 			/*if (!user) {

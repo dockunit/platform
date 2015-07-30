@@ -1,31 +1,32 @@
-var React = require('react');
-var timeago = require('timeago');
-var If = require('./If');
+'use strict';
 
-var BuildListItem = React.createClass({
+import React from 'react';
+import If from './If';
+import timeago from 'timeago';
 
-	getInitialState: function() {
-		return {
-			showBuildDetails: false
-		};
-	},
+class BuildListItem extends React.Component {
+	constructor(props, context) {
+        super(props, context);
 
-	toggleBuildDetails: function(event) {
+        this.toggleBuildDetails = this.toggleBuildDetails.bind(this);
+    }
+
+	state = {
+		showBuildDetails: false
+	}
+
+	toggleBuildDetails(event) {
 		event.preventDefault();
 
 		this.setState({ showBuildDetails: !this.state.showBuildDetails });
-	},
+	}
 
-	componentWillReceiveProps: function() {
-		this.setState(this.getInitialState());
-	},
-
-	render: function() {
-		var statusClasses = 'status ';
-		var userUrl = 'https://github.com/' + this.props.build.commitUser;
-		var githubUrl = 'https://github.com/' + this.props.repository;
-		var repositoryName = this.props.repository.replace(/^.*?\/(.*)$/i, '$1');
-		var dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
+	render() {
+		let statusClasses = 'status ';
+		let userUrl = 'https://github.com/' + this.props.build.commitUser;
+		let githubUrl = 'https://github.com/' + this.props.repository;
+		let repositoryName = this.props.repository.replace(/^.*?\/(.*)$/i, '$1');
+		let dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
 
 		if (this.props.build.finished) {
 			if (255 === this.props.build.result) {
@@ -80,6 +81,6 @@ var BuildListItem = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
-module.exports = BuildListItem;
+export default BuildListItem;

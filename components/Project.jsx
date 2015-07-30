@@ -1,77 +1,65 @@
 'use strict';
 
-var React = require('react');
-var BuildList = require('./BuildList');
-var If = require('./If');
-var ProjectsStore = require('../stores/ProjectsStore');
-var UserStore = require('../stores/UserStore');
-var NavLink = require('flux-router-component').NavLink;
-var readProject = require('../actions/readProject');
+import {NavLink} from 'fluxible-router';
+import React from 'react';
+import If from './If';
+import ProjectsStore from '../stores/ProjectsStore';
+import UserStore from '../stores/UserStore';
+import readProject from '../actions/readProject';
+import BuildList from './BuildList';
+import {connectToStores} from 'fluxible-addons-react';
 
-var Project = React.createClass({
-	contextTypes: {
-        getStore: React.PropTypes.func.isRequired
-    },
+@connectToStores(['UserStore', 'ProjectsStore'], (context, props) => ({
+    UserStore: context.getStore(UserStore).getState(),
+    ProjectsStore: context.getStore(ProjectsStore).getState()
+}))
+class Project extends React.Component {
+	constructor(props, context) {
+        super(props, context);
 
-	statics: {
-		storeListeners: {
-			onProjectsStoreChange: [ProjectsStore],
-			onUserStoreChange: [UserStore]
-		}
-	},
+        this.changeBranch = this.changeBranch.bind(this);
+    }
 
-	onProjectsStoreChange: function() {
-		var projects = this.context.getStore(ProjectsStore).getProjects(),
-			projectsNotFound = this.context.getStore(ProjectsStore).getProjectsNotFound(),
+	static contextTypes = {
+        getStore: React.PropTypes.func.isRequired,
+        executeAction: React.PropTypes.func
+    }
+
+	state = {
+		project: null,
+		currentBranch: null
+	}
+
+	componentWillReceiveProps() {
+		let projects = this.props.ProjectsStore.projects,
 			state = {};
 
 		if (projects && projects[this.props.repository]) {
 			state.project = projects[this.props.repository];
+			state.currentBranch = state.project.branch;
 
-			if (!this.statecurrentBranch) {
+			if (!this.state.currentBranch) {
 				state.currentBranch = projects[this.props.repository].branch;
 			}
-		} else if (projectsNotFound[this.props.repository]) {
-			state.project = false;
-		}
 
-		this.setState(state);
-	},
-
-	onUserStoreChange: function () {
-		var newState = {};
-		newState.currentUser = this.context.getStore(UserStore).getCurrentUser();
-
-		this.setState(newState);
-	},
-
-	getInitialState: function() {
-		var projects = this.context.getStore(ProjectsStore).getProjects();
-
-		var state = {
-			project: null,
-			currentBranch: null,
-			currentUser: this.context.getStore(UserStore).getCurrentUser()
-		};
-
-		if (projects && projects[this.props.repository]) {
-			state.project = projects[this.props.repository];
-			state.currentBranch = state.project.branch;
+			this.setState(state);
 		} else {
+			if (this.props.ProjectsStore.projectsNotFound[this.props.repository]) {
+				state.project = false;
+				this.setState(state);
+			}
 			this.context.executeAction(readProject, { repository: this.props.repository });
 		}
+	}
 
-		return state;
-	},
-
-	changeBranch: function(event) {
+	changeBranch(event) {
 		event.preventDefault();
 
 		this.setState({ currentBranch: event.target.innerText });
-	},
+	}
 
-    render: function() {
-    	var nonCurrentBranches = [],
+    render() {
+    	let nonCurrentBranches = [],
     		builds = [];
 
     	if (this.state.project) {
@@ -88,7 +76,7 @@ var Project = React.createClass({
     		nonCurrentBranches = Object.keys(nonCurrentBranches);
     	}
 
-    	var branchButtonClasses = 'btn btn-sm dropdown-toggle';
+    	let branchButtonClasses = 'btn btn-sm dropdown-toggle';
     	if (!nonCurrentBranches.length) {
     		branchButtonClasses += ' one-branch';
     	}
@@ -96,7 +84,7 @@ var Project = React.createClass({
         return (
             <div className="container">
 				<h1 className="page-header">
-					<If test={this.state.currentUser}>
+					<If test={this.props.UserStore.currentUser}>
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
 					</If>
 
@@ -147,12 +135,12 @@ var Project = React.createClass({
 							</div>
 						</div>
 
-						<BuildList currentUser={this.state.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
+						<BuildList currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
 					</div>
                 </If>
 			</div>
         );
     }
-});
+}
 
-module.exports = Project;
+export default Project;

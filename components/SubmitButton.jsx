@@ -10,7 +10,7 @@ class SubmitButton extends React.Component {
 		this.onClick = this.onClick.bind(this);
 	}
 
-	state: {
+	state = {
 		classes: 'submit-notification-icon glyphicon'
 	}
 

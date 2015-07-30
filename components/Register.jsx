@@ -19,16 +19,16 @@ class Register extends React.Component {
         super(props, context);
 
         this.validateUsername = this.validateUsername.bind(this);
+         this.validateRequired = this.validateRequired.bind(this);
         this.validateEmail = this.validateEmail.bind(this);
         this.validatePassword = this.validatePassword.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.submit = this.submit.bind(this);
-        this.click = this.click.bind(this);
         this.success = this.success.bind(this);
         this.register = this.register.bind(this);
     }
 
-	contextTypes: {
+	static contextTypes = {
         executeAction: React.PropTypes.func.isRequired,
         getStore: React.PropTypes.func.isRequired
     }
@@ -71,10 +71,8 @@ class Register extends React.Component {
 	    });
 	}
 
-	onUserStoreChange() {
-		this.userCache = this.context.getStore(UserStore).getUserCache();
-
-		if (this.userCache[this.state.username.value]) {
+	componentWillReceiveProps() {
+		if (this.props.UserStore.userCache[this.state.username.value]) {
 			let newState = {};
 			newState.username = _.extend({}, this.state.username);
 			newState.username.errors.taken = 'This username is already in use.';
@@ -267,7 +265,7 @@ class Register extends React.Component {
 								<input
 									type="hidden"
 									name="_csrf"
-									value={this.state.csrf}
+									value={this.props.ApplicationStore.csrfToken}
 								/>
 
 								<SubmitButton value="Sign Up" onSuccess={this.success} onClick={this.submit} />

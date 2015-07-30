@@ -33,21 +33,15 @@ class Application extends React.Component {
     }
 
     componentWillMount() {
-        if (this.context.getStore(UserStore).getCurrentUser()) {
+        if (this.props.UserStore.currentUser) {
             this.context.executeAction(readMyProjects, { mine: true });
         }
     }
 
-    _onChange() {
-        if (this.context.getStore(UserStore).getCurrentUser()) {
-            this.context.executeAction(readMyProjects);
-        }
-
-        this.setState(this.getStateFromStores());
-    }
-
     render() {
         var Handler = this.props.currentRoute.get('handler');
+
+
 
         var repository = false;
 
@@ -57,7 +51,7 @@ class Application extends React.Component {
 
         return (
             <div>
-                <Nav />
+                <Nav selected={this.props.ApplicationStore.currentPageName} links={this.props.ApplicationStore.pages} />
                 
                 <Handler repository={repository} />
 

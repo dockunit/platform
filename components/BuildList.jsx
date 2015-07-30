@@ -5,9 +5,9 @@ import If from './If';
 import BuildListItem from './BuildListItem';
 import LatestBuildListItem from './LatestBuildListItem';
 
-class BuildList extends React.Component;
+class BuildList extends React.Component{
 
-	render: function() {
+	render() {
 		let latestBuild = this.props.builds.shift();
 
 		return (
@@ -22,6 +22,6 @@ class BuildList extends React.Component;
             </div>
 		);
 	}
-});
+}
 
 export default BuildList;

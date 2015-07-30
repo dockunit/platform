@@ -62,10 +62,6 @@ class UserStore extends BaseStore {
 		this.emitChange();
 	}
 
-	getCurrentUser() {
-		return this.currentUser;
-	}
-
 	getState() {
 		return {
 			currentUser: this.currentUser,

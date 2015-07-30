@@ -1,33 +1,11 @@
 'use strict';
-var React = require('react');
-var UserStore = require('../stores/UserStore');
-var ProjectsStore = require('../stores/ProjectsStore');
-var ProjectList = require('./ProjectList.jsx');
-var NavLink = require('flux-router-component').NavLink;
 
-var Projects = React.createClass({
-	statics: {
-		storeListeners: {
-			onUserStoreChange: [UserStore],
-			onProjectsStoreChange: [ProjectsStore]
-		}
-	},
+import {NavLink} from 'fluxible-router';
+import React from 'react';
+import ProjectList from './ProjectList';
 
-	getInitialState: function () {
-		return {
-			projects: []
-		};
-	},
-
-	onProjectsStoreChange: function() {
-
-	},
-
-	onUserStoreChange: function() {
-
-	},
-
-	render: function() {
+class Projects extends React.Component {
+	render() {
 		return (
 			<div className="container">
 				<div className="projects-nav">
@@ -43,6 +21,6 @@ var Projects = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
-module.exports = Projects;
+export default Projects;

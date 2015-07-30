@@ -63,18 +63,16 @@ class ProjectsStore extends BaseStore {
 		};
 	}
 
-	getMyProjects() {
-		this.projects = this.projects || {};
-
+	static filterMyProjects(projects) {
 		var myProjects = {};
 
-		for (var repo in this.projects) {
-			if (this.projects[repo].mine) {
-				myProjects[repo] = this.projects[repo];
+		for (var repo in projects) {
+			if (projects[repo].mine) {
+				myProjects[repo] = projects[repo];
 			}
 		}
 
-		return this.projects;
+		return myProjects;
 	}
 
 	dehydrate() {

@@ -1,22 +1,22 @@
 'use strict';
 
-var React = require('react');
-var If = require('./If');
-var NavLink = require('flux-router-component').NavLink;
-var timeago = require('timeago');
-var _ = require('lodash');
+import {NavLink} from 'fluxible-router';
+import React from 'react';
+import If from './If';
+import _ from 'lodash';
+import timeago from 'timeago';
 
-var ProjectListItem = React.createClass({
-	render: function() {
-		var githubUrl = 'https://github.com/' + this.props.project.repository;
-		var projectUrl = '/projects/' + this.props.project.repository;
-		var repositoryUser = this.props.project.repository.replace(/^(.*?)\/.*/i, '$1');
-		var repositoryName = this.props.project.repository.replace(/^.*?\/(.*)$/i, '$1');
-		var dockunitUrl = githubUrl + '/blob/' + this.props.project.branch + '/Dockunit.json';
-		var userUrl = '';
+class ProjectListItem extends React.Component {
+	render() {
+		let githubUrl = 'https://github.com/' + this.props.project.repository;
+		let projectUrl = '/projects/' + this.props.project.repository;
+		let repositoryUser = this.props.project.repository.replace(/^(.*?)\/.*/i, '$1');
+		let repositoryName = this.props.project.repository.replace(/^.*?\/(.*)$/i, '$1');
+		let dockunitUrl = githubUrl + '/blob/' + this.props.project.branch + '/Dockunit.json';
+		let userUrl = '';
 
-		var statusClasses = 'status glyphicon ';
-		var latestBuild = false;
+		let statusClasses = 'status glyphicon ';
+		let latestBuild = false;
 
 		for (var i = this.props.project.builds.length - 1; i >= 0; i--) {
 			latestBuild = this.props.project.builds[i];
@@ -26,7 +26,7 @@ var ProjectListItem = React.createClass({
 			}
 		}
 
-		var commitUrl = githubUrl + '/commit/' + latestBuild.commit;
+		let commitUrl = githubUrl + '/commit/' + latestBuild.commit;
 
 		if (!this.props.project.builds.length) {
 			statusClasses += 'glyphicon-option-horizontal';
@@ -50,7 +50,7 @@ var ProjectListItem = React.createClass({
 			}
 		}
 
-		var shortCommit = (latestBuild && latestBuild.commit) ? latestBuild.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1') : '';
+		let shortCommit = (latestBuild && latestBuild.commit) ? latestBuild.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1') : '';
 
 		return (
 			<div className="project-item">
@@ -90,6 +90,6 @@ var ProjectListItem = React.createClass({
 			</div>
 		);
 	}
-});
+}
 
-module.exports = ProjectListItem;
+export default ProjectListItem;
