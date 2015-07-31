@@ -3,7 +3,7 @@
 import React from 'react';
 import UserStore from '../stores/UserStore';
 import createUser from '../actions/createUser';
-import {navigateAction} from 'flux-router-component';
+import {navigateAction} from 'fluxible-router';
 import {connectToStores} from 'fluxible-addons-react';
 import ApplicationStore from '../stores/ApplicationStore';
 import userExists from '../actions/userExists';
@@ -24,7 +24,7 @@ class Register extends React.Component {
         this.validatePassword = this.validatePassword.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.submit = this.submit.bind(this);
-        this.success = this.success.bind(this);
+        this.click = this.click.bind(this);
         this.register = this.register.bind(this);
     }
 
@@ -65,7 +65,7 @@ class Register extends React.Component {
 		this.context.executeAction(createUser, user);
 	}
 
-	success() {
+	submit() {
 		this.context.executeAction(navigateAction, {
 	        url: '/login'
 	    });
@@ -89,7 +89,7 @@ class Register extends React.Component {
 		this.setState(object);
 	}
 
-	submit() {
+	click() {
 		var self = this;
 
 		var errors = {};
@@ -268,7 +268,7 @@ class Register extends React.Component {
 									value={this.props.ApplicationStore.csrfToken}
 								/>
 
-								<SubmitButton value="Sign Up" onSuccess={this.success} onClick={this.submit} />
+								<SubmitButton value="Sign Up" onSubmit={this.submit} onClick={this.click} />
 							</div>
 						</form>
 					</div>

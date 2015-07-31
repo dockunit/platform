@@ -1,6 +1,6 @@
 'use strict';
 
-var navigate = require('flux-router-component').navigateAction;
+var navigate = require('fluxible-router').navigateAction;
 
 module.exports = function(context, payload, done) {
 	context.service.create('projects', payload, {}, function(error, response) {

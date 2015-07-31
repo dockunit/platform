@@ -40,13 +40,10 @@ class Application extends React.Component {
 
     render() {
         var Handler = this.props.currentRoute.get('handler');
-
-
-
         var repository = false;
 
         if ('project' === this.props.ApplicationStore.currentPageName) {
-            repository = this.props.currentRoute.params[0] + '/' + this.props.currentRoute.params[1];
+            repository = this.props.currentRoute.get('params')[0] + '/' + this.props.currentRoute.get('params')[1];
         }
 
         return (

@@ -1,7 +1,7 @@
 'use strict';
 
 import React from 'react';
-import LoginFrom from './LoginForm';
+import LoginForm from './LoginForm';
 
 class Login extends React.Component {
 

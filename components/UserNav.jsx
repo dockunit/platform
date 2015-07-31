@@ -14,6 +14,8 @@ import {connectToStores, provideContext} from 'fluxible-addons-react';
 class UserNav extends React.Component {
 	constructor(props, context) {
         super(props, context);
+
+        this.getPasswordClasses = this.getPasswordClasses.bind(this);
     }
 
 	static contextTypes = {
@@ -85,18 +87,14 @@ class UserNav extends React.Component {
 					</div>
 				</If>
 				<If test={!this.props.UserStore.currentUser}>
-					<form method="post" action="/login" className={this.props.UserStore.passwordClasses} noValidate>
+					<form method="post" action="/login" className={this.getPasswordClasses()} noValidate>
 						<div className="form-group">
 							<input type="text" name="username" placeholder="Username" className="form-control"/>
 						</div>
 						<div className="form-group">
 							<input type="password" name="password" className="form-control" placeholder="Password" />
 						</div>
-						<input
-							type="hidden"
-							name="_csrf"
-							value={this.props.ApplicationStore.csrfToken}
-						/>
+						<input type="hidden" name="_csrf" value={this.props.ApplicationStore.csrfToken} />
 						<input type="hidden" name="redirectPath" value={this.props.ApplicationStore.redirectPath} />
 						<input type="hidden" name="type" value="header" />
 						<button type="submit" className="btn btn-primary">Sign in</button>

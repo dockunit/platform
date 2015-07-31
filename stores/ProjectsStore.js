@@ -64,9 +64,9 @@ class ProjectsStore extends BaseStore {
 	}
 
 	static filterMyProjects(projects) {
-		var myProjects = {};
+		let myProjects = {};
 
-		for (var repo in projects) {
+		for (let repo in projects) {
 			if (projects[repo].mine) {
 				myProjects[repo] = projects[repo];
 			}

@@ -11,7 +11,6 @@ class ApplicationStore extends BaseStore {
         this.currentPage = null;
         this.currentRoute = null;
         this.pages = routesConfig;
-        this.csrf = '';
         this.pageTitle = '';
         this.csrfToken = null;
         this.redirectPath = null;
@@ -36,6 +35,7 @@ class ApplicationStore extends BaseStore {
 
     setCsrfToken(token) {
         this.csrfToken = token;
+        this.emitChange();
     }
 
     getState() {
