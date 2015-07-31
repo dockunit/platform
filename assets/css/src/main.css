@@ -5751,7 +5751,7 @@ body {
   color: #9d9d9d; }
   .navbar-profile a:hover {
     color: #9d9d9d; }
-.navbar-profile .avatar .avatar {
+.navbar-profile .avatar .avatar, .navbar-profile .avatar img {
   font-size: 22px;
   border-radius: 150px;
   padding: 0;
@@ -5761,7 +5761,7 @@ body {
   float: right;
   margin-top: 7px;
   margin-left: 10px; }
-  .navbar-profile .avatar .avatar.no-avatar {
+  .navbar-profile .avatar .avatar.no-avatar, .navbar-profile .avatar img.no-avatar {
     padding: 5px;
     border: 1px solid #fff; }
 

@@ -81,7 +81,7 @@
 		color: $navbar-primary;
 	}
 
-	.avatar .avatar {
+	.avatar .avatar, .avatar img {
 		&.no-avatar {
 			padding: 5px;
 			border: 1px solid #fff;
