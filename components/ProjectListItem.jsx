@@ -18,7 +18,7 @@ class ProjectListItem extends React.Component {
 		let statusClasses = 'status glyphicon ';
 		let latestBuild = false;
 
-		for (var i = this.props.project.builds.length - 1; i >= 0; i--) {
+		for (let i = this.props.project.builds.length - 1; i >= 0; i--) {
 			latestBuild = this.props.project.builds[i];
 
 			if (this.props.project.branch === latestBuild.branch) {

@@ -66,7 +66,7 @@ class AddProject extends React.Component {
 				errors = {};
 
 			if (validators.length) {
-				for (var i = 0; i < validators.length; i++) {
+				for (let i = 0; i < validators.length; i++) {
 					errors = _.extend(errors, validators[i].call(self));
 				}
 			}
