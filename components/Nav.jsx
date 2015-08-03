@@ -28,8 +28,6 @@ class Nav extends React.Component {
                 className = 'active';
             }
 
-            console.log(link);
-
             return (
                 <li className={className} key={link.path}>
                     <NavLink routeName={link.page}>{link.title}</NavLink>

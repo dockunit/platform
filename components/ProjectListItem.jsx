@@ -58,7 +58,7 @@ class ProjectListItem extends React.Component {
 					<span className={statusClasses}></span>
 
 					<div className="left">
-						<h4><NavLink navParams={[repositoryUser, repositoryName]} routeName="project">{this.props.project.repository}</NavLink></h4>
+						<h4><NavLink navParams={{username: repositoryUser, repository: repositoryName}} routeName="project">{this.props.project.repository}</NavLink></h4>
 
 						<div className="item">
 							Primary Project Branch: <strong>{this.props.project.branch}</strong>
