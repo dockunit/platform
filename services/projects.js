@@ -67,6 +67,7 @@ module.exports = {
 					callback(error);
 				} else {
 					projects.forEach(function(project) {
+						project = project.toObject();
 						project.mine = true;
 
 						projectObjects[project.repository] = project;
@@ -88,7 +89,7 @@ module.exports = {
 
 					callback(error);
 				} else {
-					var project = projects[0];
+					var project = projects[0].toObject();
 					project.mine = false;
 
 					debug('Found one project');

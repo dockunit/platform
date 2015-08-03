@@ -4,6 +4,7 @@ import {NavLink} from 'fluxible-router';
 import React from 'react';
 import ProjectsStore from '../stores/ProjectsStore';
 import If from './If';
+import ProjectListItem from './ProjectListItem';
 import {connectToStores} from 'fluxible-addons-react';
 
 

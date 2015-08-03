@@ -17,6 +17,8 @@ class ApplicationStore extends BaseStore {
     }
 
     handleNavigate(route) {
+        console.log('handle navigate');
+        console.log(route);
         if (this.currentRoute && (this.currentRoute.url === route.url)) {
             return;
         }
@@ -68,7 +70,7 @@ class ApplicationStore extends BaseStore {
 ApplicationStore.storeName = 'ApplicationStore';
 
 ApplicationStore.handlers = {
-    'CHANGE_ROUTE': 'handleNavigate',
+    'CHANGE_ROUTE_SUCCESS': 'handleNavigate',
     'UPDATE_CSRF_TOKEN': 'setCsrfToken'
 };
 
