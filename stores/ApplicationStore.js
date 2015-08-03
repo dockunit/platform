@@ -6,33 +6,8 @@ import routesConfig from '../configs/routes';
 class ApplicationStore extends BaseStore {
     constructor(dispatcher) {
         super(dispatcher);
-
-        this.currentPageName = null;
-        this.currentPage = null;
-        this.currentRoute = null;
-        this.pages = routesConfig;
-        this.pageTitle = '';
+        
         this.csrfToken = null;
-        this.redirectPath = null;
-    }
-
-    handleNavigate(route) {
-        console.log('handle navigate');
-        console.log(route);
-        if (this.currentRoute && (this.currentRoute.url === route.url)) {
-            return;
-        }
-
-        var pageName = route.config.page;
-        var pageTitle = 'Dockunit » ' + route.config.title;
-        var page = this.pages[pageName];
-
-        this.currentPageName = pageName;
-        this.pageTitle = pageTitle;
-        this.currentPage = page;
-        this.currentRoute = route;
-        this.redirectPath = route.redirectPath;
-        this.emitChange();
     }
 
     setCsrfToken(token) {
@@ -42,13 +17,7 @@ class ApplicationStore extends BaseStore {
 
     getState() {
         return {
-            currentPageName: this.currentPageName,
-            currentPage: this.currentPage,
-            pages: this.pages,
-            currentRoute: this.currentRoute,
-            pageTitle: this.pageTitle,
-            csrfToken: this.csrfToken,
-            redirectPath: this.redirectPath
+            csrfToken: this.csrfToken
         };
     }
 
@@ -57,20 +26,13 @@ class ApplicationStore extends BaseStore {
     }
 
     rehydrate(state) {
-        this.currentPageName = state.currentPageName;
-        this.currentPage = state.currentPage;
-        this.pages = state.pages;
-        this.currentRoute = state.currentRoute;
-        this.pageTitle = state.pageTitle;
         this.csrfToken = state.csrfToken;
-        this.redirectPath = state.redirectPath;
     }
 }
 
 ApplicationStore.storeName = 'ApplicationStore';
 
 ApplicationStore.handlers = {
-    'CHANGE_ROUTE_SUCCESS': 'handleNavigate',
     'UPDATE_CSRF_TOKEN': 'setCsrfToken'
 };
 

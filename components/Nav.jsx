@@ -4,6 +4,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 import UserNav from './UserNav';
 import If from './If';
+import routes from '../configs/routes';
 import {provideContext} from 'fluxible-addons-react';
 
 class Nav extends React.Component {
@@ -14,11 +15,10 @@ class Nav extends React.Component {
 
     render() {
         let selected = this.props.selected;
-        let links = this.props.links;
 
-        let exploreLinkHTML = Object.keys(links).map(function(name) {
+        let exploreLinkHTML = Object.keys(routes).map(function(name) {
             let className = '';
-            let link = links[name];
+            let link = routes[name];
 
 			if (!link.type || 'explore' !== link.type) {
 				return false;
@@ -27,6 +27,8 @@ class Nav extends React.Component {
             if (selected === name) {
                 className = 'active';
             }
+
+            console.log(link);
 
             return (
                 <li className={className} key={link.path}>

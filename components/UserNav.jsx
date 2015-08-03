@@ -6,6 +6,7 @@ import ImageLoader from 'react-imageloader';
 import ApplicationStore from '../stores/ApplicationStore';
 import UserStore from '../stores/UserStore';
 import {connectToStores, provideContext} from 'fluxible-addons-react';
+import routes from '../configs/routes';
 
 @connectToStores(['ApplicationStore', 'UserStore'], (context, props) => ({
     ApplicationStore: context.getStore(ApplicationStore).getState(),
@@ -41,9 +42,9 @@ class UserNav extends React.Component {
 		let selected = this.props.selected;
 		let links = this.props.links;
 
-		let accountLinkHTML = Object.keys(links).map(function(name) {
+		let accountLinkHTML = Object.keys(routes).map(function(name) {
 			let className = '';
-			let link = links[name];
+			let link = routes[name];
 
 			if (!link.type || 'account' !== link.type) {
 				return false;

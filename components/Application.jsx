@@ -40,15 +40,16 @@ class Application extends React.Component {
 
     render() {
         var Handler = this.props.currentRoute.get('handler');
+        var params = this.props.currentRoute.get('params');
         var repository = false;
 
-        if ('project' === this.props.ApplicationStore.currentPageName) {
-            repository = this.props.currentRoute.get('params')[0] + '/' + this.props.currentRoute.get('params')[1];
+        if ('project' === this.props.currentRoute.get('page')) {
+            repository = params.get('username') + '/' + params.get('repository');
         }
 
         return (
             <div>
-                <Nav selected={this.props.ApplicationStore.currentPageName} links={this.props.ApplicationStore.pages} />
+                <Nav selected={this.props.currentRoute.get('page')} />
                 
                 <Handler repository={repository} />
 
