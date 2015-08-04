@@ -16,7 +16,7 @@ var repos = {
 			var repos = {};
 
 			function fetch(page) {
-				httpInvoke('https://api.github.com/user/repos?page=' + page + '&access_token=' + token, 'GET', {
+				httpInvoke('https://api.github.com/user/repos?per_page=100&page=' + page + '&access_token=' + token, 'GET', {
 					headers: {
 						'User-Agent': 'Dockunit'
 					}
@@ -25,6 +25,8 @@ var repos = {
 						debug('Failed to get Github repos: ' + error);
 						reject(error);
 					} else {
+						debug('Found Github repos');
+
 						var parsedHeaders = (headers.link) ? parseLinkHeader(headers.link) : {};
 
 						var bodyObject = JSON.parse(body);
@@ -37,7 +39,9 @@ var repos = {
 						if (parsedHeaders.next) {
 							fetch(parsedHeaders.next.page);
 						} else {
+							debug('Returning Github repos');
 							fulfill(repos);
+							return;
 						}
 					}
 				});

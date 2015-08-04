@@ -20,7 +20,8 @@ let app = new Fluxible({
 });
 
 app.plug(fetchrPlugin({
-	xhrPath: '/api'
+	xhrPath: '/api',
+	xhrTimeout: 15000
 }));
 
 export default app;
