@@ -96,7 +96,7 @@ class UserNav extends React.Component {
 							<input type="password" name="password" className="form-control" placeholder="Password" />
 						</div>
 						<input type="hidden" name="_csrf" value={this.props.ApplicationStore.csrfToken} />
-						<input type="hidden" name="redirectPath" value={this.props.ApplicationStore.redirectPath} />
+						<input type="hidden" name="redirectPath" value={this.props.redirectPath} />
 						<input type="hidden" name="type" value="header" />
 						<button type="submit" className="btn btn-primary">Sign in</button>
 					</form>

@@ -14,6 +14,7 @@ class Nav extends React.Component {
     }
 
     render() {
+    	let redirectPath = (this.props.redirectPath) ? this.props.redirectPath : '/';
         let selected = this.props.selected;
 
         let exploreLinkHTML = Object.keys(routes).map(function(name) {
@@ -60,7 +61,7 @@ class Nav extends React.Component {
 						</ul>
 
 						<If test={('login' !== this.props.selected)}>
-							<UserNav selected={this.props.selected} links={this.props.links}  />
+							<UserNav redirectPath={redirectPath} selected={this.props.selected} links={this.props.links}  />
 						</If>
 					</div>
 				</div>

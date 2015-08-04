@@ -6,11 +6,13 @@ import LoginForm from './LoginForm';
 class Login extends React.Component {
 
 	render() {
+		let redirectPath = (this.props.redirectPath) ? this.props.redirectPath : '/';
+
 		return (
 			<div className="container login">
 				<h2>Login</h2>
 
-				<LoginForm />
+				<LoginForm redirectPath={redirectPath} />
 			</div>
 		);
 	}

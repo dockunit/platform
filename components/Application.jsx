@@ -2,18 +2,14 @@
 
 import React from 'react';
 import Nav from './Nav';
-import Register from './Register';
-import Projects from './Projects';
-import AddProject from './AddProject';
-import About from './About';
 import Login from './Login';
-import Project from './Project';
 import GithubAuthorize from './GithubAuthorize';
 import ApplicationStore from '../stores/ApplicationStore';
 import readMyProjects from '../actions/readMyProjects';
 import UserStore from '../stores/UserStore';
 import {connectToStores, provideContext} from 'fluxible-addons-react';
 import {handleHistory} from 'fluxible-router';
+import {navigateAction} from 'fluxible-router';
 
 @provideContext
 @handleHistory({enableScroll: false})
@@ -39,19 +35,34 @@ class Application extends React.Component {
     }
 
     render() {
-        var Handler = this.props.currentRoute.get('handler');
-        var params = this.props.currentRoute.get('params');
-        var repository = false;
+        let Handler = this.props.currentRoute.get('handler');
+        let params = this.props.currentRoute.get('params');
+        let repository = false;
+        let redirectPath = false;
 
         if ('project' === this.props.currentRoute.get('page')) {
             repository = params.get('username') + '/' + params.get('repository');
         }
 
+        if (!this.props.UserStore.currentUser) {
+            if ('projects' === this.props.currentRoute.get('page') || 'addProject' === this.props.currentRoute.get('page') || 'githubAuthorize' === this.props.currentRoute.get('page')) {
+                Handler = Login;
+                redirectPath = this.props.currentRoute.get('path');
+            }
+        } else {
+            if (!this.props.UserStore.currentUser.githubAccessToken) {
+                if ('projects' === this.props.currentRoute.get('page') || 'addProject' === this.props.currentRoute.get('page')) {
+                    Handler = GithubAuthorize;
+                    redirectPath = this.props.currentRoute.get('path');
+                }
+            }
+        }
+
         return (
             <div>
-                <Nav selected={this.props.currentRoute.get('page')} />
+                <Nav selected={this.props.currentRoute.get('page')} redirectPath={redirectPath} />
                 
-                <Handler repository={repository} />
+                <Handler repository={repository} redirectPath={redirectPath} />
 
 				<div className="container">
 					<hr />

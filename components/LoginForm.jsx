@@ -36,8 +36,8 @@ class LoginForm extends React.Component {
 				<div className="form-group">
 					<input type="password" name="password" placeholder="Password" className="form-control" />
 				</div>
-				<input type="hidden" name="_csrf" value={this.props.ApplicationStore.csrf} />
-				<input type="hidden" name="redirectPath" value={this.props.ApplicationStore.redirectPath} />
+				<input type="hidden" name="_csrf" value={this.props.ApplicationStore.csrfToken} />
+				<input type="hidden" name="redirectPath" value={this.props.redirectPath} />
 				<input type="hidden" name="type" value="form" />
 
 				<button type="submit" className="btn btn-primary btn-lg">Sign in</button>
