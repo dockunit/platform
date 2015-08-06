@@ -1,6 +1,6 @@
 # Dockunit Platform
 
-Fully open sourced [Dockunit.io](http://dockunit.io) platform for running [Dockunit](https://github.com/tlovett1/dockunit) containerized continuous integration tests.
+Fully open sourced [Dockunit.io](http://dockunit.io) platform for running [Dockunit](https://github.com/tlovett1/dockunit) containerized continuous integration tests. 
 
 ## Purpose
 
