@@ -1,0 +1,15 @@
+.loading-section {
+	text-align: center;
+}
+
+.loading-section.inline {
+	text-align: left;
+	font-style: italic;
+}
+
+.loading-section .glyphicon-refresh {
+	animation-name: rotateThis;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}

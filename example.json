@@ -1,0 +1,12 @@
+{ "ref": "refs/heads/master",
+  "before": "8608f40c62e4570dd8c3c59a6c45f9fd37d2ba81",
+  "after": "662bfd670b7f8cfca83cad7f50b15b2edd3a9668",
+  "created": false,
+  "deleted": false,
+  "forced": false,
+  "base_ref": null,
+  "compare": "https://github.com/tlovett1/Basic-Auth/compare/8608f40c62e4...662bfd670b7f",
+  "repository":
+   { "id": 23778555,
+     "name": "Basic-Auth",
+     "full_name": "tlovett1/Basic-Auth" } }

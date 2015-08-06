@@ -1,0 +1,162 @@
+.no-projects {
+	text-align: center;
+}
+
+.projects {
+	margin-top: $component-distance;
+	border: 1px solid $table-border-color;
+}
+
+.project-item:last-child {
+	border-bottom: 0;
+}
+
+.dropdown-toggle .count {
+	margin-right: 4px;
+}
+
+.dropdown-toggle.one-branch {
+	cursor: default;
+}
+
+.project-item:nth-child(even) {
+	background-color: #fff;
+}
+
+.projects-nav {
+	margin-top: 1.5em;
+}
+
+.project-item.latest-build .left {
+	margin-top: .9em;
+}
+
+.project-item.latest-build .status {
+	margin-top: .22em;
+}
+
+.project-item {
+	width: 100%;
+	overflow: auto;
+	border-bottom: 1px solid $table-border-color;
+	background-color: $gray-lighter;
+	padding: $panel-body-padding;
+
+	.main {
+		position: relative;
+		overflow: auto
+	}
+
+	&.jumbo {
+		background-color: $gray-lighter;
+	}
+
+	h3, h2, h4 {
+		margin-top: 0;
+	}
+
+	.status {
+		font-size: 60px;
+		color: #4c1;
+		width: 90px;
+		margin-top: .05em;
+		float: left;
+
+		&.glyphicon-option-horizontal {
+			color: yellow;
+		}
+
+		&.glyphicon-remove {
+			color: #e05d44;
+		}
+
+		&.glyphicon-exclamation-sign {
+			color: orange;
+		}
+	}
+
+	.left {
+		float: left;
+		margin-top: .7em;
+
+		a {
+			text-decoration: none;
+		}
+
+		.glyphicon-cog {
+			margin-right: 3px;
+		}
+	}
+
+	.right {
+		float: right;
+		width: 460px;
+		text-align: right;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	.toolbar {
+		margin-top: 1.3em;
+	}
+
+	.toolbar a:last-child {
+		margin-right: 0;
+	}
+
+	.expand {
+		vertical-align: middle;
+		text-decoration: none;
+	}
+
+	.toolbar .glyphicon, .toolbar .icomoon {
+		margin-left: $caret-width-base;
+		margin-right: 0;
+	}
+
+	.btn {
+		margin-right: 4px;
+		background-color: #fff;
+	}
+
+	.build-details {
+		margin-top: $panel-body-padding;
+		background-color: #000;
+		overflow: auto;
+	}
+
+	.build-details .containers {
+		background-color: $gray-lighter;
+		float: left;
+		padding-left: $panel-body-padding;
+		width: 25%;
+
+		h4 {
+			margin-top: 0;
+		}
+
+		li {
+			list-style-type: none;
+		}
+	}
+
+	.build-details .output {
+		background-color: #000;
+		color: #fff;
+		padding: $panel-body-padding;
+	}
+
+	.build-details .subnav {
+		text-align: right;
+		padding: 0;
+		margin-top: $padding-large-vertical;
+		margin-bottom: $padding-large-vertical;
+		margin-right: $panel-body-padding;
+
+		li {
+			padding-left: $padding-small-horizontal;
+			display: inline-block;
+			list-style-type: none
+		}
+	}
+}

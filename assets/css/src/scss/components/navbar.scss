@@ -1,0 +1,100 @@
+.navbar-form {
+	&.failed-login {
+		input[type=password] {
+			&:-webkit-autofill {
+				-webkit-box-shadow: 0 0 0px 1000px #f2dede inset;
+			}
+
+			background-color: #f2dede;
+			border-color: #ebccd1;
+		}
+	}
+
+	.form-group:first-child {
+		margin-right: .3em;
+	}
+
+	button {
+		margin-left: .3em;
+	}
+}
+
+.navbar-brand {
+	padding: 0;
+	vertical-align: middle;
+	line-height: 50px;
+}
+
+.navbar-brand > img {
+	display: inline-block;
+}
+
+.navbar-user {
+	display: inline-block;
+	float: right;
+	position: relative;
+}
+
+.navbar-projects {
+	margin-bottom: -1em;
+	padding-left: 0;
+	padding-right: 0;
+
+	.nav {
+		padding: 10px 0;
+	}
+}
+
+.navbar-project {
+	margin-bottom: -1em;
+	padding-left: 0;
+	padding-right: 0;
+
+	.navbar-right {
+		margin-right: 0;
+	}
+
+	.nav {
+		padding: 10px 0;
+	}
+}
+
+.navbar-profile {
+	.username {
+		padding-top: 15px;
+		padding-bottom: 15px;
+		padding-right: 15px;
+	}
+
+	.dropdown-menu {
+		margin-top: 0;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+
+	a {
+		&:hover {
+			color: $navbar-primary;
+		}
+
+		text-decoration: none;
+		color: $navbar-primary;
+	}
+
+	.avatar .avatar, .avatar img {
+		&.no-avatar {
+			padding: 5px;
+			border: 1px solid #fff;
+		}
+
+		font-size: 22px;
+		border-radius: 150px;
+		padding: 0;
+		background-color: #fff;
+		display: block;
+		width: auto;
+		float: right;
+		margin-top: 7px;
+		margin-left: 10px;
+	}
+}

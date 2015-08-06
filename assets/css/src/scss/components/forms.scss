@@ -1,0 +1,17 @@
+.submit-notification-icon {
+	visibility: hidden;
+	display: inline;
+	margin-left: .3em;
+	vertical-align: middle;
+	font-size: 1.5em;
+}
+
+.submit-notification-icon.errors {
+	visibility: visible;
+	color: red;
+}
+
+.submit-notification-icon.ok {
+	visibility: visible;
+	color: green;
+}
