@@ -94,6 +94,7 @@ class Project extends React.Component {
     	if (this.state.currentBranch) {
     		svgUrl += '/' + this.state.currentBranch;
     	}
+    	svgUrl += '?' + new Date().getTime();
 
     	let currentBranch = this.state.currentBranch || '';
 
