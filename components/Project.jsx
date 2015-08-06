@@ -18,7 +18,6 @@ class Project extends React.Component {
         super(props, context);
 
         this.changeBranch = this.changeBranch.bind(this);
-        this.toggleSvgCodeView = this.toggleSvgCodeView.bind(this);
     }
 
 	static contextTypes = {
@@ -28,8 +27,16 @@ class Project extends React.Component {
 
 	state = {
 		project: null,
-		currentBranch: null,
-		showSvgCodeView: false
+		currentBranch: null
+	}
+
+	componentDidMount() {
+		console.log('hello');
+		jQuery(React.findDOMNode(this.refs.buildImage)).popover({
+			trigger: 'click',
+			placement: 'bottom',
+			html: true
+		});
 	}
 
 	componentWillReceiveProps() {
@@ -52,10 +59,6 @@ class Project extends React.Component {
 			}
 			this.context.executeAction(readProject, { repository: this.props.repository });
 		}
-	}
-
-	toggleSvgCodeView() {
-
 	}
 
 	changeBranch(event) {
@@ -92,11 +95,6 @@ class Project extends React.Component {
     		svgUrl += '/' + this.state.currentBranch;
     	}
 
-    	let svgCodeViewClasses = 'svgCodeViewClasses hide';
-    	if (this.state.showSvgCodeView) {
-    		svgCodeViewClasses = 'svgCodeViewClasses';
-    	}
-
     	let repository = '';
     	if (this.state.project) {
     		repository = this.state.project.repository;
@@ -104,18 +102,12 @@ class Project extends React.Component {
 
         return (
             <div className="container">
-            	<If test={this.state.project}>
-	            	<div className={svgCodeViewClasses}>
-	            		[![Dockunit Status](http://dockunit.io/svg/{repository}/{this.state.currentBranch})](http://dockunit.io/projects/{repository}/{this.state.currentBranch})
-	            	</div>
-            	</If>
-
-				<h1 className="page-header">
+            	<h1 className="page-header">
 					<If test={this.props.UserStore.currentUser}>
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
 					</If>
 
-					{this.props.repository} <img onClick={this.toggleSvgCodeView} src={svgUrl} />
+					{this.props.repository} <img ref="buildImage" data-content="<textarea class='form-control'>[![Dockunit Status](http://dockunit.io/svg/{repository}/{this.state.currentBranch})](http://dockunit.io/projects/{repository}/{this.state.currentBranch})</textarea>" title="Build Image Markdown" className="build-image" onClick={this.toggleSvgCodeView} src={svgUrl} />
 				</h1>
 
 				<If test={false === this.state.project}>

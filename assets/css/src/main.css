@@ -5816,6 +5816,12 @@ body {
 .project-item.latest-build .status {
   margin-top: .22em; }
 
+.build-image {
+  cursor: pointer; }
+
+.popover-content textarea {
+  font-size: 12px; }
+
 .project-item {
   width: 100%;
   overflow: auto;
