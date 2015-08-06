@@ -97,11 +97,18 @@ class Project extends React.Component {
     		svgCodeViewClasses = 'svgCodeViewClasses';
     	}
 
+    	let repository = '';
+    	if (this.state.project) {
+    		repository = this.state.project.repository;
+    	}
+
         return (
             <div className="container">
-            	<div className={svgCodeViewClasses}>
-            		[![Dockunit Status](http://dockunit.io/svg/{this.state.project.repository}/{this.state.currentBranch})](http://dockunit.io/projects/{this.state.project.repository}/{this.state.currentBranch})
-            	</div>
+            	<If test={this.state.project}>
+	            	<div className={svgCodeViewClasses}>
+	            		[![Dockunit Status](http://dockunit.io/svg/{repository}/{this.state.currentBranch})](http://dockunit.io/projects/{repository}/{this.state.currentBranch})
+	            	</div>
+            	</If>
 
 				<h1 className="page-header">
 					<If test={this.props.UserStore.currentUser}>
