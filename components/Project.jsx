@@ -95,10 +95,9 @@ class Project extends React.Component {
     		svgUrl += '/' + this.state.currentBranch;
     	}
 
-    	let repository = '';
-    	if (this.state.project) {
-    		repository = this.state.project.repository;
-    	}
+    	let currentBranch = this.state.currentBranch || '';
+
+    	let buildImageMarkdownContent = "<textarea class='form-control'>[![Dockunit Status](http://dockunit.io/svg/" + this.props.repository + "/" + currentBranch + ")](http://dockunit.io/projects/" + this.props.repository + "/" + currentBranch + ")</textarea>";
 
         return (
             <div className="container">
@@ -107,7 +106,7 @@ class Project extends React.Component {
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
 					</If>
 
-					{this.props.repository} <img ref="buildImage" data-content="<textarea class='form-control'>[![Dockunit Status](http://dockunit.io/svg/{repository}/{this.state.currentBranch})](http://dockunit.io/projects/{repository}/{this.state.currentBranch})</textarea>" title="Build Image Markdown" className="build-image" onClick={this.toggleSvgCodeView} src={svgUrl} />
+					{this.props.repository} <img ref="buildImage" data-content={buildImageMarkdownContent} title="Build Image Markdown" className="build-image" src={svgUrl} />
 				</h1>
 
 				<If test={false === this.state.project}>
