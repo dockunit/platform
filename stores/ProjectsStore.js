@@ -41,6 +41,14 @@ class ProjectsStore extends BaseStore {
 		this.emitChange();
 	}
 
+	updateProjectSuccess(project) {
+		this.projects = this.projects || {};
+
+		this.projects = _.extend(this.projects, project);
+
+		this.emitChange();
+	}
+
 	readProjectFailure(params) {
 		this.projectsNotFound[params.repository] = true;
 
@@ -90,6 +98,7 @@ ProjectsStore.handlers = {
 	'READ_PROJECT_SUCCESS': 'readProjectSuccess',
 	'READ_PROJECT_FAILURE': 'readProjectFailure',
 	'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
+	'UPDATE_PROJECT_SUCCESS': 'updateProjectSuccess',
 	'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
 	'NEW_PROJECT_BUILD': 'newProjectBuild'
 };

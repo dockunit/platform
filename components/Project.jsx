@@ -8,6 +8,9 @@ import UserStore from '../stores/UserStore';
 import readProject from '../actions/readProject';
 import BuildList from './BuildList';
 import {connectToStores} from 'fluxible-addons-react';
+import updateProject from '../actions/updateProject';
+import readGithubRepoBranches from '../actions/readGithubRepoBranches';
+import SelectField from './SelectField';
 
 @connectToStores(['UserStore', 'ProjectsStore'], (context, props) => ({
     UserStore: context.getStore(UserStore).getState(),
@@ -18,6 +21,9 @@ class Project extends React.Component {
         super(props, context);
 
         this.changeBranch = this.changeBranch.bind(this);
+        this.toggleEditingPrimaryBranch = this.toggleEditingPrimaryBranch.bind(this);
+        this.changePrimaryBranch = this.changePrimaryBranch.bind(this);
+        this.changePrimaryBranchField = this.changePrimaryBranchField.bind(this);
     }
 
 	static contextTypes = {
@@ -27,11 +33,32 @@ class Project extends React.Component {
 
 	state = {
 		project: null,
-		currentBranch: null
+		currentBranch: null,
+		editingPrimaryBranch: false,
+		primaryBranchField: '',
+	}
+
+	toggleEditingPrimaryBranch() {
+		this.context.executeAction(readGithubRepoBranches, {
+			repository: this.props.repository,
+			token: this.props.UserStore.currentUser.githubAccessToken
+		});
+
+		this.setState({editingPrimaryBranch: !this.state.editingPrimaryBranch});
+	}
+
+	changePrimaryBranchField(event) {
+		this.setState({primaryBranchField: event.target.value});
+	}
+
+	changePrimaryBranch() {
+		this.context.executeAction(updateProject, {
+			branch: this.state.primaryBranchField,
+			repository: this.props.repository
+		});
 	}
 
 	componentDidMount() {
-		console.log('hello');
 		jQuery(React.findDOMNode(this.refs.buildImage)).popover({
 			trigger: 'click',
 			placement: 'bottom',
@@ -50,6 +77,8 @@ class Project extends React.Component {
 			if (!this.state.currentBranch) {
 				state.currentBranch = projects[this.props.repository].branch;
 			}
+
+			state.primaryBranchField = state.project.branch;
 
 			this.setState(state);
 		} else {
@@ -85,6 +114,8 @@ class Project extends React.Component {
     		nonCurrentBranches = Object.keys(nonCurrentBranches);
     	}
 
+    	console.log(builds);
+
     	let branchButtonClasses = 'btn btn-sm dropdown-toggle';
     	if (!nonCurrentBranches.length) {
     		branchButtonClasses += ' one-branch';
@@ -99,6 +130,16 @@ class Project extends React.Component {
     	let currentBranch = this.state.currentBranch || '';
 
     	let buildImageMarkdownContent = "<textarea class='form-control'>[![Dockunit Status](http://dockunit.io/svg/" + this.props.repository + "/" + currentBranch + ")](http://dockunit.io/projects/" + this.props.repository + "/" + currentBranch + ")</textarea>";
+
+    	let primaryBranch = '';
+    	if (this.state.project) {
+    		primaryBranch = this.state.project.branch;
+    	}
+
+    	let editBranches = [];
+    	if (this.props.UserStore.currentUser && this.props.UserStore.currentUser.repositories && this.props.UserStore.currentUser.repositories[this.props.repository]) {
+    		editBranches = Object.keys(this.props.UserStore.currentUser.repositories[this.props.repository].branches);
+    	}
 
         return (
             <div className="container">
@@ -122,13 +163,13 @@ class Project extends React.Component {
 					</div>
 				</If>
 
-				<If test={this.state.project && !this.state.project.builds.length}>
+				<If test={this.state.project && !builds.length}>
 					<div className="no-builds">
 						<h3>This project currently has no builds. Sorry!</h3>
 					</div>
 				</If>
 
-				<If test={this.state.project instanceof Object && this.state.project.builds.length}>
+				<If test={this.state.project instanceof Object && builds.length}>
 					<div>
 						<div className="navbar-collapse collapse navbar-project">
 							<div className="nav navbar-nav">
@@ -151,6 +192,29 @@ class Project extends React.Component {
 										</ul>
 									</If>
 								</div>
+
+								<If test={this.props.UserStore.currentUser}>
+									<span>
+										<If test={!this.state.editingPrimaryBranch}>
+											<span onClick={this.toggleEditingPrimaryBranch} className="edit-branch-icon glyphicon glyphicon-edit"></span>
+										</If>
+
+										<If test={this.state.editingPrimaryBranch}>
+											<span className="edit-branch-form input-group-sm">
+												<SelectField
+													label=""
+													ref="primaryBranchField"
+													className="form-control"
+													options={editBranches}
+													onChange={this.changePrimaryBranchField}
+													noWrap={true}
+												/>
+												<button onClick={this.changePrimaryBranch} className="btn btn-sm btn-default">Edit Primary Branch</button>
+												<span onClick={this.toggleEditingPrimaryBranch} className="close-edit-branch-icon glyphicon glyphicon-remove"></span>
+											</span>
+										</If>
+									</span>
+								</If>
 							</div>
 						</div>
 

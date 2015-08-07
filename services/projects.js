@@ -10,6 +10,7 @@ var Github = require('../clients/Github');
 
 module.exports = {
 	name: 'projects',
+
 	create: function (req, resource, params, body, config, callback) {
 		debug('Create project with ' + params);
 
@@ -148,6 +149,41 @@ module.exports = {
 	},
 
 	update: function (req, resource, params, body, config, callback) {
-		
+		debug('Update project');
+
+		let query = {};
+		let user = req.user;
+
+		if (!user) {
+			callback('Not logged in');
+			return;
+		}
+
+		query.user = user._id;
+		query.repository = params.repository;
+
+		Project.findOne(query, function(error, project) {
+			if (error || !project) {
+				debug('Project not found');
+
+				callback(error);
+			} else {
+				if (project.branch !== params.branch) {
+					project.branch = params.branch;
+
+					project.save(function(error) {
+						if (error) {
+							debug('Could not save project');
+
+							callback(error);
+						} else {
+							callback(null, project);
+						}
+					});
+				} else {
+					callback(null, project);
+				}
+			}
+		});
 	}
 };

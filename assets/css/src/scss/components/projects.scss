@@ -27,6 +27,45 @@
 	margin-top: 1.5em;
 }
 
+.edit-branch-icon {
+	margin-left: $padding-small-horizontal;
+	vertical-align: middle;
+	font-size: $font-size-large;
+	cursor: pointer;
+}
+
+.close-edit-branch-icon {
+	cursor: pointer;
+	vertical-align: middle;
+}
+
+.edit-branch-form {
+	margin-left: $padding-small-horizontal;
+
+	button {
+		display: inline-block;
+		margin: 0 $padding-small-horizontal;
+	}
+
+	input {
+		width: 150px;
+		display: inline-block;
+	}
+
+	.select-wrap {
+		display: inline-block;
+	}
+
+	select {
+		height: 28px;
+		line-height: 1.5;
+	}
+}
+
+.navbar-project .dropdown {
+	display: inline-block;
+}
+
 .project-item.latest-build .left {
 	margin-top: .9em;
 }

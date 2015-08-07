@@ -16,6 +16,7 @@ module.exports = {
 
 		if (!user) {
 			callback('Not logged in');
+			return;
 		}
 
 		// Todo: check to make sure project belongs to user

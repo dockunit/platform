@@ -19,9 +19,15 @@ class UserStore extends BaseStore {
 	updateRepoBranches(branchObject) {
 		this.currentUser = this.currentUser || {};
 
-		if (this.currentUser.repositories && this.currentUser.repositories[branchObject.repository]) {
-			this.currentUser.repositories[branchObject.repository].branches = branchObject.branches;
+		if (!this.currentUser.repositories) {
+			this.currentUser.repositories = {};
 		}
+
+		if (!this.currentUser.repositories[branchObject.repository]) {
+			this.currentUser.repositories[branchObject.repository] = {};
+		}
+
+		this.currentUser.repositories[branchObject.repository].branches = branchObject.branches;
 
 		this.emitChange();
 	}

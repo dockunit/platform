@@ -14,18 +14,26 @@ class SelectField extends React.Component {
 			}, this);
 		}
 
-		var groupClasses = 'form-group';
+
+		let groupClasses = 'select-wrap';
+		if (!this.props.noWrap) {
+			groupClasses += ' form-group';
+		}
+
 		if (errorsHTML.length) {
 			groupClasses += ' has-error';
 		}
 
 		return (
 			<div className={groupClasses}>
-				<label for={this.props.id}>{this.props.label}:</label>
+				<If test={this.props.label}>
+					<label for={this.props.id}>{this.props.label}:</label>
+				</If>
 
 				<If test={this.props.options.length}>
 					<select
 						className={this.props.className}
+						ref={this.props.ref}
 						onBlur={this.props.onBlur}
 						name={this.props.name}
 						id={this.props.id}
