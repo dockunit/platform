@@ -44,7 +44,10 @@ class ProjectsStore extends BaseStore {
 	updateProjectSuccess(project) {
 		this.projects = this.projects || {};
 
-		this.projects = _.extend(this.projects, project);
+		let projects = {};
+		projects[project.repository] = project;
+
+		this.projects = _.extend(this.projects, projects);
 
 		this.emitChange();
 	}

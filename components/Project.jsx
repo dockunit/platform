@@ -56,6 +56,8 @@ class Project extends React.Component {
 			branch: this.state.primaryBranchField,
 			repository: this.props.repository
 		});
+
+		this.setState({editingPrimaryBranch: false});
 	}
 
 	componentDidMount() {
@@ -178,9 +180,7 @@ class Project extends React.Component {
 								<If test={this.state.project instanceof Object && (builds.length || Object.keys(nonCurrentBranches).length)}>
 									<div className="dropdown">
 										<button className={branchButtonClasses} type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-											<If test={nonCurrentBranches.length}>
-												<span className="count">({nonCurrentBranches.length + 1})</span>
-											</If>
+											
 											{this.state.currentBranch}
 
 											<If test={nonCurrentBranches.length}>
