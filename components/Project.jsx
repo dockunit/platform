@@ -111,10 +111,12 @@ class Project extends React.Component {
     			}
     		}, this);
 
+    		if (this.state.currentBranch !== this.state.project.branch) {
+    			nonCurrentBranches[this.state.project.branch] = true;
+    		}
+
     		nonCurrentBranches = Object.keys(nonCurrentBranches);
     	}
-
-    	console.log(builds);
 
     	let branchButtonClasses = 'btn btn-sm dropdown-toggle';
     	if (!nonCurrentBranches.length) {
@@ -163,35 +165,37 @@ class Project extends React.Component {
 					</div>
 				</If>
 
-				<If test={this.state.project && !builds.length}>
+				<If test={this.state.project && !builds.length && !Object.keys(nonCurrentBranches).length}>
 					<div className="no-builds">
 						<h3>This project currently has no builds. Sorry!</h3>
 					</div>
 				</If>
 
-				<If test={this.state.project instanceof Object && builds.length}>
+				<If test={this.state.project && (builds.length || Object.keys(nonCurrentBranches).length)}>
 					<div>
 						<div className="navbar-collapse collapse navbar-project">
 							<div className="nav navbar-nav">
-								<div className="dropdown">
-									<button className={branchButtonClasses} type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-										<If test={nonCurrentBranches.length}>
-											<span className="count">({nonCurrentBranches.length + 1})</span>
-										</If>
-										{this.state.currentBranch}
+								<If test={this.state.project instanceof Object && (builds.length || Object.keys(nonCurrentBranches).length)}>
+									<div className="dropdown">
+										<button className={branchButtonClasses} type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
+											<If test={nonCurrentBranches.length}>
+												<span className="count">({nonCurrentBranches.length + 1})</span>
+											</If>
+											{this.state.currentBranch}
 
+											<If test={nonCurrentBranches.length}>
+												<span className="caret"></span>
+											</If>
+										</button>
 										<If test={nonCurrentBranches.length}>
-											<span className="caret"></span>
+											<ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
+												{nonCurrentBranches.map(function(branch) {
+													return <li role="presentation"><a role="menuitem" onClick={this.changeBranch} tabindex="-1" href="#">{branch}</a></li>
+												}, this)}
+											</ul>
 										</If>
-									</button>
-									<If test={nonCurrentBranches.length}>
-										<ul className="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1">
-											{nonCurrentBranches.map(function(branch) {
-												return <li role="presentation"><a role="menuitem" onClick={this.changeBranch} tabindex="-1" href="#">{branch}</a></li>
-											}, this)}
-										</ul>
-									</If>
-								</div>
+									</div>
+								</If>
 
 								<If test={this.props.UserStore.currentUser}>
 									<span>
@@ -206,6 +210,7 @@ class Project extends React.Component {
 													ref="primaryBranchField"
 													className="form-control"
 													options={editBranches}
+													selected={this.state.currentBranch}
 													onChange={this.changePrimaryBranchField}
 													noWrap={true}
 												/>
@@ -218,9 +223,17 @@ class Project extends React.Component {
 							</div>
 						</div>
 
-						<BuildList currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
+						<If test={this.state.project instanceof Object && builds.length}>
+							<BuildList currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
+						</If>
+
+						<If test={this.state.project instanceof Object && !builds.length}>
+							<div className="no-builds">
+								<h3>This branch currently has no builds. Sorry!</h3>
+							</div>
+						</If>
 					</div>
-                </If>
+				</If>
 			</div>
         );
     }

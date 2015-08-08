@@ -41,8 +41,9 @@ class SelectField extends React.Component {
 						onChange={this.props.onChange}
 					>
 						{this.props.options.map(function(label) {
-	                        return <option>{label}</option>        
-	                    })}
+							let selected = (this.props.selected && this.props.selected === label) ? true : false;
+	                        return <option selected={selected}>{label}</option>        
+	                    }, this)}
 					</select>
 				</If>
 
