@@ -86,6 +86,14 @@ class ProjectsStore extends BaseStore {
 		return myProjects;
 	}
 
+	static isMyProject(project, currentUser) {
+		if (!project || !project.user || !currentUser || !currentUser._id) {
+			return false;
+		}
+
+		return (project.user === currentUser._id);
+	}
+
 	dehydrate() {
 		return this.getState();
 	}

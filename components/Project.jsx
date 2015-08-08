@@ -197,7 +197,7 @@ class Project extends React.Component {
 									</div>
 								</If>
 
-								<If test={this.props.UserStore.currentUser}>
+								<If test={this.props.UserStore.currentUser && ProjectsStore.isMyProject(this.state.project, this.props.UserStore.currentUser)}>
 									<span>
 										<If test={!this.state.editingPrimaryBranch}>
 											<span onClick={this.toggleEditingPrimaryBranch} className="edit-branch-icon glyphicon glyphicon-edit"></span>
