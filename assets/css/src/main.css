@@ -5804,6 +5804,9 @@ body {
 .dropdown-toggle.one-branch {
   cursor: default; }
 
+.build-image-popover-content {
+  display: none; }
+
 .project-item:nth-child(even) {
   background-color: #fff; }
 

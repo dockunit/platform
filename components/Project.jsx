@@ -61,10 +61,21 @@ class Project extends React.Component {
 	}
 
 	componentDidMount() {
-		jQuery(React.findDOMNode(this.refs.buildImage)).popover({
+		let self = this;
+
+		jQuery(React.findDOMNode(self.refs.buildImage)).popover({
 			trigger: 'click',
 			placement: 'bottom',
-			html: true
+			html: true,
+			content: function() {
+				let currentBranch = self.state.currentBranch || '';
+
+				let textarea = document.createElement('textarea');
+				textarea.className = 'form-control';
+				textarea.value = '[![Dockunit Status](http://dockunit.io/svg/' + self.props.repository + '/' + currentBranch + ')](http://dockunit.io/projects/' + self.props.repository + '/' + currentBranch + ')';
+
+				return textarea;
+			}
 		});
 	}
 
@@ -133,8 +144,6 @@ class Project extends React.Component {
 
     	let currentBranch = this.state.currentBranch || '';
 
-    	let buildImageMarkdownContent = "<textarea class='form-control'>[![Dockunit Status](http://dockunit.io/svg/" + this.props.repository + "/" + currentBranch + ")](http://dockunit.io/projects/" + this.props.repository + "/" + currentBranch + ")</textarea>";
-
     	let primaryBranch = '';
     	if (this.state.project) {
     		primaryBranch = this.state.project.branch;
@@ -145,14 +154,14 @@ class Project extends React.Component {
     		editBranches = Object.keys(this.props.UserStore.currentUser.repositories[this.props.repository].branches);
     	}
 
-        return (
+    	return (
             <div className="container">
             	<h1 className="page-header">
 					<If test={this.props.UserStore.currentUser}>
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
 					</If>
 
-					{this.props.repository} <img ref="buildImage" data-content={buildImageMarkdownContent} title="Build Image Markdown" className="build-image" src={svgUrl} />
+					{this.props.repository} <img ref="buildImage" title="Build Image Markdown" className="build-image" src={svgUrl} />
 				</h1>
 
 				<If test={false === this.state.project}>
