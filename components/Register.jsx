@@ -191,6 +191,7 @@ class Register extends React.Component {
 		return (
 			<div>
 				<div className="jumbotron jumbotron-page">
+					<div className="platform"></div>
 					<h1>Get Started Now</h1>
 					<p className="lead">Dockunit.io is super awesome. We promise.</p>
 					<p><a className="btn btn-lg btn-primary" href="/" role="button">Not Convinced?</a></p>
