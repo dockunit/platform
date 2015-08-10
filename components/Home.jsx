@@ -10,6 +10,7 @@ class Home extends React.Component {
 			<div>
 				<div className="jumbotron">
 					<div className="container">
+						<div className="platform"></div>
 						<h1>Welcome to Dockunit.io</h1>
 						<p>Dockunit.io is a <strong>containerized</strong> continuous integration service for running Dockunit test suites hosted on <strong>Github</strong>. The days of staggering launches are long gone. Automatically test the integrity of each change to your software as a part of your workflow. Quickly and effectively respond to issues with insightful reports on software issues.</p>
 						<p>
