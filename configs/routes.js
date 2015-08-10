@@ -91,7 +91,7 @@ export default {
         }
 	},
 	project: {
-		path: '/projects/:username/:repository\?.*',
+		path: '/projects/:username/:repository',
 		method: 'get',
 		handler: require('../components/Project'),
 		page: 'project',
