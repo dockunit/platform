@@ -1,3 +1,5 @@
+/*global window */
+
 'use strict';
 
 import {NavLink} from 'fluxible-router';
@@ -24,6 +26,7 @@ class Project extends React.Component {
         this.toggleEditingPrimaryBranch = this.toggleEditingPrimaryBranch.bind(this);
         this.changePrimaryBranch = this.changePrimaryBranch.bind(this);
         this.changePrimaryBranchField = this.changePrimaryBranchField.bind(this);
+        this.onHashChange = this.onHashChange.bind(this);
     }
 
 	static contextTypes = {
@@ -77,6 +80,30 @@ class Project extends React.Component {
 				return textarea;
 			}
 		});
+
+		let hash = window.location.hash.replace(/^#(.*)$/i, '$1');
+		if (hash) {
+			this.setState({currentBranch: hash});
+		}
+
+		// No early IE
+		if (window.addEventListener) {
+			window.addEventListener('hashchange', this.onHashChange, false);
+		}
+	}
+
+	componentWillUnmount() {
+		// No early IE
+		if (window.removeEventListener) {
+			window.removeEventListener('hashchange', this.onHashChange, false);
+		}
+	}
+
+	onHashChange() {
+		let hash = window.location.hash.replace(/^#(.*)$/i, '$1');
+		if (hash) {
+			this.setState({currentBranch: hash});
+		}
 	}
 
 	componentWillReceiveProps() {
@@ -85,7 +112,10 @@ class Project extends React.Component {
 
 		if (projects && projects[this.props.repository]) {
 			state.project = projects[this.props.repository];
-			state.currentBranch = state.project.branch;
+
+			if (!window.location.hash.replace(/^#(.*)$/i, '$1')) {
+				state.currentBranch = state.project.branch;
+			}
 
 			if (!this.state.currentBranch) {
 				state.currentBranch = projects[this.props.repository].branch;
@@ -106,7 +136,7 @@ class Project extends React.Component {
 	changeBranch(event) {
 		event.preventDefault();
 
-		this.setState({ currentBranch: event.target.innerText });
+		window.location.hash = event.target.innerText;
 	}
 
     render() {
@@ -219,7 +249,7 @@ class Project extends React.Component {
 													ref="primaryBranchField"
 													className="form-control"
 													options={editBranches}
-													selected={this.state.currentBranch}
+													selected={this.state.project && this.state.project.branch}
 													onChange={this.changePrimaryBranchField}
 													noWrap={true}
 												/>
