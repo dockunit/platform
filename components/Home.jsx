@@ -10,11 +10,29 @@ class Home extends React.Component {
 			<div>
 				<div className="jumbotron">
 					<div className="container">
-						<h1>Welcome to Dockunit.io</h1>
-						<p>Dockunit.io is a <strong>containerized</strong> continuous integration service for running Dockunit test suites hosted on <strong>Github</strong>. The days of staggering launches are long gone. Automatically test the integrity of each change to your software as a part of your workflow. Quickly and effectively respond to issues with insightful reports on software issues.</p>
-						<p>
-							<NavLink className="btn btn-primary btn-lg" role="button" routeName="register">Sign up »</NavLink>
-						</p>
+						<div className="text-wrapper">
+							<h1>Welcome to Dockunit.io</h1>
+							<p>Dockunit.io is a <strong>containerized</strong> continuous integration service for running Dockunit test suites hosted on <strong>Github</strong>.</p>
+							<div className="button-wrapper">
+								<NavLink className="btn btn-primary btn-lg" role="button" routeName="register">Sign up »</NavLink>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div className="container steps">
+					<div className="row">
+						<div className="col-md-4">
+							<h2>Step 1</h2>
+							<p>Install <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> on your machine. npm makes installation super quick and easy.</p>
+						</div>
+						<div className="col-md-4">
+							<h2>Step 2</h2>
+							<p>Add a <a href="https://github.com/tlovett1/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
+						</div>
+						<div className="col-md-4">
+							<h2>Step 3</h2>
+							<p><NavLink routeName="addProject">Create a project</NavLink> for your Github repository. The project dashboard will continuously test the integrity of your build.</p>
+						</div>
 					</div>
 				</div>
 				<div className="container">

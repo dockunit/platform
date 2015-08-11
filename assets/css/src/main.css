@@ -5700,9 +5700,14 @@ body {
   text-align: center; }
 
 .jumbotron {
+  background-color: #69C1E0;
+  padding: 0; }
+
+.jumbotron .container {
   position: relative;
-  background: url(../img/splash.svg) 100% 0 no-repeat #69C1E0;
-  color: #fff; }
+  background: url(../img/splash.svg) bottom right no-repeat;
+  color: #fff;
+  padding: 45px 0; }
 
 .platform {
   background-color: #03739C;
@@ -5712,6 +5717,24 @@ body {
   right: 0;
   height: 30px; }
 
+.jumbotron .container .text-wrapper {
+  width: 50%;
+  font-size: 14px; }
+
+.jumbotron h1 {
+  font-size: 47px;
+  margin-bottom: 20px;
+  margin-top: 0; }
+
+.jumbotron .button-wrapper {
+  margin-top: 20px; }
+
+@media (max-width: 768px) {
+  .jumbotron {
+    text-align: center; }
+
+  .jumbotron .container .text-wrapper {
+    width: 100%; } }
 /**
  * Super hacky
  */
