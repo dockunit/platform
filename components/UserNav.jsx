@@ -88,6 +88,16 @@ class UserNav extends React.Component {
 					</div>
 				</If>
 				<If test={!this.props.UserStore.currentUser}>
+					<div className="navbar-profile-logged-out">
+						<ul className="dropdown-menu" role="menu">
+							{accountLinkHTML}
+							<li>
+								<NavLink routeName="login">Login</NavLink>
+							</li>
+						</ul>
+					</div>
+				</If>
+				<If test={!this.props.UserStore.currentUser}>
 					<form method="post" action="/login" className={this.getPasswordClasses()} noValidate>
 						<div className="form-group">
 							<input type="text" name="username" placeholder="Username" className="form-control"/>

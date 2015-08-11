@@ -5712,6 +5712,38 @@ body {
   right: 0;
   height: 30px; }
 
+/**
+ * Super hacky
+ */
+@media (max-width: 768px) {
+  .navbar .dropdown-menu {
+    border: 0;
+    position: static;
+    display: block;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    text-align: center;
+    width: 100%;
+    padding: 0; }
+
+  .navbar-profile-logged-out {
+    display: block; }
+
+  .navbar .dropdown-toggle {
+    display: none; }
+
+  .navbar-nav {
+    margin: 0; }
+
+  .navbar-user {
+    float: none;
+    display: block;
+    width: 100%; }
+
+  .navbar-collapse {
+    overflow-y: visible;
+    padding-top: 8px;
+    padding-bottom: 8px; } }
 .navbar-form.failed-login input[type=password] {
   background-color: #f2dede;
   border-color: #ebccd1; }

@@ -36,6 +36,7 @@ class Html extends React.Component {
             <script src="/public/js/jquery.min.js"></script>
             <script src="/public/js/bootstrap.min.js"></script>
             <script src="/socket.io/socket.io.js"></script>
+            <script src="/public/js/navbars.min.js"></script>
             <script src="/public/js/sockets.min.js"></script>
             <script src="/public/js/main.js"></script>
             </html>
