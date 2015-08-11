@@ -98,8 +98,6 @@ export default {
 		action: (context, payload, done) => {
 			let params = payload.get('params');
 
-			console.log(arguments);
-
             context.dispatch('UPDATE_PAGE_TITLE', { pageTitle: 'Dockunit.io - ' + params.get('username') + '/' + params.get('repository') });
             done();
         }
