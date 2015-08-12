@@ -4,7 +4,7 @@ import React from 'react';
 import {NavLink} from 'fluxible-router';
 
 class Home extends React.Component {
-    
+
     render() {
         return (
 			<div>
@@ -22,19 +22,22 @@ class Home extends React.Component {
 				<div className="container steps">
 					<div className="row">
 						<div className="col-md-4">
-							<h2>Step 1</h2>
-							<p>Install <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> on your machine. npm makes installation super quick and easy.</p>
+							<h2><i className="glyphicon glyphicon-save"></i>Step 1</h2>
+							<p>Setup <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> on your machine, using NPM installation is quick and easy.</p>
+                            <i className="glyphicon glyphicon-fast-forward"></i>
 						</div>
 						<div className="col-md-4">
-							<h2>Step 2</h2>
-							<p>Add a <a href="https://github.com/tlovett1/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
+							<h2><i className="glyphicon glyphicon-list-alt"></i>Step 2</h2>
+							<p>Configure a <a href="https://github.com/tlovett1/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
+                            <i className="glyphicon glyphicon-fast-forward"></i>
 						</div>
 						<div className="col-md-4">
-							<h2>Step 3</h2>
-							<p><NavLink routeName="addProject">Create a project</NavLink> for your Github repository. The project dashboard will continuously test the integrity of your build.</p>
+							<h2><i className="glyphicon glyphicon-refresh"></i>Step 3</h2>
+							<p><NavLink routeName="addProject">Create a project</NavLink> for your Github repository and watch the integrity tests of your build.</p>
 						</div>
 					</div>
 				</div>
+                <div className="steps-separator"></div>
 				<div className="container">
 					<div className="row">
 						<div className="col-md-4">

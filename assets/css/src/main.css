@@ -6134,4 +6134,27 @@ body {
 .login h2 {
   margin-bottom: 20px; }
 
+.steps {
+  margin-bottom: 60px; }
+  .steps h2 {
+    margin-bottom: 25px; }
+  .steps .glyphicon {
+    margin-right: 10px;
+    top: 5px; }
+  .steps .glyphicon-fast-forward {
+    position: absolute;
+    right: -25px;
+    top: 50%;
+    font-size: 45px;
+    opacity: 0.2;
+    color: #73d0f0; }
+  .steps .col-md-4 {
+    padding: 0 75px; }
+    .steps .col-md-4:first-child {
+      padding-left: 45px;
+      padding-right: 95px; }
+
+.steps-separator {
+  border-bottom: 20px solid #03739C; }
+
 /*# sourceMappingURL=main.css.map */
