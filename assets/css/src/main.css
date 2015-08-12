@@ -5696,12 +5696,10 @@ body {
 .row {
   margin-top: 1.5em; }
 
-.jumbotron-page {
-  text-align: center; }
-
 .jumbotron {
   background-color: #69C1E0;
-  padding: 0; }
+  padding: 0;
+  border-bottom: 20px solid #03739C; }
 
 .jumbotron .container {
   position: relative;
