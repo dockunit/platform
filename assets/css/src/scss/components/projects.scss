@@ -231,6 +231,7 @@
 		float: none;
 		height: 20px;
 		width: 100%;
+		background-color: #4c1;
 
 		&.glyphicon-option-horizontal {
 			background-color: yellow;
@@ -254,6 +255,10 @@
 			&:before {
 				display: none
 			}
+		}
+
+		&:before {
+			display: none;
 		}
 	}
 }

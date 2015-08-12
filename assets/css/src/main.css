@@ -6030,7 +6030,8 @@ body {
   .project-item .status {
     float: none;
     height: 20px;
-    width: 100%; }
+    width: 100%;
+    background-color: #4c1; }
     .project-item .status.glyphicon-option-horizontal {
       background-color: yellow; }
       .project-item .status.glyphicon-option-horizontal:before {
@@ -6042,7 +6043,9 @@ body {
     .project-item .status.glyphicon-exclamation-sign {
       background-color: orange; }
       .project-item .status.glyphicon-exclamation-sign:before {
-        display: none; } }
+        display: none; }
+    .project-item .status:before {
+      display: none; } }
 .builds {
   margin-top: 1.5em; }
 
