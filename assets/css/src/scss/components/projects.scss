@@ -211,3 +211,49 @@
 		}
 	}
 }
+
+@media (max-width : $screen-sm) {
+	.project-item .right {
+		float: none;
+		width: 100%;
+		text-align: center;
+		display: block;
+	}
+
+	.project-item .left {
+		float: none;
+		width: 100%;
+		text-align: center;
+		display: block;
+	}
+
+	.project-item .status {
+		float: none;
+		height: 20px;
+		width: 100%;
+
+		&.glyphicon-option-horizontal {
+			background-color: yellow;
+
+			&:before {
+				display: none
+			}
+		}
+
+		&.glyphicon-remove {
+			background-color: #e05d44;
+
+			&:before {
+				display: none
+			}
+		}
+
+		&.glyphicon-exclamation-sign {
+			background-color: orange;
+
+			&:before {
+				display: none
+			}
+		}
+	}
+}

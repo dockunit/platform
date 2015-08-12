@@ -5774,6 +5774,9 @@ body {
   .navbar-nav {
     margin: 0; }
 
+  .navbar-form {
+    display: none; }
+
   .navbar-user {
     float: none;
     display: block;
@@ -6011,6 +6014,35 @@ body {
       display: inline-block;
       list-style-type: none; }
 
+@media (max-width: 768px) {
+  .project-item .right {
+    float: none;
+    width: 100%;
+    text-align: center;
+    display: block; }
+
+  .project-item .left {
+    float: none;
+    width: 100%;
+    text-align: center;
+    display: block; }
+
+  .project-item .status {
+    float: none;
+    height: 20px;
+    width: 100%; }
+    .project-item .status.glyphicon-option-horizontal {
+      background-color: yellow; }
+      .project-item .status.glyphicon-option-horizontal:before {
+        display: none; }
+    .project-item .status.glyphicon-remove {
+      background-color: #e05d44; }
+      .project-item .status.glyphicon-remove:before {
+        display: none; }
+    .project-item .status.glyphicon-exclamation-sign {
+      background-color: orange; }
+      .project-item .status.glyphicon-exclamation-sign:before {
+        display: none; } }
 .builds {
   margin-top: 1.5em; }
 
