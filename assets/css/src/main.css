@@ -5746,6 +5746,9 @@ body {
   .jumbotron {
     text-align: center; }
 
+  .jumbotron .container {
+    background: none; }
+
   .jumbotron .container .text-wrapper {
     width: 100%; } }
 /**
