@@ -86,12 +86,12 @@ class ImageBuilder {
 		debug('Generating image');
 
 		return new NPromise(function(fulfill, reject) {
-			let buildText = 'passing';
-			let buildColor = '#4c1';
+			let buildText = 'failed';
+			let buildColor = '#e05d44';
 
-			if (1 === self.result) {
-				buildText = 'failed';
-				buildColor = '#e05d44';
+			if (0 === self.result) {
+				buildText = 'passing';
+				buildColor = '#4c1';
 			} else if (255 === self.result) {
 				buildText = 'errored';
 				buildColor = 'orange';
