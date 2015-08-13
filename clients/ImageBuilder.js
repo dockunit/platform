@@ -114,7 +114,7 @@ class ImageBuilder {
 						 		'<text x="82.5" y="15" fill="#010101" fill-opacity=".3">' + buildText + '</text>' + 
 						 		'<text x="82.5" y="14">' + buildText + '</text>' + 
 						 	'</g>' + 
-						 '</svg>';
+						 '</svg><!-- Build id: ' + self._id +', Finished: ' + self.finished + '-->';
 			fulfill();
 		});
 	}
