@@ -114,7 +114,11 @@ class ImageBuilder {
 						 		'<text x="82.5" y="15" fill="#010101" fill-opacity=".3">' + buildText + '</text>' + 
 						 		'<text x="82.5" y="14">' + buildText + '</text>' + 
 						 	'</g>' + 
-						 '</svg><!-- Build id: ' + self.branchBuild._id +', Finished: ' + self.branchBuild.finished + '-->';
+						 '</svg><!--' + 
+						 	'Build id: ' + self.branchBuild._id +', ' + 
+						 	'Result: ' + self.result + ', ' + 
+						 	'Finished: ' + self.branchBuild.finished +
+						 	'-->';
 			fulfill();
 		});
 	}
