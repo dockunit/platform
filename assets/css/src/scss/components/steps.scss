@@ -1,5 +1,9 @@
 .steps {
-    margin-bottom: 60px;
+    padding-bottom: 60px;
+
+    .row {
+        margin-top: 2.2em;
+    }
 
     h2 {
         margin-bottom: 25px;
@@ -15,12 +19,11 @@
         right: -25px;
         top: 50%;
         font-size: 45px;
-        opacity: 0.2;
-        color: #73d0f0;
+        color: $logo-blue;
     }
 
     .col-md-4 {
-        padding: 0 75px;
+        padding: 0 75px; 
 
         &:first-child {
             padding-left: 45px;
@@ -29,6 +32,20 @@
     }
 }
 
-.steps-separator {
-    border-bottom: 20px solid #03739C;
+.steps-wrapper {
+    background-color: $gray-lighter;
+}
+
+@media (max-width : $screen-sm) {
+    .steps .glyphicon-fast-forward {
+        display: none;
+    }
+
+    .steps .col-md-4 {
+        padding: 0 15px;
+
+        &:first-child {
+            padding: 0 15px;
+        }
+    }
 }

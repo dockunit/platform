@@ -5716,6 +5716,9 @@ body {
   padding: 0;
   border-bottom: 20px solid #03739C; }
 
+.jumbotron.home {
+  margin-bottom: 0; }
+
 .jumbotron .container {
   position: relative;
   background: url(../img/splash.svg) bottom right no-repeat;
@@ -6135,7 +6138,9 @@ body {
   margin-bottom: 20px; }
 
 .steps {
-  margin-bottom: 60px; }
+  padding-bottom: 60px; }
+  .steps .row {
+    margin-top: 2.2em; }
   .steps h2 {
     margin-bottom: 25px; }
   .steps .glyphicon {
@@ -6146,15 +6151,23 @@ body {
     right: -25px;
     top: 50%;
     font-size: 45px;
-    opacity: 0.2;
-    color: #73d0f0; }
+    color: #2BBAED; }
   .steps .col-md-4 {
     padding: 0 75px; }
     .steps .col-md-4:first-child {
       padding-left: 45px;
       padding-right: 95px; }
 
-.steps-separator {
-  border-bottom: 20px solid #03739C; }
+.steps-wrapper {
+  background-color: #eeeeee; }
+
+@media (max-width: 768px) {
+  .steps .glyphicon-fast-forward {
+    display: none; }
+
+  .steps .col-md-4 {
+    padding: 0 15px; }
+    .steps .col-md-4:first-child {
+      padding: 0 15px; } }
 
 /*# sourceMappingURL=main.css.map */

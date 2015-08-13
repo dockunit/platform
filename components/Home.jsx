@@ -8,7 +8,7 @@ class Home extends React.Component {
     render() {
         return (
 			<div>
-				<div className="jumbotron">
+				<div className="jumbotron home">
 					<div className="container">
 						<div className="text-wrapper">
 							<h1>Welcome to Dockunit.io</h1>
@@ -19,25 +19,26 @@ class Home extends React.Component {
 						</div>
 					</div>
 				</div>
-				<div className="container steps">
-					<div className="row">
-						<div className="col-md-4">
-							<h2><i className="glyphicon glyphicon-save"></i>Step 1</h2>
-							<p>Setup <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> on your machine, using NPM installation is quick and easy.</p>
-                            <i className="glyphicon glyphicon-fast-forward"></i>
-						</div>
-						<div className="col-md-4">
-							<h2><i className="glyphicon glyphicon-list-alt"></i>Step 2</h2>
-							<p>Configure a <a href="https://github.com/tlovett1/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
-                            <i className="glyphicon glyphicon-fast-forward"></i>
-						</div>
-						<div className="col-md-4">
-							<h2><i className="glyphicon glyphicon-refresh"></i>Step 3</h2>
-							<p><NavLink routeName="addProject">Create a project</NavLink> for your Github repository and watch the integrity tests of your build.</p>
+				<div className="steps-wrapper">
+					<div className="container steps">
+						<div className="row">
+							<div className="col-md-4">
+								<h2><i className="glyphicon glyphicon-save"></i>Step 1</h2>
+								<p>Setup <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> on your machine, using NPM installation is quick and easy.</p>
+	                            <i className="glyphicon glyphicon-fast-forward"></i>
+							</div>
+							<div className="col-md-4">
+								<h2><i className="glyphicon glyphicon-list-alt"></i>Step 2</h2>
+								<p>Configure a <a href="https://github.com/tlovett1/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
+	                            <i className="glyphicon glyphicon-fast-forward"></i>
+							</div>
+							<div className="col-md-4">
+								<h2><i className="glyphicon glyphicon-refresh"></i>Step 3</h2>
+								<p><NavLink routeName="addProject">Create a project</NavLink> for your Github repository and watch the integrity tests of your build.</p>
+							</div>
 						</div>
 					</div>
 				</div>
-                <div className="steps-separator"></div>
 				<div className="container">
 					<div className="row">
 						<div className="col-md-4">
