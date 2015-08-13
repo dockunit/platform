@@ -95,6 +95,9 @@ class ImageBuilder {
 			} else if (255 === self.result) {
 				buildText = 'errored';
 				buildColor = 'orange';
+			} else if (!self.finished) {
+				buildText = 'running';
+				buildColor = 'yellow';
 			}
 
 			self.image = '<svg xmlns="http://www.w3.org/2000/svg" width="110" height="20">' +
