@@ -89,15 +89,15 @@ class ImageBuilder {
 			let buildText = 'failed';
 			let buildColor = '#e05d44';
 
-			if (0 === self.result) {
+			if (!self.branchBuild.finished) {
+				buildText = 'running';
+				buildColor = 'yellow';
+			} else if (0 === self.result) {
 				buildText = 'passing';
 				buildColor = '#4c1';
 			} else if (255 === self.result) {
 				buildText = 'errored';
 				buildColor = 'orange';
-			} else if (!self.branchBuild.finished) {
-				buildText = 'running';
-				buildColor = 'yellow';
 			}
 
 			self.image = '<svg xmlns="http://www.w3.org/2000/svg" width="110" height="20">' +
