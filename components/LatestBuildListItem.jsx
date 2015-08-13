@@ -71,6 +71,13 @@ class LatestBuildListItem extends React.Component {
 
     	var output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
+		
+    	let buildDetailsButtonsClasses = "btn btn-default expand";
+    	if (!this.props.build.finished) {
+    		buildDetailsButtonsClasses += ' disabled';
+    	}
+
+
 		return (
 			<div className="project-item latest-build jumbo">
 				<div className="main">
@@ -105,14 +112,18 @@ class LatestBuildListItem extends React.Component {
 
 							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>
 							<a className="btn btn-default" href={githubUrl}>Repo <span className="icomoon icomoon-github"></span></a>
-							<a className="btn btn-default expand" onClick={this.toggleBuildDetails}>
+							<a className={buildDetailsButtonsClasses} onClick={this.toggleBuildDetails}>
 								Build Details 
-								<If test={this.state.showBuildDetails}>
-									<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
-								</If>
+								<If test={this.props.build.finished}>
+									<span>
+										<If test={this.state.showBuildDetails}>
+											<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+										</If>
 
-								<If test={!this.state.showBuildDetails}>
-									<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+										<If test={!this.state.showBuildDetails}>
+											<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+										</If>
+									</span>
 								</If>
 							</a>
 						</div>

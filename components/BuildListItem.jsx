@@ -60,10 +60,12 @@ class BuildListItem extends React.Component {
 				<div className="left">
 					<strong>Build #{buildIdShort}</strong> @ Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a>
 				</div>
-
+				
 				<div className="right">
 					Last ran <strong>{timeago(this.props.build.ran)}</strong>
-					<a onClick={this.toggleBuildDetails} className="expand" href=""><span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+					<If test={this.props.build.finished}>
+						<a onClick={this.toggleBuildDetails} className="expand" href=""><span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
+					</If>
 				</div>
 
 				<div className={buildDetailsClasses}>
