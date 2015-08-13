@@ -194,7 +194,7 @@ class Register extends React.Component {
 					<div className="container">
 						<div className="text-wrapper">
 							<h1>Get Started Now</h1>
-							<p className="lead">Dockunit.io is super awesome. Promise!</p>
+							<p className="lead">Dockunit.io is a super awesome containerized continuous integration testing service. Give it a try.</p>
 							<p><a className="btn btn-lg btn-primary" href="/" role="button">Not Convinced?</a></p>
 						</div>
 					</div>

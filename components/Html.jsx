@@ -5,6 +5,18 @@ import ApplicationStore from '../stores/ApplicationStore';
 
 class Html extends React.Component {
     render() {
+        let trackingCode = `
+            <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-66294889-1', 'auto');
+            ga('send', 'pageview');
+            </script>
+            `;
+        
         return (
             <html>
             <head>
@@ -27,10 +39,12 @@ class Html extends React.Component {
                 <meta name="msapplication-TileColor" content="#ffffff" />
                 <meta name="msapplication-TileImage" content="/public/img/ms-icon-144x144.png" />
                 <meta name="theme-color" content="#ffffff" />
+                <meta name="description" content="A containerized continuous integration testing service built on Docker made for Github." />
 				<link href="/public/css/main.min.css" rel="stylesheet" />
             </head>
             <body>
                 <div context={this.props.context} id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
+                <div dangerouslySetInnerHTML={{ __html: trackingCode }} />
             </body>
             <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
             <script src="/public/js/jquery.min.js"></script>
