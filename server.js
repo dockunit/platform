@@ -149,7 +149,7 @@ server.get('/sitemap.xml', function(req, res) {
 	});
 });
 
-server.use(favicon(__dirname + '/public/img/favicon.ico'));
+server.use(favicon(__dirname + '/assets/img/favicon.ico'));
 
 server.get('/svg/:repository([^/]+/[^/]+):branch(/[^/]*?)?', function(req, res, next) {
 	var repository = req.params.repository || false,
