@@ -37,6 +37,8 @@ var constants = require('./constants');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 var createElement = require('fluxible-addons-react/createElementWithContext');
+var sm = require('sitemap');
+var favicon = require('express-favicon');
 
 var server = express();
 
@@ -129,6 +131,25 @@ fetchrPlugin.registerService(require('./services/builds'));
 
 // Set up the fetchr middleware
 server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
+
+var sitemap = sm.createSitemap({
+	hostname: 'http://dockunit.io',
+	cacheTime: 600000,        // 600 sec - cache purge period 
+	urls: [
+		{ url: '/',  changefreq: 'daily', priority: 0.8 },
+		{ url: '/register/',  changefreq: 'daily', priority: 0.5 },
+		{ url: '/about/',  changefreq: 'daily',  priority: 0.3 }
+	]
+});
+ 
+server.get('/sitemap.xml', function(req, res) {
+	sitemap.toXML(function (xml) {
+		res.header('Content-Type', 'application/xml');
+		res.send(xml);
+	});
+});
+
+server.use(favicon(__dirname + '/public/img/favicon.ico'));
 
 server.get('/svg/:repository([^/]+/[^/]+):branch(/[^/]*?)?', function(req, res, next) {
 	var repository = req.params.repository || false,
