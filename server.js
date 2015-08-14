@@ -39,6 +39,7 @@ var RedisStore = require('connect-redis')(session);
 var createElement = require('fluxible-addons-react/createElementWithContext');
 var sm = require('sitemap');
 var favicon = require('express-favicon');
+var robots = require('robots.txt');
 
 var server = express();
 
@@ -150,6 +151,8 @@ server.get('/sitemap.xml', function(req, res) {
 });
 
 server.use(favicon(__dirname + '/assets/img/favicon.ico'));
+
+server.use(robots(__dirname + '/robots.txt'));
 
 server.get('/svg/:repository([^/]+/[^/]+):branch(/[^/]*?)?', function(req, res, next) {
 	var repository = req.params.repository || false,

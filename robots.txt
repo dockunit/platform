@@ -1,0 +1,4 @@
+Sitemap: http://dockunit.io/sitemap.xml
+
+User-agent: *
+Disallow: /mongo
