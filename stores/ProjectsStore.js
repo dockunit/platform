@@ -28,6 +28,11 @@ class ProjectsStore extends BaseStore {
 		this.emitChange();
 	}
 
+	rerunProjectBuild(payload) {
+		this.projects[payload.repository].builds = payload.project.builds;
+		this.emitChange();
+	}
+
 	readMyProjectsSuccess(projects) {
 		this.projects = projects;
 		this.emitChange();
@@ -111,7 +116,8 @@ ProjectsStore.handlers = {
 	'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
 	'UPDATE_PROJECT_SUCCESS': 'updateProjectSuccess',
 	'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
-	'NEW_PROJECT_BUILD': 'newProjectBuild'
+	'NEW_PROJECT_BUILD': 'newProjectBuild',
+	'RERUN_PROJECT_BUILD': 'rerunProjectBuild'
 };
 
 ProjectsStore.storeName = 'ProjectsStore';

@@ -9,7 +9,7 @@ var Github = require('../clients/Github');
 module.exports = {
 	name: 'builds',
 
-	create: function(req, resource, params, config, callback) {
+	create: function(req, resource, params, body, config, callback) {
 		debug('Create a new build');
 
 		var user = req.user;
@@ -19,26 +19,38 @@ module.exports = {
 			return;
 		}
 
-		// Todo: check to make sure project belongs to user
+		params.user = user;
 
-		Github.branch.get(user.githubAccessToken, params.repository, params.branch).then(function(response) {
-			params.commit = response.commit.sha;
-			params.commitUser = response.commit.committer.login;
-			params.user = user;
-
+		if ('rerun' === params.action) {
 			queue.create('builder', params).save(function(error){
 				if (error) {
 					callback(true);
 				} else {
-					Github.webhooks.create(user.githubAccessToken, params.repository).then(function() {
-						callback(null);
-					}, function() {
-						callback(true);
-					});
+					callback(null);
 				}
 			});
-		}, function() {
-			callback(true);
-		});
+		} else {
+
+			// Todo: check to make sure project belongs to user
+
+			Github.branch.get(user.githubAccessToken, params.repository, params.branch).then(function(response) {
+				params.commit = response.commit.sha;
+				params.commitUser = response.commit.committer.login;
+
+				queue.create('builder', params).save(function(error){
+					if (error) {
+						callback(true);
+					} else {
+						Github.webhooks.create(user.githubAccessToken, params.repository).then(function() {
+							callback(null);
+						}, function() {
+							callback(true);
+						});
+					}
+				});
+			}, function() {
+				callback(true);
+			});
+		}
 	}
 };

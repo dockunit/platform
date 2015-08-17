@@ -12,11 +12,11 @@ class BuildList extends React.Component{
 
 		return (
 			<div className="build-wrapper">
-				<LatestBuildListItem currentUser={this.props.currentUser} build={latestBuild} branch={this.props.branch} repository={this.props.repository} />
+				<LatestBuildListItem rerun={this.props.rerun} currentUser={this.props.currentUser} build={latestBuild} branch={this.props.branch} repository={this.props.repository} />
 
 				<div className="builds">
 					{this.props.builds.map(function(build) {
-	                    return <BuildListItem currentUser={this.props.currentUser} build={build} branch={this.props.branch} repository={this.props.repository} />     
+	                    return <BuildListItem rerun={this.props.rerun} currentUser={this.props.currentUser} build={build} branch={this.props.branch} repository={this.props.repository} />     
 	                }, this)}
                 </div>
             </div>

@@ -17,7 +17,7 @@ var queue = kue.createQueue();
 queue.process('builder', function(payload, done) {
 	debug('Worker registered');
 
-	var builder = new Builder(payload.data.repository, payload.data.commit, payload.data.branch, payload.data.commitUser, payload.data.user).then(function(output) {
+	var builder = new Builder(payload.data).then(function(output) {
 		debug('Worker finished successfully');
 
 		done();

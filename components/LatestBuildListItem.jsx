@@ -9,10 +9,17 @@ class LatestBuildListItem extends React.Component {
         super(props, context);
 
         this.toggleBuildDetails = this.toggleBuildDetails.bind(this);
+        this.rerun = this.rerun.bind(this);
     }
 
 	state = {
 		showBuildDetails: false
+	}
+
+	rerun(event) {
+		event.preventDefault();
+
+		this.props.rerun(this.props.build._id);
 	}
 
 	toggleBuildDetails() {
@@ -107,7 +114,7 @@ class LatestBuildListItem extends React.Component {
 
 						<div className="toolbar">
 							<If test={this.props.currentUser}>
-								<a className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
+								<a onClick={this.rerun} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
 							</If>
 
 							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>

@@ -10,21 +10,20 @@ var Github = require('./Github');
 var constants = require('../constants');
 var Convert = require('ansi-to-html');
 
-var debug = console.log;
-
-var Builder = function(repository, commit, branch, commitUser, user) {
+var Builder = function(params) {
 	var self = this;
 
 	self.socket = require('socket.io-client')('http://localhost:3000');
 
 	return new NPromise(function(fulfill, reject) {
-		self.repository = repository;
-		self.commit = commit;
-		self.branch = branch;
-		self.user = user;
-		self.commitUser = commitUser;
+		self.repository = params.repository;
+		self.commit = params.commit;
+		self.branch = params.branch;
+		self.user = params.user;
+		self.commitUser = params.commitUser;
 		self.outputCode = null;
 		self.output = '';
+		self.buildId = params.buildId;
 
 		var stepIndex = 0;
 
@@ -81,14 +80,32 @@ Builder.prototype.createBuild = function() {
 
 	return new NPromise(function(fulfill, reject) {
 		var build = {};
-		build.commit = self.commit;
-		build.branch = self.branch;
-		build.output = '';
-		build.commitUser = self.commitUser;
 
-		self.project.builds.push(build);
+		if (self.buildId) {
+			self.build = self.project.builds.id(self.buildId);
 
-		self.build = self.project.builds[self.project.builds.length - 1];
+			if (!build) {
+				reject(new Error('Could not find build with id ' + self.buildId));
+				return;
+			}
+
+			self.build.output = '';
+			self.build.result = 0;
+			self.build.finished = null;
+			self.build.ran = new Date();
+			build.outputCode = null;
+			self.commit = self.build.commit;
+		} else {
+
+			build.commit = self.commit;
+			build.branch = self.branch;
+			build.output = '';
+			build.commitUser = self.commitUser;
+
+			self.project.builds.push(build);
+
+			self.build = self.project.builds[self.project.builds.length - 1];
+		}
 
 		self.project.save(function(error) {
 			if (error) {
@@ -98,7 +115,12 @@ Builder.prototype.createBuild = function() {
 
 				Github.statuses.create(self.user.githubAccessToken, self.repository, self.user.username, self.commit, 'pending');
 
-				self.socket.emit('newBuild', { build: self.build, user: self.user.username, repository: self.repository });
+				if (self.buildId) {
+					self.socket.emit('rerunBuild', { build: self.build, user: self.user.username, repository: self.repository });
+				} else {
+					self.socket.emit('newBuild', { build: self.build, user: self.user.username, repository: self.repository });
+				}
+
 				fulfill();
 			}
 		});

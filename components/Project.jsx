@@ -11,6 +11,7 @@ import readProject from '../actions/readProject';
 import BuildList from './BuildList';
 import {connectToStores} from 'fluxible-addons-react';
 import updateProject from '../actions/updateProject';
+import rerunBuild from '../actions/rerunBuild';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
 import SelectField from './SelectField';
 
@@ -27,6 +28,7 @@ class Project extends React.Component {
         this.changePrimaryBranch = this.changePrimaryBranch.bind(this);
         this.changePrimaryBranchField = this.changePrimaryBranchField.bind(this);
         this.onHashChange = this.onHashChange.bind(this);
+        this.rerun = this.rerun.bind(this);
     }
 
 	static contextTypes = {
@@ -39,6 +41,13 @@ class Project extends React.Component {
 		currentBranch: null,
 		editingPrimaryBranch: false,
 		primaryBranchField: '',
+	}
+
+	rerun(buildId) {
+		this.context.executeAction(rerunBuild, {
+			repository: this.props.repository,
+			buildId: buildId
+		});
 	}
 
 	toggleEditingPrimaryBranch() {
@@ -263,7 +272,7 @@ class Project extends React.Component {
 						</div>
 
 						<If test={this.state.project instanceof Object && builds.length}>
-							<BuildList currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
+							<BuildList rerun={this.rerun} currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
 						</If>
 
 						<If test={this.state.project instanceof Object && !builds.length}>

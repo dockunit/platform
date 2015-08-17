@@ -28,6 +28,14 @@ Sockets.prototype.routeMessages = function() {
 			}
 		});
 
+		socket.on('rerunBuild', function(message) {
+			debug('Routing rerun build message to ' + message.user);
+
+			if (message.user) {
+				socket.in(message.user).emit('rerunBuild', message);
+			}
+		});
+
 		socket.on('newBuild', function(message) {
 			debug('Routing new build message to ' + message.user);
 
