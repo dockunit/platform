@@ -56,6 +56,11 @@ module.exports = function (grunt) {
 					cwd: 'assets/js/dist/',
 					src: ['*.*'],
 					dest: 'build/js'
+				}, {
+					expand: true,
+					cwd: 'bower_components/sweetalert/dist/',
+					src: ['sweetalert.min.js'],
+					dest: 'build/js'
 				}]
 			},
 			css: {
@@ -63,6 +68,11 @@ module.exports = function (grunt) {
 					expand: true,
 					cwd: 'assets/css/dist/',
 					src: ['*.*'],
+					dest: 'build/css'
+				}, {
+					expand: true,
+					cwd: 'bower_components/sweetalert/dist/',
+					src: ['sweetalert.css'],
 					dest: 'build/css'
 				}]
 			},

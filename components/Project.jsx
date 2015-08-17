@@ -12,6 +12,7 @@ import BuildList from './BuildList';
 import {connectToStores} from 'fluxible-addons-react';
 import updateProject from '../actions/updateProject';
 import rerunBuild from '../actions/rerunBuild';
+import createBuild from '../actions/createBuild';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
 import SelectField from './SelectField';
 
@@ -29,6 +30,7 @@ class Project extends React.Component {
         this.changePrimaryBranchField = this.changePrimaryBranchField.bind(this);
         this.onHashChange = this.onHashChange.bind(this);
         this.rerun = this.rerun.bind(this);
+        this.createBuild = this.createBuild.bind(this);
     }
 
 	static contextTypes = {
@@ -47,6 +49,31 @@ class Project extends React.Component {
 		this.context.executeAction(rerunBuild, {
 			repository: this.props.repository,
 			buildId: buildId
+		});
+
+		swal({
+			title: 'Nice!',
+			text: 'Your build has been queued.',
+			type: 'success',
+			timer: 2000,
+			showConfirmButton: false
+		});
+	}
+
+	createBuild(event) {
+		event.preventDefault();
+
+		this.context.executeAction(createBuild, {
+			repository: this.props.repository,
+			branch: this.state.currentBranch
+		});
+
+		swal({
+			title: 'Nice!',
+			text: 'Your build has been queued.',
+			type: 'success',
+			timer: 2000,
+			showConfirmButton: false
 		});
 	}
 
@@ -277,7 +304,7 @@ class Project extends React.Component {
 
 						<If test={this.state.project instanceof Object && !builds.length}>
 							<div className="no-builds">
-								<h3>This branch currently has no builds. Sorry!</h3>
+								<h3>This branch currently has no builds. Either push to your repository or <a href="" onClick={this.createBuild}>manually run a build.</a></h3>
 							</div>
 						</If>
 					</div>

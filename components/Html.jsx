@@ -41,6 +41,7 @@ class Html extends React.Component {
                 <meta name="theme-color" content="#ffffff" />
                 <meta name="description" content="A containerized continuous integration testing service built on Docker made for Github." />
 				<link href="/public/css/main.min.css" rel="stylesheet" />
+                <link rel="stylesheet" type="text/css" href="/public/css/sweetalert.css" />
             </head>
             <body>
                 <div context={this.props.context} id="app" dangerouslySetInnerHTML={{__html: this.props.markup}}></div>
@@ -49,6 +50,7 @@ class Html extends React.Component {
             <script dangerouslySetInnerHTML={{__html: this.props.state}}></script>
             <script src="/public/js/jquery.min.js"></script>
             <script src="/public/js/bootstrap.min.js"></script>
+            <script src="/public/js/sweetalert.min.js"></script>
             <script src="/socket.io/socket.io.js"></script>
             <script src="/public/js/navbars.min.js"></script>
             <script src="/public/js/sockets.min.js"></script>
