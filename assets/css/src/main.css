@@ -6088,6 +6088,9 @@ body {
       background-color: #e05d44; }
     .build-item .status.running {
       background-color: yellow; }
+  .build-item .btn {
+    margin-right: 4px;
+    background-color: #fff; }
   .build-item .left {
     float: left;
     display: inline-block;

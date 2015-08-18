@@ -18,6 +18,8 @@ class BuildListItem extends React.Component {
 
 	rerun(event) {
 		event.preventDefault();
+
+		this.setState({ showBuildDetails: false });
 		
 		this.props.rerun(this.props.build._id);
 	}
@@ -62,7 +64,14 @@ class BuildListItem extends React.Component {
 		
     	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
 
-    	let lastRan = (this.props.build.ran) ? timeago(this.props.build.ran) : 'never';
+    	let lastRan = '';
+		if (!this.props.build.ran && !this.props.build.finished) {
+			lastRan = 'Queued to run';
+		} else if (this.props.build.ran && !this.props.build.finished) {
+			lastRan = 'Started ' + timeago(this.props.build.ran);
+		}  else if (this.props.build.ran && this.props.build.finished) {
+			lastRan = 'Finished ' + timeago(this.props.build.ran);
+		}
 
 		return (
 			<div className="build-item">
@@ -74,7 +83,7 @@ class BuildListItem extends React.Component {
 				</div>
 				
 				<div className="right">
-					Last ran <strong>{lastRan}</strong>
+					<strong>{lastRan}</strong>
 					<If test={this.props.build.finished}>
 						<a onClick={this.toggleBuildDetails} className="expand" href=""><span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
 					</If>

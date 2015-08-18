@@ -19,6 +19,7 @@ var Builder = function(user, repository, buildId) {
 		self.repository = repository;
 		self.buildId = buildId;
 		self.user = user;
+		self.output = '';
 
 		var stepIndex = 0;
 

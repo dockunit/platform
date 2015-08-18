@@ -19,6 +19,8 @@ class LatestBuildListItem extends React.Component {
 	rerun(event) {
 		event.preventDefault();
 
+		this.setState({ showBuildDetails: false });
+
 		this.props.rerun(this.props.build._id);
 	}
 
@@ -84,7 +86,14 @@ class LatestBuildListItem extends React.Component {
     		buildDetailsButtonsClasses += ' disabled';
     	}
 
-    	let lastRan = (this.props.build.ran) ? timeago(this.props.build.ran) : 'never';
+    	let lastRan = '';
+		if (!this.props.build.ran && !this.props.build.finished) {
+			lastRan = 'Queued to run';
+		} else if (this.props.build.ran && !this.props.build.finished) {
+			lastRan = 'Started ' + timeago(this.props.build.ran);
+		}  else if (this.props.build.ran && this.props.build.finished) {
+			lastRan = 'Finished ' + timeago(this.props.build.ran);
+		}
 
     	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
 
@@ -116,7 +125,7 @@ class LatestBuildListItem extends React.Component {
 					</div>
 
 					<div className="right">
-						<div className="item">Last ran <strong>{lastRan}</strong></div>
+						<div className="item"><strong>{lastRan}</strong></div>
 						<div className="item">Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{this.props.build.commitUser}</strong></a></div>
 
 						<div className="toolbar">

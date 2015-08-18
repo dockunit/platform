@@ -52,6 +52,18 @@ class ProjectListItem extends React.Component {
 
 		let shortCommit = (latestBuild && latestBuild.commit) ? latestBuild.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1') : '';
 
+		let status = '';
+
+		if (!latestBuild) {
+			status = 'No builds have ran';
+		} else if (!latestBuild.ran && !latestBuild.finished) {
+			status = 'Queued to run';
+		} else if (latestBuild.ran && !latestBuild.finished) {
+			status = 'Started ' + timeago(latestBuild.ran);
+		}  else if (latestBuild.ran && latestBuild.finished) {
+			status = 'Finished ' + timeago(latestBuild.ran);
+		}
+
 		return (
 			<div className="project-item">
 				<div className="main">
@@ -66,13 +78,7 @@ class ProjectListItem extends React.Component {
 					</div>
 
 					<div className="right">
-						<If test={this.props.project.latestBuild}>
-							<div className="item">Last ran <strong>{this.props.project.latestBuild && timeago(this.props.project.latestBuild.ran)}</strong></div>
-						</If>
-						<If test={!this.props.project.builds.length}>
-							<div className="item"><strong>No builds have ran yet</strong></div>
-						</If>
-
+						<div className="item"><strong>{status}</strong></div>
 
 						<If test={this.props.project.builds.length}>
 							<div className="item">
@@ -81,7 +87,6 @@ class ProjectListItem extends React.Component {
 						</If>
 
 						<div className="toolbar">
-							<a className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
 							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>
 							<a className="btn btn-default" href={githubUrl}>Repo <span className="icomoon icomoon-github"></span></a>
 						</div>
