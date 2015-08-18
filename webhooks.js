@@ -90,14 +90,31 @@ Webhooks.prototype.createJob = function() {
 				return;
 			}
 
-			var job = queue.create('builder', { user: user, repository: self.repository, commit: self.commit, branch: self.branch, commitUser: self.commitUser }).save(function(error){
-				if (error) {
-					debug('Could not save builder job');
-				} else {
-					debug('Builder job created');
-				}
+			var build = {};
+			build.commit = self.commit;
+			build.branch = self.branch;
+			build.output = '';
+			build.ran = null;
+			build.commitUser = self.commitUser;
+			build = self.project.builds.create(build);
 
-				fulfill();
+			self.project.builds.push(build);
+
+			self.project.save(function(error) {
+				if (error) {
+					debug('Could not save project with new build');
+					reject();
+				} else {
+					queue.create('builder', { user: user, repository: self.project.repository, buildId: build._id }).save(function(error){
+						if (error) {
+							debug('Could not save builder job');
+						} else {
+							debug('Builder job created');
+						}
+
+						fulfill();
+					});
+				}
 			});
 		});
 	});

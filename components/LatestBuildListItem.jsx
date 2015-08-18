@@ -84,6 +84,9 @@ class LatestBuildListItem extends React.Component {
     		buildDetailsButtonsClasses += ' disabled';
     	}
 
+    	let lastRan = (this.props.build.ran) ? timeago(this.props.build.ran) : 'never';
+
+    	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
 
 		return (
 			<div className="project-item latest-build jumbo">
@@ -102,19 +105,23 @@ class LatestBuildListItem extends React.Component {
 								<div>Status: <strong>{passFail} in {runTime}</strong></div>
 							</If>
 
-							<If test={!this.props.build.finished}>
+							<If test={!this.props.build.finished && this.props.build.ran}>
 								<div>Status: <strong>Not finished</strong></div>
+							</If>
+
+							<If test={!this.props.build.finished && !this.props.build.ran}>
+								<div>Status: <strong>Waiting to run</strong></div>
 							</If>
 						</div>
 					</div>
 
 					<div className="right">
-						<div className="item">Last ran <strong>{timeago(this.props.build.ran)}</strong></div>
+						<div className="item">Last ran <strong>{lastRan}</strong></div>
 						<div className="item">Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{this.props.build.commitUser}</strong></a></div>
 
 						<div className="toolbar">
 							<If test={this.props.currentUser}>
-								<a onClick={this.rerun} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
+								<a onClick={this.rerun} disabled={rerunDisabled} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
 							</If>
 
 							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>

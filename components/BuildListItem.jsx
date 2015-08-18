@@ -47,17 +47,22 @@ class BuildListItem extends React.Component {
 			statusClasses += 'running';
 		}
 
-		var buildDetailsClasses = 'build-details ';
+		let buildDetailsClasses = 'build-details ';
     	if (!this.state.showBuildDetails) {
     		buildDetailsClasses += 'hide';
     	}
 
-    	var buildShortCommit = this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
-    	var commitUrl = githubUrl + '/commit/' + this.props.build.commit;
-    	var buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
-    	var passFail = (this.props.build.result) ? 'Passed' : 'Failed';
+    	let buildShortCommit = this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
+    	let commitUrl = githubUrl + '/commit/' + this.props.build.commit;
+    	let buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
+    	let passFail = (this.props.build.result) ? 'Passed' : 'Failed';
 
-    	var output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
+    	let output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
+
+		
+    	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
+
+    	let lastRan = (this.props.build.ran) ? timeago(this.props.build.ran) : 'never';
 
 		return (
 			<div className="build-item">
@@ -69,7 +74,7 @@ class BuildListItem extends React.Component {
 				</div>
 				
 				<div className="right">
-					Last ran <strong>{timeago(this.props.build.ran)}</strong>
+					Last ran <strong>{lastRan}</strong>
 					<If test={this.props.build.finished}>
 						<a onClick={this.toggleBuildDetails} className="expand" href=""><span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span></a>
 					</If>
@@ -78,7 +83,7 @@ class BuildListItem extends React.Component {
 				<div className={buildDetailsClasses}>
 					<div className="toolbar">
 						<If test={this.props.currentUser}>
-							<a onClick={this.rerun} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
+							<a onClick={this.rerun} disabled={rerunDisabled} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
 						</If>
 
 						<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>
