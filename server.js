@@ -166,6 +166,8 @@ server.get('/svg/:repository([^/]+/[^/]+):branch(/[^/]*?)?', function(req, res, 
 		branch = branch.replace(/\/(.*)/ig, '$1');
 	}
 
+	res.set('Cache-Control', 'max-age=3600, must-revalidate');
+
 	if (repository) {
 		ImageBuilder = require('./clients/ImageBuilder');
 		image = new ImageBuilder(repository, branch);
