@@ -247,8 +247,10 @@ class Project extends React.Component {
 					</If>
 
 					<span className="project-title">{this.props.repository}</span> <img ref="buildImage" title="Build Image Markdown" className="build-image" src={svgUrl} />
-				
-					<span onClick={this.deleteProject} className="delete-project">Delete <span className="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+					
+					<If test={this.props.UserStore.currentUser && ProjectsStore.isMyProject(this.state.project, this.props.UserStore.currentUser)}>
+						<span onClick={this.deleteProject} className="delete-project">Delete <span className="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
+					</If>
 				</h1>
 
 				<If test={false === this.state.project}>
