@@ -10,7 +10,7 @@ module.exports = function(context, payload, done) {
 			return;
 		}
 
-		context.dispatch('CREATE_PROJECT_SUCCESS', response.project);
+		context.dispatch('CREATE_PROJECT_SUCCESS', response);
 
 		navigate(context, {
 	        url: '/projects/' + payload.repository
