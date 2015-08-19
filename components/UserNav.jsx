@@ -63,7 +63,7 @@ class UserNav extends React.Component {
 
 		let gravatar = '';
 		if (this.props.UserStore.currentUser && this.props.UserStore.currentUser.emailHash) {
-			gravatar = 'http://www.gravatar.com/avatar/' + this.props.UserStore.currentUser.emailHash + '?s=36&d=404';
+			gravatar = 'https://www.gravatar.com/avatar/' + this.props.UserStore.currentUser.emailHash + '?s=36&d=404';
 		}
 
 		return (
