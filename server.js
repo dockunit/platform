@@ -134,7 +134,7 @@ fetchrPlugin.registerService(require('./services/builds'));
 server.use(fetchrPlugin.getXhrPath(), fetchrPlugin.getMiddleware());
 
 var sitemap = sm.createSitemap({
-	hostname: 'http://dockunit.io',
+	hostname: 'https://dockunit.io',
 	cacheTime: 600000,        // 600 sec - cache purge period 
 	urls: [
 		{ url: '/',  changefreq: 'daily', priority: 0.8 },

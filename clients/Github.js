@@ -88,7 +88,7 @@ var webhooks = {
 					'public'
 				],
 				config: {
-					url: 'http://dockunit.io/webhooks',
+					url: 'https://dockunit.io/webhooks',
 					content_type: 'json',
 					secret: require('../constants').githubWebhooksSecret
 				}
@@ -179,7 +179,7 @@ var tokens = {
 
 			params.client_id = constants.githubClientId;
 			params.client_secret = constants.githubClientSecret;
-			params.redirect_uri = 'http://dockunit.io/projects/authorize';
+			params.redirect_uri = 'https://dockunit.io/projects/authorize';
 
 			debug('Get github access token with ' + params);
 

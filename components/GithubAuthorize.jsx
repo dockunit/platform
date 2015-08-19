@@ -23,7 +23,7 @@ class GithubAuthorize extends React.Component {
 		event.preventDefault();
 
 		let state = this.props.UserStore.currentUser.githubStateToken;
-		let redirect = 'http://dockunit.io/projects/authorize';
+		let redirect = 'https://dockunit.io/projects/authorize';
 		let clientId = constants.githubClientId;
 
 		let url = 'https://github.com/login/oauth/authorize?client_id=' + clientId + '&amp;scope=admin:repo_hook,admin:org_hook,repo:status,repo&amp;state=' + state + '&amp;redirect_uri=' + redirect;

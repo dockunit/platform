@@ -1,4 +1,4 @@
-Sitemap: http://dockunit.io/sitemap.xml
+Sitemap: https://dockunit.io/sitemap.xml
 
 User-agent: *
 Disallow: /mongo
