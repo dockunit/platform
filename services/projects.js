@@ -11,6 +11,34 @@ var Github = require('../clients/Github');
 module.exports = {
 	name: 'projects',
 
+	delete: function(req, resource, params, config, callback) {
+		console.log(arguments);
+		debug('Delete project ' + params.repository);
+
+		let user = req.user;
+
+		if (!user) {
+			callback('Not logged in');
+			return;
+		}
+
+		if (!params.repository) {
+			callback('No repository provided');
+			return;
+		}
+
+		Project.findOneAndRemove({ user: user._id, repository: params.repository }, function(error) {
+			if (error) {
+				debug('Project could not be deleted');
+
+				callback(error);
+			} else {
+				debug('Project ' + params.repository + ' successfully deleted');
+				callback(null, { repository: params.repository });
+			}
+		});
+	},
+
 	create: function (req, resource, params, body, config, callback) {
 		debug('Create project with ' + params);
 

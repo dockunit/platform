@@ -5938,6 +5938,15 @@ body {
 .popover-content textarea {
   font-size: 12px; }
 
+.delete-project {
+  float: right;
+  font-size: 14px;
+  position: relative;
+  top: 1em;
+  cursor: pointer; }
+  .delete-project .glyphicon {
+    top: 2px; }
+
 .project-item {
   width: 100%;
   overflow: auto;
@@ -6018,6 +6027,15 @@ body {
       list-style-type: none; }
 
 @media (max-width: 768px) {
+  .project-title {
+    display: block; }
+
+  .project-header {
+    overflow: auto; }
+
+  .project-header.page-header .breadcrumb-link {
+    display: none; }
+
   .project-item .right {
     float: none;
     width: 100%;

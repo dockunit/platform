@@ -72,6 +72,14 @@ class ProjectsStore extends BaseStore {
 		this.emitChange();
 	}
 
+	deleteProjectSuccess(repository) {
+		if (this.projects[repository]) {
+			delete this.projects[repository];
+		}
+
+		this.emitChange();
+	}
+
 	getState() {
 		return {
 			projects: this.projects,
@@ -114,6 +122,7 @@ ProjectsStore.handlers = {
 	'READ_PROJECT_SUCCESS': 'readProjectSuccess',
 	'READ_PROJECT_FAILURE': 'readProjectFailure',
 	'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',
+	'DELETE_PROJECT_SUCCESS': 'deleteProjectSuccess',
 	'UPDATE_PROJECT_SUCCESS': 'updateProjectSuccess',
 	'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
 	'NEW_PROJECT_BUILD': 'newProjectBuild',

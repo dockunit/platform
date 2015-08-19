@@ -12,6 +12,7 @@ import BuildList from './BuildList';
 import {connectToStores} from 'fluxible-addons-react';
 import updateProject from '../actions/updateProject';
 import rerunBuild from '../actions/rerunBuild';
+import deleteProject from '../actions/deleteProject';
 import createBuild from '../actions/createBuild';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
 import SelectField from './SelectField';
@@ -31,6 +32,7 @@ class Project extends React.Component {
         this.onHashChange = this.onHashChange.bind(this);
         this.rerun = this.rerun.bind(this);
         this.createBuild = this.createBuild.bind(this);
+        this.deleteProject = this.deleteProject.bind(this);
     }
 
 	static contextTypes = {
@@ -57,6 +59,23 @@ class Project extends React.Component {
 			type: 'success',
 			timer: 2000,
 			showConfirmButton: false
+		});
+	}
+
+	deleteProject() {
+		let self = this;
+
+		swal({
+			title: 'Are you sure?',
+			text: 'You will not be able to recover a deleted project.',
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonText: 'Yes, delete it!',
+			closeOnConfirm: true
+		}, function() {
+			self.context.executeAction(deleteProject, {
+				repository: self.props.repository
+			});
 		});
 	}
 
@@ -222,12 +241,14 @@ class Project extends React.Component {
 
     	return (
             <div className="container">
-            	<h1 className="page-header">
+            	<h1 className="page-header project-header">
 					<If test={this.props.UserStore.currentUser}>
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
 					</If>
 
-					{this.props.repository} <img ref="buildImage" title="Build Image Markdown" className="build-image" src={svgUrl} />
+					<span className="project-title">{this.props.repository}</span> <img ref="buildImage" title="Build Image Markdown" className="build-image" src={svgUrl} />
+				
+					<span onClick={this.deleteProject} className="delete-project">Delete <span className="glyphicon glyphicon-remove" aria-hidden="true"></span></span>
 				</h1>
 
 				<If test={false === this.state.project}>
