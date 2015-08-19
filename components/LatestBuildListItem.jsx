@@ -133,7 +133,7 @@ class LatestBuildListItem extends React.Component {
 								<a onClick={this.rerun} disabled={rerunDisabled} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
 							</If>
 
-							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>
+							<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icon-logo"></span></a>
 							<a className="btn btn-default" href={githubUrl}>Repo <span className="icomoon icomoon-github"></span></a>
 							<a className={buildDetailsButtonsClasses} onClick={this.toggleBuildDetails}>
 								Build Details 
