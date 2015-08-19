@@ -154,13 +154,13 @@ server.use(favicon(__dirname + '/assets/img/favicon.ico'));
 
 server.use(robots(__dirname + '/robots.txt'));
 
-server.get('/svg/:repository([^/]+/[^/]+):branch(/[^/]*?)?', function(req, res, next) {
+server.get('/svg/:repository([^/]+/[^/]+):branch(\\?.*)?', function(req, res, next) {
 	var repository = req.params.repository || false,
 		branch = req.params.branch,
 		ImageBuilder,
 		image;
 
-	if (!branch || '/' === branch.trim()) {
+	if (!branch || '?' === branch.trim()) {
 		branch = false;
 	} else {
 		branch = branch.replace(/\/(.*)/ig, '$1');

@@ -130,7 +130,7 @@ class Project extends React.Component {
 
 				let textarea = document.createElement('textarea');
 				textarea.className = 'form-control';
-				textarea.value = '[![Dockunit Status](http://dockunit.io/svg/' + self.props.repository + '/' + currentBranch + ')](http://dockunit.io/projects/' + self.props.repository + '#' + currentBranch + ')';
+				textarea.value = '[![Dockunit Status](http://dockunit.io/svg/' + self.props.repository + '?' + currentBranch + ')](http://dockunit.io/projects/' + self.props.repository + '#' + currentBranch + ')';
 
 				return textarea;
 			}
@@ -223,7 +223,7 @@ class Project extends React.Component {
 
     	let svgUrl = '/svg/' + this.props.repository
     	if (this.state.currentBranch) {
-    		svgUrl += '/' + this.state.currentBranch;
+    		svgUrl += '?' + this.state.currentBranch;
     	}
     	svgUrl += '?' + new Date().getTime();
 
