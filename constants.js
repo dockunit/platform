@@ -2,7 +2,7 @@
 
 var _ = require('lodash');
 
-var baseUrl = 'http://dockunit.io';
+var baseUrl = 'https://dockunit.io';
 var isDevelopment = false;
 
 if (process.env.BASE_URL) {
