@@ -10,8 +10,6 @@ var kue = require('kue');
 var constants = require('./constants');
 var Builder = require('./clients/Builder');
 
-debug = console.log;
-
 var Webhooks = function() {
 	var self = this;
 
@@ -32,7 +30,7 @@ var Webhooks = function() {
 		];
 
 		if (!constants.isDevelopment) {
-			//steps.unshift(self.verifySignature);
+			steps.unshift(self.verifySignature);
 		}
 
 		function run() {
