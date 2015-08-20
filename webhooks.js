@@ -15,6 +15,8 @@ debug = console.log;
 var Webhooks = function() {
 	var self = this;
 
+	console.log('webhooks');
+
 	return function(req, res) {
 		self.req = req;
 		self.res = res;

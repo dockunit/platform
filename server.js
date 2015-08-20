@@ -150,8 +150,6 @@ server.get('/sitemap.xml', function(req, res) {
 	});
 });
 
-console.log('debug');
-
 server.use(favicon(__dirname + '/assets/img/favicon.ico'));
 
 server.use(robots(__dirname + '/robots.txt'));
