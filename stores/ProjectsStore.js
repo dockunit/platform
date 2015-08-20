@@ -24,7 +24,7 @@ class ProjectsStore extends BaseStore {
 	}
 
 	newProjectBuild(payload) {
-		this.projects[payload.repository].builds.unshift(payload.build);
+		this.projects[payload.repository].builds.push(payload.build);
 		this.emitChange();
 	}
 

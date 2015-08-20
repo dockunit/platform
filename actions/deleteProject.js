@@ -14,6 +14,6 @@ module.exports = function(context, payload, done) {
 
 		navigateAction(context, {
 	        url: '/projects'
-	    });
+	    }, done);
 	});
 };

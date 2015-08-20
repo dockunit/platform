@@ -10,12 +10,15 @@ var kue = require('kue');
 var constants = require('./constants');
 var Builder = require('./clients/Builder');
 
+debug = console.log;
+
 var Webhooks = function() {
 	var self = this;
 
 	return function(req, res) {
 		self.req = req;
 		self.res = res;
+		self.socket = require('socket.io-client')('http://localhost:3000');
 
 		debug('Received webhooks request');
 
@@ -29,7 +32,7 @@ var Webhooks = function() {
 		];
 
 		if (!constants.isDevelopment) {
-			steps.unshift(self.verifySignature);
+			//steps.unshift(self.verifySignature);
 		}
 
 		function run() {
@@ -105,6 +108,8 @@ Webhooks.prototype.createJob = function() {
 					debug('Could not save project with new build');
 					reject();
 				} else {
+					self.socket.emit('newBuild', { build: build, user: user.username, repository: self.project.repository });
+
 					queue.create('builder', { user: user, repository: self.project.repository, buildId: build._id }).save(function(error){
 						if (error) {
 							debug('Could not save builder job');
