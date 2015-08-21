@@ -34,7 +34,7 @@ class Home extends React.Component {
 							<div className="col-md-4">
 								<div className="glyphicon glyphicon-th-list"></div>
 								<h2>Choose Your Test Images</h2>
-								<p>Configure a <a href="https://github.com/tlovett1/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
+								<p>Configure a <a href="https://github.com/dockunit/dockunit#dockunitjson-examples">Dockunit.json</a> file to your Github repository.</p>
 							</div>
 							<div className="col-md-4">
 								<div className="glyphicon glyphicon-cog"></div>
@@ -57,7 +57,7 @@ class Home extends React.Component {
 
 						<div className="col-md-4">
 							<h2>No Environment Restrictions</h2>
-							<p>Dockunit.io runs <a href="http://github.com/tlovett1/dockunit">Dockunit</a> tests which run test suites in Docker containers that you define. Docker containers allow you to build an environment from scratch. There are many <a href="https://registry.hub.docker.com/">prebuilt Docker containers</a> available for you to get started.</p>
+							<p>Dockunit.io runs <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> tests which run test suites in Docker containers that you define. Docker containers allow you to build an environment from scratch. There are many <a href="https://hub.docker.com/r/dockunit/prebuilt-images/">prebuilt Docker containers</a> available for you to get started.</p>
 						</div>
 						<div className="col-md-4">
 							<h2>No Limitions</h2>
