@@ -36,6 +36,14 @@ Sockets.prototype.routeMessages = function() {
 			}
 		});
 
+		socket.on('updatedBuild', function(message) {
+			debug('Routing updated build message to ' + message.user);
+
+			if (message.user) {
+				socket.in(message.user).emit('updatedBuild', message);
+			}
+		});
+
 		socket.on('newBuild', function(message) {
 			debug('Routing new build message to ' + message.user);
 

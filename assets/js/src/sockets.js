@@ -32,6 +32,10 @@
 			context._dispatcher.dispatch('UPDATE_PROJECT_BUILD', message);
 		});
 
+		this.socket.on('updatedBuild', function(message) {
+			context._dispatcher.dispatch('UPDATE_PROJECT_BUILD', message);
+		});
+
 		this.socket.on('newBuild', function(message) {
 			context._dispatcher.dispatch('NEW_PROJECT_BUILD', message);
 		});

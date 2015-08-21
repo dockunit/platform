@@ -75,11 +75,10 @@ Builder.prototype.getBuild = function() {
 	debug('Getting build model');
 
 	return new NPromise(function(fulfill, reject) {
-		var build = {};
 
 		self.build = self.project.builds.id(self.buildId);
 
-		if (!build) {
+		if (!self.build) {
 			reject(new Error('Could not find build with id ' + self.buildId));
 			return;
 		}
@@ -88,7 +87,7 @@ Builder.prototype.getBuild = function() {
 		self.build.result = 0;
 		self.build.finished = null;
 		self.build.ran = new Date();
-		build.outputCode = null;
+		self.build.outputCode = null;
 
 		self.project.save(function(error) {
 			if (error) {
