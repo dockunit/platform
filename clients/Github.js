@@ -243,9 +243,9 @@ var statuses = {
 
 			var params = {
 				state: status,
-				target_url: constants.baseUrl + '/projects/' + user + '/' + repository.replace(/^.*?\/(.*)$/i, '$1'),
+				target_url: constants.baseUrl + '/projects/' + repository,
 				description: description,
-				context: 'continuous-integration/dockunit'
+				context: 'dockunit'
 			};
 
 			httpInvoke('https://api.github.com/repos/' + repository + '/statuses/' + commit + '?access_token=' + token, 'POST', {
