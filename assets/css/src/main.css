@@ -6180,29 +6180,86 @@ body {
 .login h2 {
   margin-bottom: 20px; }
 
+.home-panel h1 {
+  text-align: center;
+  margin-bottom: 0;
+  padding-bottom: 0;
+  margin-top: 0; }
+
+.home-panel {
+  padding: 2.5em 0; }
+
+.home-panel h2 {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 18px;
+  text-align: center; }
+
+.home-panel-heading-divider {
+  display: block;
+  width: 55px;
+  background-color: #2BBAED;
+  height: 2px;
+  margin: 1em auto; }
+
+.home-panel-subheading {
+  text-align: center;
+  margin-top: 0; }
+
+.get-started {
+  text-align: center;
+  padding: 2.5em 0;
+  color: #fff; }
+  .get-started .row {
+    margin: 0; }
+  .get-started h1 {
+    margin-top: 0;
+    color: #fff;
+    margin-bottom: .5em; }
+
+.get-started-wrapper {
+  background: #03739C url("../img/pattern1.png"); }
+
 .steps {
-  padding-bottom: 60px; }
+  padding-bottom: 2em;
+  text-align: center; }
+  .steps .glyphicon-download-alt {
+    font-size: 60px;
+    color: #2BBAED;
+    border: 2px solid #2BBAED;
+    border-radius: 150px;
+    padding: 16px;
+    text-align: center;
+    padding-right: 19px;
+    padding-bottom: 19px; }
+  .steps .glyphicon-th-list {
+    font-size: 60px;
+    color: #2BBAED;
+    border: 2px solid #2BBAED;
+    border-radius: 150px;
+    padding: 18px;
+    text-align: center; }
+  .steps .glyphicon-cog {
+    font-size: 60px;
+    color: #2BBAED;
+    border: 2px solid #2BBAED;
+    border-radius: 150px;
+    padding: 19px 17px 17px 19px;
+    text-align: center; }
   .steps .row {
     margin-top: 2.2em; }
   .steps h2 {
     margin-bottom: 25px; }
-  .steps .glyphicon {
-    margin-right: 10px;
-    top: 5px; }
-  .steps .glyphicon-fast-forward {
-    position: absolute;
-    right: -25px;
-    top: 50%;
-    font-size: 45px;
-    color: #2BBAED; }
   .steps .col-md-4 {
     padding: 0 75px; }
+    .steps .col-md-4 p {
+      margin-bottom: 0; }
     .steps .col-md-4:first-child {
       padding-left: 45px;
       padding-right: 95px; }
 
 .steps-wrapper {
-  background-color: #eeeeee; }
+  background-color: #fafafa; }
 
 @media (max-width: 768px) {
   .steps .glyphicon-fast-forward {
