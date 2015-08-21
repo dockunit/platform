@@ -21,7 +21,7 @@ class Home extends React.Component {
 				</div>
 				<div className="steps-wrapper home-panel">
 					<div className="container steps">
-						<h1>How Does Is Work?</h1>
+						<h1>How Does It Work?</h1>
 						<div className="home-panel-heading-divider"></div>
 						<p className="home-panel-subheading">Dockunit.io is super easy to use. Set it up once and it just works.</p>
 
