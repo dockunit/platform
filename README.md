@@ -1,10 +1,10 @@
 # Dockunit Platform
 
-Fully open sourced [Dockunit.io](https://dockunit.io) platform for running [Dockunit](https://github.com/tlovett1/dockunit) containerized continuous integration tests. 
+Fully open sourced [Dockunit.io](https://dockunit.io) platform for running [Dockunit](https://github.com/dockunit/dockunit) containerized continuous integration tests. 
 
 ## Purpose
 
-[Dockunit](https://github.com/tlovett1/dockunit) gives you true build freedom using [Docker](http://docker.com) 
+[Dockunit](https://github.com/dockunit/dockunit) gives you true build freedom using [Docker](http://docker.com) 
 technology. No longer are you bound to testing your software in a limited set of environments with a limited set 
 of utilities and dependencies. Define your own build environments using Dockunit with no restrictions; test across 
 multiple versions of your favorite programming languages using a variety of technologies and tools. Dockunit.io
