@@ -10,6 +10,8 @@ var kue = require('kue');
 var constants = require('./constants');
 var Builder = require('./clients/Builder');
 
+debug = console.log;
+
 var Webhooks = function() {
 	var self = this;
 
@@ -133,6 +135,8 @@ Webhooks.prototype.verifyRequestBody = function() {
 	}
 
 	this.payload = this.req.body;
+
+	debug(this.payload);
 };
 
 Webhooks.prototype.verifyRequiredProperties = function() {
