@@ -162,7 +162,7 @@ server.use(function(req, res, next) {
 			repository,
 			ImageBuilder,
 			image,
-			urlParse = url.match(/\/svg\/([^\/]+)\/([^\/]+)\/(.*)?/i);
+			urlParse = url.match(/\/svg\/([^\/]+)\/([^?]+)(.*)?/i);
 
 		if (urlParse) {
 			repository = urlParse[1] + '/' + urlParse[2];
@@ -170,7 +170,11 @@ server.use(function(req, res, next) {
 			if (!urlParse[3] || '?' === urlParse[3].trim()) {
 				branch = false;
 			} else {
-				branch = urlParse[3].replace(/\/(.*)/ig, '$1');
+				branch = urlParse[3].replace(/\?(.*)/ig, '$1');
+				branch = branch.replace(/(.*)&(.*)/ig, '$1');
+				if (branch.match(/^date=.*/ig)) {
+					branch = false;
+				}
 			}
 
 			res.set('Cache-Control', 'max-age=3600, must-revalidate');

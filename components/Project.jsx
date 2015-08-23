@@ -226,7 +226,7 @@ class Project extends React.Component {
     		svgUrl += '?' + this.state.currentBranch;
     		svgUrl += '&' + new Date().getTime();
     	} else {
-    		svgUrl += '?' + new Date().getTime();
+    		svgUrl += '?date=' + new Date().getTime();
     	}
 
     	let currentBranch = this.state.currentBranch || '';
