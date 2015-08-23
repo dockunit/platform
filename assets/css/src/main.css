@@ -2,6 +2,7 @@
 /* Bootstrap
 ------------------------------------------------*/
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
+@import url(http://fonts.googleapis.com/css?family=Montserrat:400,700);
 html {
   font-family: sans-serif;
   -ms-text-size-adjust: 100%;
@@ -5711,7 +5712,12 @@ body {
   padding-left: 12px;
   padding-right: 12px;
   margin-right: 12px;
-  vertical-align: middle; }
+  vertical-align: middle;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+
+h1,
+h2 {
+  font-family: 'Montserrat', sans-serif; }
 
 /* Components
 ------------------------------------------------*/
@@ -5965,6 +5971,7 @@ body {
   font-size: 14px;
   position: relative;
   top: 1em;
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   cursor: pointer; }
   .delete-project .glyphicon {
     top: 2px; }
@@ -6100,6 +6107,9 @@ body {
 
 .no-builds {
   text-align: center; }
+
+.latest-build h2 {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
 .build-item {
   overflow: auto;
