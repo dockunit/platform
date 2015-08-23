@@ -224,8 +224,10 @@ class Project extends React.Component {
     	let svgUrl = '/svg/' + this.props.repository
     	if (this.state.currentBranch) {
     		svgUrl += '?' + this.state.currentBranch;
+    		svgUrl += '&' + new Date().getTime();
+    	} else {
+    		svgUrl += '?' + new Date().getTime();
     	}
-    	svgUrl += '?' + new Date().getTime();
 
     	let currentBranch = this.state.currentBranch || '';
 
