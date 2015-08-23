@@ -154,35 +154,49 @@ server.use(favicon(__dirname + '/assets/img/favicon.ico'));
 
 server.use(robots(__dirname + '/robots.txt'));
 
-server.get('/svg/:repository([^/]+/[^/]+):branch(\\?.*)?', function(req, res, next) {
-	var repository = req.params.repository || false,
-		branch = req.params.branch,
-		ImageBuilder,
-		image;
+server.use(function(req, res, next) {
+	var url = req.url;
 
-	if (!branch || '?' === branch.trim()) {
-		branch = false;
-	} else {
-		branch = branch.replace(/\/(.*)/ig, '$1');
-	}
+	if (url.match(/^\/svg\/*/i)) {
+		var branch,
+			repository,
+			ImageBuilder,
+			image,
+			urlParse = url.match(/\/svg\/([^\/]+)\/([^\/]+)\/(.*)?/i);
 
-	res.set('Cache-Control', 'max-age=3600, must-revalidate');
+		if (urlParse) {
+			repository = urlParse[1] + '/' + urlParse[2];
 
-	if (repository) {
-		ImageBuilder = require('./clients/ImageBuilder');
-		image = new ImageBuilder(repository, branch);
+			if (!urlParse[3] || '?' === urlParse[3].trim()) {
+				branch = false;
+			} else {
+				branch = urlParse[3].replace(/\/(.*)/ig, '$1');
+			}
 
-		image.build().then(function() {
-			res.type('svg');
-			res.send(image.getImage()).end();
-		}, function() {
-			res.type('svg');
-			res.send('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>').end();
-		});
-	} else {
+			res.set('Cache-Control', 'max-age=3600, must-revalidate');
+
+			if (repository) {
+				ImageBuilder = require('./clients/ImageBuilder');
+				image = new ImageBuilder(repository, branch);
+
+				image.build().then(function() {
+					res.type('svg');
+					res.send(image.getImage()).end();
+				}, function() {
+					res.type('svg');
+					res.send('<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>').end();
+				});
+
+				return;
+			}
+		}
+
 		res.status(404).send('Not found').end();
 	}
+
+	return next();
 });
+
 
 // Handle login
 server.post('/login', function(req, res, next) {
