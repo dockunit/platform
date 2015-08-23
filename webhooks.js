@@ -168,6 +168,7 @@ Webhooks.prototype.verifyAndGetProject = function() {
 			} else {
 				self.project = projects[0];
 				debug('Found project');
+				debug(self.project);
 				fulfill();
 			}
 		});
