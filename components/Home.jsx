@@ -52,19 +52,22 @@ class Home extends React.Component {
 						</div>
 					</div>
 				</div>
-				<div className="container">
+				<div className="container attributes-panel">
 					<div className="row">
 
 						<div className="col-md-4">
 							<h2>No Environment Restrictions</h2>
+							<div className="home-panel-heading-divider"></div>
 							<p>Dockunit.io runs <a href="https://www.npmjs.com/package/dockunit">Dockunit</a> tests which run test suites in Docker containers that you define. Docker containers allow you to build an environment from scratch. There are many <a href="https://hub.docker.com/r/dockunit/prebuilt-images/">prebuilt Docker containers</a> available for you to get started.</p>
 						</div>
 						<div className="col-md-4">
 							<h2>No Limitions</h2>
+							<div className="home-panel-heading-divider"></div>
 							<p>Integrate as many Github repositories as you need. Run as many builds as you like. Dockunit.io provides the application testing flexibility that your software projects require.</p>
 						</div>
 						<div className="col-md-4">
 							<h2>Public and Private Repos</h2>
+							<div className="home-panel-heading-divider"></div>
 							<p>Integrate with both your public and private repos on Github. No need to sign up for a premium account to access your private repositories.</p>
 						</div>
 					</div>
