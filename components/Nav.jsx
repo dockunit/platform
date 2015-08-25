@@ -47,7 +47,7 @@ class Nav extends React.Component {
 							<span className="icon-bar"></span>
 						</button>
 						<NavLink className="navbar-brand" routeName="home">
-							<img src="/public/img/logo.png" />
+							<img src="/public/img/logo.svg" width="200" height="50" />
 						</NavLink>
 					</div>
 					<div id="navbar" className="navbar-collapse collapse">
