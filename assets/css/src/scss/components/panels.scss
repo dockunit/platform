@@ -1,5 +1,6 @@
 .attributes-panel {
     text-align: center;
+    padding: 1em 0 2em 0;
 }
 
 .home-panel h1,
@@ -55,7 +56,7 @@
 }
 
 .steps {
-    padding-bottom: 2em;
+    padding-bottom: 1em;
     text-align: center;
 
     .glyphicon-download-alt {
@@ -124,5 +125,13 @@
         &:first-child {
             padding: 0 15px;
         }
+    }
+
+    .home-panel .col-md-4 {
+        margin-top: 1em;
+    }
+
+    .home-panel .col-md-4:first-child {
+        margin-top: 0;
     }
 }

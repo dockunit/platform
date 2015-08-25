@@ -52,6 +52,8 @@
 @media (max-width : $screen-sm) {
 	.jumbotron {
 		text-align: center;
+		background: none;
+		background-color: #49A7D7;
 	}
 
 	.jumbotron .container {

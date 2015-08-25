@@ -5775,7 +5775,9 @@ h2 {
 
 @media (max-width: 768px) {
   .jumbotron {
-    text-align: center; }
+    text-align: center;
+    background: none;
+    background-color: #49A7D7; }
 
   .jumbotron .container {
     background: none; }
@@ -6191,7 +6193,8 @@ h2 {
   margin-bottom: 20px; }
 
 .attributes-panel {
-  text-align: center; }
+  text-align: center;
+  padding: 1em 0 2em 0; }
 
 .home-panel h1,
 .attributes-panel h1 {
@@ -6235,7 +6238,7 @@ h2 {
   background: #03739C url("../img/pattern1.png"); }
 
 .steps {
-  padding-bottom: 2em;
+  padding-bottom: 1em;
   text-align: center; }
   .steps .glyphicon-download-alt {
     font-size: 60px;
@@ -6282,6 +6285,12 @@ h2 {
   .steps .col-md-4 {
     padding: 0 15px; }
     .steps .col-md-4:first-child {
-      padding: 0 15px; } }
+      padding: 0 15px; }
+
+  .home-panel .col-md-4 {
+    margin-top: 1em; }
+
+  .home-panel .col-md-4:first-child {
+    margin-top: 0; } }
 
 /*# sourceMappingURL=main.css.map */
