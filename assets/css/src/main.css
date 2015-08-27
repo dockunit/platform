@@ -5715,6 +5715,10 @@ body {
   vertical-align: middle;
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
+@media (max-width: 768px) {
+  .row {
+    margin-left: 0;
+    margin-right: 0; } }
 h1,
 h2 {
   font-family: 'Montserrat', sans-serif; }
@@ -5780,7 +5784,9 @@ h2 {
     background-color: #49A7D7; }
 
   .jumbotron .container {
-    background: none; }
+    background: none;
+    padding-left: 15px;
+    padding-right: 15px; }
 
   .jumbotron .container .text-wrapper {
     width: 100%; } }

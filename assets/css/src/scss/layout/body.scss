@@ -15,3 +15,10 @@ body {
 	vertical-align: middle;
 	font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
+
+@media (max-width : $screen-sm) {
+	.row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+}
