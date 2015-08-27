@@ -1,21 +1,23 @@
 (function($) {
 	'use strict';
 
-	var $collapse = $('.navbar-collapse');
-	var $navbar = $('#navbar');
+	$(document).ready(function() {
+		var $collapse = $('.navbar-collapse');
+		var $navbar = $('#navbar');
 
-	var setupMenuCloseMobile = false; 
+		var setupMenuCloseMobile = false; 
 
-	$('.toggle-main-nav').on('click', function() {
-		$collapse.toggle();
+		$('.toggle-main-nav').on('click', function() {
+			$collapse.toggle();
 
-		/*if (!setupMenuCloseMobile) {
-			$navbar.on('click', 'a', function() {
-				setupMenuCloseMobile = true;
+			if (!setupMenuCloseMobile) {
+				$navbar.on('click', 'a', function() {
+					setupMenuCloseMobile = true;
 
-				$collapse.hide();
-			});
-		}*/
+					$collapse.hide();
+				});
+			}
+		});
 	});
 	
 })(jQuery);
