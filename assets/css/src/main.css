@@ -5835,13 +5835,17 @@ h2 {
 .navbar-form button {
   margin-left: .3em; }
 
+.navbar {
+  height: 50px; }
+
 .navbar-brand {
   padding: 0;
   vertical-align: middle;
   line-height: 50px; }
 
 .navbar-brand > img {
-  display: inline-block; }
+  display: block;
+  margin-top: .2em; }
 
 .navbar-user {
   display: inline-block;

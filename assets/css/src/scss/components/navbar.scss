@@ -64,6 +64,10 @@
 	}
 }
 
+.navbar {
+	height: 50px;
+}
+
 .navbar-brand {
 	padding: 0;
 	vertical-align: middle;
@@ -71,7 +75,8 @@
 }
 
 .navbar-brand > img {
-	display: inline-block;
+	display: block;
+	margin-top: .2em;
 }
 
 .navbar-user {
