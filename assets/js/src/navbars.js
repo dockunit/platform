@@ -9,13 +9,13 @@
 	$('.toggle-main-nav').on('click', function() {
 		$collapse.toggle();
 
-		if (!setupMenuCloseMobile) {
+		/*if (!setupMenuCloseMobile) {
 			$navbar.on('click', 'a', function() {
 				setupMenuCloseMobile = true;
 
 				$collapse.hide();
 			});
-		}
+		}*/
 	});
 	
 })(jQuery);
