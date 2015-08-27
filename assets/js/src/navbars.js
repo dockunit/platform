@@ -4,7 +4,7 @@
 	var $collapse = $('.navbar-collapse');
 	var $navbar = $('#navbar');
 
-	var setupMenuCloseMobile = false;
+	var setupMenuCloseMobile = false; 
 
 	$('.toggle-main-nav').on('click', function() {
 		$collapse.toggle();
