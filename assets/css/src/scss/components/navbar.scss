@@ -2,7 +2,7 @@
 /**
  * Super hacky
  */
-@media (max-width : $screen-sm) {
+/*@media (max-width : $screen-sm) {
 	.navbar .dropdown-menu {
 		border: 0; 
 		position: static;
@@ -142,5 +142,60 @@
 		float: right;
 		margin-top: 7px;
 		margin-left: 10px;
+	}
+}*/
+
+@media (max-width : $screen-sm) {
+
+	.navbar-form {
+		display: none;
+	}
+}
+
+.navbar-brand {
+	padding: 0;
+	line-height: 50px;
+}
+
+.navbar-brand img {
+	display: inline-block;
+}
+
+.avatar .avatar, .avatar img {
+	&.no-avatar {
+		padding: 5px;
+		border: 1px solid #fff;
+	}
+
+	font-size: 22px;
+	border-radius: 150px;
+	padding: 0;
+	background-color: #fff;
+	display: block;
+	width: auto;
+	float: right;
+	margin-left: 10px;
+	position: relative;
+	top: -6px;
+}
+
+.navbar-form {
+	&.failed-login {
+		input[type=password] {
+			&:-webkit-autofill {
+				-webkit-box-shadow: 0 0 0px 1000px #f2dede inset;
+			}
+
+			background-color: #f2dede;
+			border-color: #ebccd1;
+		}
+	}
+
+	.form-group:first-child {
+		margin-right: .3em;
+	}
+
+	button {
+		margin-left: .3em;
 	}
 }
