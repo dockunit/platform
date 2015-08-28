@@ -5973,7 +5973,9 @@ h2 {
     display: inline-block;
     vertical-align: middle; }
   .project-item .toolbar {
-    margin-top: 1.3em; }
+    margin-top: .8em; }
+  .project-item .toolbar .btn {
+    margin-top: .5em; }
   .project-item .toolbar a:last-child {
     margin-right: 0; }
   .project-item .expand {
