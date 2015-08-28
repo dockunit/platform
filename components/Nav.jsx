@@ -99,6 +99,9 @@ class Nav extends React.Component {
 							<li className="dropdown">
 								<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span className="caret"></span></a>
 								<ul className="dropdown-menu">
+									<If test={!this.props.UserStore.currentUser}>
+										<li><NavLink routeName="login">Log in</NavLink></li>
+									</If>
 									{exploreLinkHTML}
 								</ul>
 							</li>

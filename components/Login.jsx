@@ -10,7 +10,7 @@ class Login extends React.Component {
 
 		return (
 			<div className="container login">
-				<h2>Login</h2>
+				<h2>Log In</h2>
 
 				<LoginForm redirectPath={redirectPath} />
 			</div>
