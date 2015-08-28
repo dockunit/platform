@@ -6016,6 +6016,9 @@ h2 {
       list-style-type: none; }
 
 @media (max-width: 768px) {
+  .projects-nav {
+    display: none; }
+
   .project-title {
     display: block; }
 

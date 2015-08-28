@@ -230,6 +230,10 @@
 }
 
 @media (max-width : $screen-sm) {
+	.projects-nav {
+		display: none;
+	}
+	
 	.project-title {
 		display: block;
 	}
