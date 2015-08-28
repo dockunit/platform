@@ -53,7 +53,7 @@ class Nav extends React.Component {
 
             return (
                 <li className={className} key={link.path}>
-                    <NavLink routeName={link.page}>{link.title}</NavLink>
+                    <NavLink data-toggle="collapse" data-target=".navbar-collapse" routeName={link.page}>{link.title}</NavLink>
                 </li>
             );
         });
@@ -72,7 +72,7 @@ class Nav extends React.Component {
 
 			return (
 				<li className={className} key={link.path}>
-					<NavLink routeName={link.page}>{link.title}</NavLink>
+					<NavLink data-toggle="collapse" data-target=".navbar-collapse" routeName={link.page}>{link.title}</NavLink>
 				</li>
 			);
 		});
@@ -92,7 +92,7 @@ class Nav extends React.Component {
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<NavLink className="navbar-brand" routeName="home"><img src="/public/img/logo.png" width="200" height="39" /></NavLink>
+						<NavLink data-toggle="collapse" data-target=".navbar-collapse" className="navbar-brand" routeName="home"><img src="/public/img/logo.png" width="200" height="39" /></NavLink>
 					</div>
 					<div id="navbar" className="navbar-collapse collapse" aria-expanded="false">
 						<ul className="nav navbar-nav">
@@ -100,7 +100,7 @@ class Nav extends React.Component {
 								<a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Explore <span className="caret"></span></a>
 								<ul className="dropdown-menu">
 									<If test={!this.props.UserStore.currentUser}>
-										<li><NavLink routeName="login">Log in</NavLink></li>
+										<li><NavLink data-toggle="collapse" data-target=".navbar-collapse" routeName="login">Log in</NavLink></li>
 									</If>
 									{exploreLinkHTML}
 								</ul>
