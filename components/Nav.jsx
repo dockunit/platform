@@ -92,7 +92,7 @@ class Nav extends React.Component {
 							<span className="icon-bar"></span>
 							<span className="icon-bar"></span>
 						</button>
-						<NavLink data-toggle="collapse" data-target=".navbar-collapse" className="navbar-brand" routeName="home"><img src="/public/img/logo.png" width="200" height="39" /></NavLink>
+						<NavLink className="navbar-brand" routeName="home"><img src="/public/img/logo.png" width="200" height="39" /></NavLink>
 					</div>
 					<div id="navbar" className="navbar-collapse collapse" aria-expanded="false">
 						<ul className="nav navbar-nav">
