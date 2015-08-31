@@ -2,6 +2,8 @@
 var mongoose = require('mongoose');
 var debug = require('debug')('dockunit');
 var User = mongoose.model('User');
+var constants = require('../constants');
+var mailchimp = require('mailchimp-api');
 
 module.exports = {
 	name: 'users',
@@ -17,6 +19,15 @@ module.exports = {
 		user.username = params.username;
 
 		user.save(function(error) {
+			var mc = new mailchimp.Mailchimp(constants.mailchimpAPIKey);
+
+			mc.lists.subscribe({ double_optin: false, id: constants.mailchimpListId, email: { email: user.email } }, function(data) {
+				debug('User added to Mailchimp');
+			},
+			function(error) {
+				debug('User failed to be added to Mailchimp');
+			});
+
 			callback(null, error);
 		});
 	},
