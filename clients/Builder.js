@@ -135,7 +135,14 @@ Builder.prototype.startContainer = function() {
 				self.output += '' + data;
 			});
 
+			var called = false;
+
 			function dockunitCallback(code, signal) {
+				if (called) {
+					return false;
+				}
+
+				called = true;
 
 				debug('Dockunit command exited with code ' + code);
 				self.outputCode = code;
