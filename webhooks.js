@@ -136,6 +136,12 @@ Webhooks.prototype.verifyRequestBody = function() {
 
 	this.payload = this.req.body;
 
+	if (this.payload.ref.match(/^refs\/tags/i)) {
+		debug('No need to build a tag push');
+
+		return new Error(204);
+	}
+
 	debug(this.payload);
 };
 
