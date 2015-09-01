@@ -10,6 +10,8 @@ var kue = require('kue');
 var constants = require('./constants');
 var Builder = require('./clients/Builder');
 
+debug = console.log;
+
 var Webhooks = function() {
 	var self = this;
 
