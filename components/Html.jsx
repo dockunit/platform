@@ -17,11 +17,6 @@ class Html extends React.Component {
             ga('send', 'pageview');
             </script>
             `;
-
-        let mainUrl = '/public/js/main.min.js';
-        if (constants.isDevelopment) {
-            mainUrl = '/public/js/main.js';
-        }
         
         return (
             <html>
@@ -59,7 +54,7 @@ class Html extends React.Component {
             <script src="/public/js/sweetalert.min.js"></script>
             <script src="https://cdn.socket.io/socket.io-1.3.6.js"></script>
             <script src="/public/js/sockets.min.js"></script>
-            <script src={mainUrl}></script>
+            <script src="/public/js/main.min.js"></script>
             </html>
         );
     }
