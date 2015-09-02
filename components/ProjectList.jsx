@@ -21,7 +21,6 @@ class ProjectList extends React.Component {
     }
 
 	render() {
-		let self = this;
 		let projects = ProjectsStore.filterMyProjects(this.props.ProjectsStore.projects);
 
 		return (

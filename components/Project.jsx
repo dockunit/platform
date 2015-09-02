@@ -229,8 +229,6 @@ class Project extends React.Component {
     		svgUrl += '?date=' + new Date().getTime();
     	}
 
-    	let currentBranch = this.state.currentBranch || '';
-
     	let primaryBranch = '';
     	if (this.state.project) {
     		primaryBranch = this.state.project.branch;

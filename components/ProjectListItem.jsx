@@ -9,7 +9,6 @@ import timeago from 'timeago';
 class ProjectListItem extends React.Component {
 	render() {
 		let githubUrl = 'https://github.com/' + this.props.project.repository;
-		let projectUrl = '/projects/' + this.props.project.repository;
 		let repositoryUser = this.props.project.repository.replace(/^(.*?)\/.*/i, '$1');
 		let repositoryName = this.props.project.repository.replace(/^.*?\/(.*)$/i, '$1');
 		let dockunitUrl = githubUrl + '/blob/' + this.props.project.branch + '/Dockunit.json';

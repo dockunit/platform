@@ -32,7 +32,6 @@ class LatestBuildListItem extends React.Component {
 		let statusClasses = 'status glyphicon ';
 		let userUrl = 'https://github.com/' + this.props.build.commitUser;
 		let githubUrl = 'https://github.com/' + this.props.repository;
-		let repositoryName = this.props.repository.replace(/^.*?\/(.*)$/i, '$1');
 		let  dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
 
 		if (this.props.build.finished) {

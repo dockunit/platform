@@ -1,4 +1,5 @@
 var webpack = require('webpack');
+var constants = require('./constants');
 
 var plugins = [];
 
@@ -10,6 +11,12 @@ plugins.push(
 	})
 );
 
+var filename = '[name].min.js';
+if (constants.isDevelopment) {
+	plugins.push(new webpack.optimize.UglifyJsPlugin({ minimize: true }));
+	filename = '[name].js';
+}
+
 module.exports = {
 	resolve: {
 		extensions: ['', '.js', '.jsx']
@@ -18,7 +25,7 @@ module.exports = {
 	output: {
 		path: './build/js',
 		publicPath: '/public/js/',
-		filename: '[name].js'
+		filename: filename
 	},
 	module: {
 		loaders: [

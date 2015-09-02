@@ -32,9 +32,7 @@ class BuildListItem extends React.Component {
 
 	render() {
 		let statusClasses = 'status ';
-		let userUrl = 'https://github.com/' + this.props.build.commitUser;
 		let githubUrl = 'https://github.com/' + this.props.repository;
-		let repositoryName = this.props.repository.replace(/^.*?\/(.*)$/i, '$1');
 		let dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
 
 		if (this.props.build.finished) {
@@ -57,7 +55,6 @@ class BuildListItem extends React.Component {
     	let buildShortCommit = this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
     	let commitUrl = githubUrl + '/commit/' + this.props.build.commit;
     	let buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
-    	let passFail = (this.props.build.result) ? 'Passed' : 'Failed';
 
     	let output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
