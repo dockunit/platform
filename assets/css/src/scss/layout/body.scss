@@ -16,6 +16,12 @@ body {
 	font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
+
+.separator {
+	margin-left: .5em;
+	margin-right: .5em;
+}
+
 @media (max-width : $screen-sm) {
 	.row {
 		margin-left: 0;

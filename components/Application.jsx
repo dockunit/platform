@@ -67,7 +67,7 @@ class Application extends React.Component {
 				<div className="container">
 					<hr />
 					<footer>
-						<p>&copy; Dockunit.io 2015 | <a href="https://github.com/dockunit/platform">100% Open Source</a></p>
+						<p>&copy; Dockunit.io 2015 <a href="https://twiter.com/dockunitio" className="icomoon icomoon-twitter"></a>  <a href="mailto:admin@dockunit.io" className="icomoon icomoon-mail"></a> <span className="separator">|</span> <a href="https://github.com/dockunit/platform">100% Open Source</a></p>
 					</footer>
 				</div>
             </div>

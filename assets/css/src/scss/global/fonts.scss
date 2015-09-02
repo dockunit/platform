@@ -65,3 +65,25 @@
 .icomoon-code:before {
 	content: "\e602";
 }
+
+.icomoon-twitter {
+	margin-left: .3em;
+}
+
+.icomoon-twitter,
+.icomoon-mail {
+	color: inherit;
+	margin-left: .15em;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+.icomoon-twitter:before {
+	content: "\e604";
+}
+
+.icomoon-mail:before {
+	content: "\e603";
+}
