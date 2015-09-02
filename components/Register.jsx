@@ -19,13 +19,14 @@ class Register extends React.Component {
         super(props, context);
 
         this.validateUsername = this.validateUsername.bind(this);
-         this.validateRequired = this.validateRequired.bind(this);
+		this.validateRequired = this.validateRequired.bind(this);
         this.validateEmail = this.validateEmail.bind(this);
         this.validatePassword = this.validatePassword.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
         this.submit = this.submit.bind(this);
         this.click = this.click.bind(this);
         this.register = this.register.bind(this);
+        this.importantEmailChange = this.importantEmailChange.bind(this);
     }
 
 	static contextTypes = {
@@ -58,7 +59,8 @@ class Register extends React.Component {
 			value: '',
 			errors: {},
 			validators: [this.validateRequired('password'), this.validatePassword]
-		}
+		},
+		importantEmail: ''
 	}
 
 	register(user) {
@@ -108,7 +110,8 @@ class Register extends React.Component {
 			password: self.state.password.value,
 			email: self.state.email.value,
 			firstName: self.state.firstName.value,
-			lastName: self.state.lastName.value
+			lastName: self.state.lastName.value,
+			importantEmail: self.state.importantEmail
 		});
 
 		return true;
@@ -161,6 +164,10 @@ class Register extends React.Component {
 
 			return errors;
 		};
+	}
+
+	importantEmailChange(event) {
+		this.setState({ importantEmail: event.target.value });
 	}
 
 	validatePassword() {
@@ -271,6 +278,8 @@ class Register extends React.Component {
 									name="_csrf"
 									value={this.props.ApplicationStore.csrfToken}
 								/>
+
+								<input onChange={this.importantEmailChange} id="important_email" type="text" name="important_email" size="25" value="" />
 
 								<SubmitButton value="Sign Up" onSubmit={this.submit} onClick={this.click} />
 							</div>

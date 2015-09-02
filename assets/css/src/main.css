@@ -5860,6 +5860,9 @@ h2 {
   visibility: visible;
   color: green; }
 
+#important_email {
+  display: none; }
+
 .no-projects {
   text-align: center; }
 

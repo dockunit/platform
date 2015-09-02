@@ -10,6 +10,12 @@ module.exports = {
 	create: function (req, resource, params, body, config, callback) {
 		debug('Create user with ' + params);
 
+		if (params.importantEmail) {
+			debug('Honeypot caught something');
+			callback(true);
+			return;
+		}
+
 		var user = new User();
 
 		user.firstName = params.firstName;
