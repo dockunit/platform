@@ -5860,6 +5860,27 @@ h2 {
   visibility: visible;
   color: green; }
 
+.submit-wrapper {
+  display: inline-block;
+  vertical-align: middle; }
+
+.recaptcha {
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 1em; }
+
+@media (max-width: 768px) {
+  .recaptcha {
+    margin-bottom: 2em; }
+
+  .mobile-center {
+    text-align: center; }
+
+  .submit-wrapper {
+    display: block;
+    width: 100%; }
+    .submit-wrapper input {
+      width: 100%; } }
 .no-projects {
   text-align: center; }
 

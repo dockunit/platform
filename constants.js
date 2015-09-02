@@ -14,6 +14,7 @@ if (process.env.BASE_URL) {
 
 module.exports = _.extend({
 	baseUrl: baseUrl,
+	googleReCAPTCHASiteKey: '6LdzKAwTAAAAAIk4VA_9ZPGl7QjVn6FkiCPk0LmY',
 	isDevelopment: isDevelopment
 }, require('../secrets'));
 
@@ -24,6 +25,9 @@ module.exports = _.extend({
  *  githubClientId: 'xxxxxxx',
  *  githubClientSecret: 'xxxxxxx',
  *  githubWebhooksSecret: 'xxxxxxx',
- *  sessionSecret: 'xxxxxxx'
+ *  sessionSecret: 'xxxxxxx',
+ *  googleReCAPTCHASecretKey: 'xxxxxx',
+ *  mailchimpListId: 'xxxxxx',
+ *  mailchimpAPIKey: 'xxxxxx',
  * };
  */

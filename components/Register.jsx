@@ -9,6 +9,8 @@ import ApplicationStore from '../stores/ApplicationStore';
 import userExists from '../actions/userExists';
 import InputField from './InputField';
 import SubmitButton from './SubmitButton';
+import ReCAPTCHA from 'react-google-recaptcha';
+import constants from '../constants';
 
 @connectToStores(['ApplicationStore', 'UserStore'], (context, props) => ({
     ApplicationStore: context.getStore(ApplicationStore).getState(),
@@ -26,6 +28,7 @@ class Register extends React.Component {
         this.submit = this.submit.bind(this);
         this.click = this.click.bind(this);
         this.register = this.register.bind(this);
+        this.recaptchaChange = this.recaptchaChange.bind(this);
     }
 
 	static contextTypes = {
@@ -58,7 +61,12 @@ class Register extends React.Component {
 			value: '',
 			errors: {},
 			validators: [this.validateRequired('password'), this.validatePassword]
-		}
+		},
+		recaptcha: {
+			value: '',
+			errors: {},
+			validators: [this.validateRequired('recaptcha')]
+		},
 	}
 
 	register(user) {
@@ -89,12 +97,21 @@ class Register extends React.Component {
 		this.setState(object);
 	}
 
+	recaptchaChange(value) {
+		console.log(value);
+		let object = {};
+		object.recaptcha = _.extend({}, this.state.reaptcha);
+		object.recaptcha.value = value;
+
+		this.setState(object);
+	}
+
 	click() {
 		var self = this;
 
 		var errors = {};
 
-		['username', 'password', 'lastName', 'firstName', 'email'].forEach(function(field) {
+		['username', 'password', 'lastName', 'firstName', 'email', 'recaptcha'].forEach(function(field) {
 			var newErrors = self.validate.call(self, field)();
 			errors = _.extend(errors, newErrors);
 		});
@@ -108,7 +125,8 @@ class Register extends React.Component {
 			password: self.state.password.value,
 			email: self.state.email.value,
 			firstName: self.state.firstName.value,
-			lastName: self.state.lastName.value
+			lastName: self.state.lastName.value,
+			recaptcha: self.state.recaptcha
 		});
 
 		return true;
@@ -204,9 +222,9 @@ class Register extends React.Component {
 					<p>
 						Signing up for Dockunit.io is quick, easy, and best of all free. After you setup your account, we will help you connect your repositories so you can start continuous integration tests immediatly.
 					</p>
-					<div className="row">
-						<form method="post" noValidate>
-							<div className="col-md-4">
+					<form method="post" noValidate>
+						<div className="row">
+							<div className="col-md-6">
 								<InputField
 									label="Username"
 									required="true"
@@ -231,7 +249,7 @@ class Register extends React.Component {
 									errors={this.state.password.errors}
 								/>
 							</div>
-							<div className="col-md-4">
+							<div className="col-md-6">
 								<InputField
 									label="First Name"
 									onChange={this.handleFormChange}
@@ -253,7 +271,7 @@ class Register extends React.Component {
 									id="lastName"
 								/>
 							</div>
-							<div className="col-md-4">
+							<div className="col-md-6">
 								<InputField
 									label="Email"
 									value={this.state.email.value}
@@ -266,16 +284,28 @@ class Register extends React.Component {
 									errors={this.state.email.errors}
 									id="email"
 								/>
-								<input
-									type="hidden"
-									name="_csrf"
-									value={this.props.ApplicationStore.csrfToken}
+							</div>
+						</div>
+
+						<div className="row mobile-center">
+							<div className="col-md-12">
+								<ReCAPTCHA
+									className="recaptcha"
+									ref="recaptcha"
+									onChange={this.recaptchaChange}
+									sitekey={constants.googleReCAPTCHASiteKey}
 								/>
 
-								<SubmitButton value="Sign Up" onSubmit={this.submit} onClick={this.click} />
+								<SubmitButton className="submit-wrapper" value="Sign Up" onSubmit={this.submit} onClick={this.click} />
 							</div>
-						</form>
-					</div>
+						</div>
+
+						<input
+							type="hidden"
+							name="_csrf"
+							value={this.props.ApplicationStore.csrfToken}
+						/>
+					</form>
 				</div>
 			</div>
 		);

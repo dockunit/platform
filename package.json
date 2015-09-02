@@ -49,6 +49,7 @@
     "promise": "^7.0.3",
     "querystring": "^0.2.0",
     "react": "^0.13.3",
+    "react-google-recaptcha": "^0.4.0",
     "react-imageloader": "^2.0.0",
     "robots.txt": "^1.1.0",
     "serialize-javascript": "^1.0.0",

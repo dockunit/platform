@@ -37,7 +37,7 @@ class SubmitButton extends React.Component {
 
 	render() {
 		return (
-			<div>
+			<div className={this.props.className}>
 				<input
 					type="submit"
 					className="btn btn-lg btn-primary"
