@@ -42,6 +42,7 @@
     "lodash": "^3.10.0",
     "mailchimp-api": "^2.0.7",
     "mongoose": "^4.1.0",
+    "mongoose-reverse-populate": "^1.1.0",
     "parse-link-header": "^0.2.1",
     "passport": "^0.2.2",
     "passport-local": "^1.0.0",

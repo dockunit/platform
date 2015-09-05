@@ -4,6 +4,7 @@ var mongoose = require('mongoose');
 var debug = require('debug')('dockunit');
 var kue = require('kue');
 var queue = kue.createQueue();
+var Build = mongoose.model('Build');
 var Github = require('../clients/Github');
 var Project = mongoose.model('Project');
 
@@ -13,53 +14,44 @@ module.exports = {
 	create: function(req, resource, params, body, config, callback) {
 		debug('Create a new build');
 
-		var user = req.user;
+		var user = req.user,
+			build;
 
 		if (!user) {
 			callback('Not logged in');
 			return;
 		}
+		
+		var socket = require('socket.io-client')('http://localhost:3000');
 
-		params.user = user;
+		if ('rerun' === params.action) {
+			debug('Reruning build');
 
-		Project.find({ repository: params.repository }, function(error, projects) {
-			if (error || !projects.length) {
-				debug('Could not find project');
-				callback(true);
-			} else {
-				var project = projects[0];
-				var socket = require('socket.io-client')('http://localhost:3000');
-
-				var build = {};
-
-				if ('rerun' === params.action) {
-					debug('Reruning build');
-					build = project.builds.id(params.buildId);
-
-					if (!build) {
-						debug('Could not find build');
-						callback(true);
-						return;
-					}
+			Build.find({ _id: params.buildId }, function(error, builds) {
+				if (error || !builds.length) {
+					debug('Could not find build');
+					callback(true);
+				} else {
+					build = builds[0];
 
 					build.output = '';
 					build.result = 0;
 					build.finished = null;
-					build.ran = null;
+					build.started = null;
 					build.outputCode = null;
 
-					project.save(function(error) {
+					build.save(function(error) {
 						if (error) {
-							debug('Project save error: ' + error);
+							debug('Build save error: ' + error);
 							callback(true);
 						} else {
 							debug('Emitting new build to ' + user.username);
 
-							Github.statuses.create(user.githubAccessToken, params.repository, user.username, build.commit, 'pending');
+							Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending');
 
-							socket.emit('rerunBuild', { build: build, user: user.username, repository: params.repository });
+							socket.emit('rerunBuild', { build: build, user: user.username, repository: params.project.repository });
 
-							queue.create('builder', {user: user, repository: params.repository, buildId: params.buildId}).save(function(error) {
+							queue.create('builder', {user: user, repository: params.project.repository, buildId: params.buildId}).save(function(error) {
 								if (error) {
 									callback(true);
 								} else {
@@ -68,47 +60,46 @@ module.exports = {
 							});
 						}
 					});
+				}
+			});
 
-				} else {
-					debug('Creating a fresh build');
-					Github.branch.get(user.githubAccessToken, params.repository, params.branch).then(function(response) {
+		} else {
+			debug('Creating a fresh build');
 
-						build.commit = response.commit.sha;
-						build.branch = params.branch;
-						build.output = '';
-						build.ran = null;
-						build.commitUser = response.commit.committer.login;
-						build = project.builds.create(build);
+			Github.branch.get(user.githubAccessToken, params.project.repository, params.branch).then(function(response) {
 
-						project.builds.push(build);
+				build = new Build();
 
-						project.save(function(error) {
+				build.commit = response.commit.sha;
+				build.branch = params.branch;
+				build.output = '';
+				build.commitUser = response.commit.committer.login;
+
+				build.save(function(error) {
+					if (error) {
+						debug('Build save error: ' + error);
+						callback(true);
+					} else {
+						debug('Emitting new build to ' + user.username);
+
+						Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending');
+
+						socket.emit('newBuild', { build: build, user: user.username, repository: params.project.repository });
+
+						queue.create('builder', {user: user, repository: params.project.repository, buildId: build._id}).save(function(error) {
 							if (error) {
-								debug('Project save error: ' + error);
 								callback(true);
 							} else {
-								debug('Emitting new build to ' + user.username);
-
-								Github.statuses.create(user.githubAccessToken, params.repository, user.username, build.commit, 'pending');
-
-								socket.emit('newBuild', { build: build, user: user.username, repository: params.repository });
-
-								queue.create('builder', {user: user, repository: params.repository, buildId: build._id}).save(function(error) {
-									if (error) {
-										callback(true);
-									} else {
-										Github.webhooks.create(user.githubAccessToken, params.repository).then(function() {
-											callback(null);
-										}, function() {
-											callback(true);
-										});
-									}
+								Github.webhooks.create(user.githubAccessToken, params.project.repository).then(function() {
+									callback(null);
+								}, function() {
+									callback(true);
 								});
 							}
 						});
-					});
-				}
-			}
-		});
+					}
+				});
+			});
+		}
 	}
 };

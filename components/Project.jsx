@@ -49,7 +49,7 @@ class Project extends React.Component {
 
 	rerun(buildId) {
 		this.context.executeAction(rerunBuild, {
-			repository: this.props.repository,
+			project: this.state.project,
 			buildId: buildId
 		});
 
@@ -74,7 +74,7 @@ class Project extends React.Component {
 			closeOnConfirm: true
 		}, function() {
 			self.context.executeAction(deleteProject, {
-				repository: self.props.repository
+				project: this.state.project
 			});
 		});
 	}
@@ -83,7 +83,7 @@ class Project extends React.Component {
 		event.preventDefault();
 
 		this.context.executeAction(createBuild, {
-			repository: this.props.repository,
+			project: this.state.project,
 			branch: this.state.currentBranch
 		});
 
@@ -112,7 +112,7 @@ class Project extends React.Component {
 	changePrimaryBranch() {
 		this.context.executeAction(updateProject, {
 			branch: this.state.primaryBranchField,
-			repository: this.props.repository
+			project: this.state.project
 		});
 
 		this.setState({editingPrimaryBranch: false});

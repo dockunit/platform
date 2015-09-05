@@ -15,9 +15,9 @@ module.exports = function(context, payload, done) {
 		navigate(context, {
 	        url: '/projects/' + payload.repository
 	    }, function() {
-	    	context.service.create('builds', payload, {}, function() {
+	    	/*context.service.create('builds', response, {}, function() {
 				done();
-			});
+			});*/
 	    });
 	});
 };

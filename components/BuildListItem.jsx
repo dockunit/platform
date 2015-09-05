@@ -59,15 +59,15 @@ class BuildListItem extends React.Component {
     	let output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 		
-    	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
+    	let rerunDisabled = (this.props.build.started && this.props.build.finished) ? false : true;
 
     	let lastRan = '';
-		if (!this.props.build.ran && !this.props.build.finished) {
+		if (!this.props.build.started && !this.props.build.finished) {
 			lastRan = 'Queued to run';
-		} else if (this.props.build.ran && !this.props.build.finished) {
-			lastRan = 'Started ' + timeago(this.props.build.ran);
-		}  else if (this.props.build.ran && this.props.build.finished) {
-			lastRan = 'Finished ' + timeago(this.props.build.ran);
+		} else if (this.props.build.started && !this.props.build.finished) {
+			lastRan = 'Started ' + timeago(this.props.build.started);
+		}  else if (this.props.build.started && this.props.build.finished) {
+			lastRan = 'Finished ' + timeago(this.props.build.started);
 		}
 
 		return (
