@@ -12,7 +12,6 @@ module.exports = {
 	name: 'projects',
 
 	delete: function(req, resource, params, config, callback) {
-		console.log(arguments);
 		debug('Delete project ' + params.repository);
 
 		let user = req.user;
@@ -58,7 +57,7 @@ module.exports = {
 		
 		project.repository = params.repository;
 		project.branch = params.branch;
-		project.private = params.private;
+		project.private = params.privateRepository;
 		project.user = user._id;
 
 		project.save(function(error) {

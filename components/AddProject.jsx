@@ -7,6 +7,7 @@ import ProjectsStore from '../stores/ProjectsStore';
 import ApplicationStore from '../stores/ApplicationStore';
 import readGithubRepositories from '../actions/readGithubRepositories';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
+import readMyProjects from '../actions/readMyProjects';
 import If from './If';
 import InputField from './InputField';
 import SelectField from './SelectField';
@@ -55,6 +56,8 @@ class AddProject extends React.Component {
     }
 
     componentWillMount() {
+    	this.context.executeAction(readMyProjects, { mine: true });
+
         this.context.executeAction(readGithubRepositories, { token: this.props.UserStore.currentUser.githubAccessToken });
     }
 
@@ -96,7 +99,7 @@ class AddProject extends React.Component {
 
 			if (repositories && Object.keys(repositories)) {
 				for (var repoKey in repositories) {
-					if (projects[repoKey]) {
+					if (projects && projects[repoKey]) {
 						delete repositories[repoKey];
 					}
 				}
@@ -116,7 +119,7 @@ class AddProject extends React.Component {
 				};
 
 				state.privateRepository = {
-					value: (repositories[Object.keys(repositories)[0]].privateRepository) ? 'Yes' : 'No',
+					value: (repositories[Object.keys(repositories)[0]].private) ? 'Yes' : 'No',
 					errors: {},
 					validators: this.state.privateRepository.validators
 				};
@@ -135,7 +138,7 @@ class AddProject extends React.Component {
 				};
 
 				state.privateRepository = {
-					value: (repositories[this.state.repository.value].privateRepository) ? 'Yes' : 'No',
+					value: (repositories[this.state.repository.value].private) ? 'Yes' : 'No',
 					errors: {},
 					validators: this.state.privateRepository.validators
 				};
@@ -277,10 +280,10 @@ class AddProject extends React.Component {
 
 						<SelectField
 							label="Private"
-							name="private"
+							name="privateRepository"
 							onChange={this.handleFormChange}
 							className="form-control"
-							id="private"
+							id="privateRepository"
 							options={statuses}
 							helpText="Private projects will only be viewable to those who have access to the Github project."
 							errors={this.state.privateRepository.errors}

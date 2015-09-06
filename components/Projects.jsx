@@ -3,8 +3,24 @@
 import {NavLink} from 'fluxible-router';
 import React from 'react';
 import ProjectList from './ProjectList';
+import UserStore from '../stores/UserStore';
+import readMyProjects from '../actions/readMyProjects';
+import {connectToStores} from 'fluxible-addons-react';
 
+@connectToStores(['UserStore'], (context, props) => ({
+    UserStore: context.getStore(UserStore).getState()
+}))
 class Projects extends React.Component {
+	static contextTypes = {
+        executeAction: React.PropTypes.func
+    }
+
+	componentWillMount() {
+        if (this.props.UserStore.currentUser) {
+            this.context.executeAction(readMyProjects, { mine: true });
+        }
+    }
+
 	render() {
 		return (
 			<div className="container">

@@ -28,12 +28,6 @@ class Application extends React.Component {
         executeAction: React.PropTypes.func
     }
 
-    componentWillMount() {
-        if (this.props.UserStore.currentUser) {
-            this.context.executeAction(readMyProjects, { mine: true });
-        }
-    }
-
     render() {
         let Handler = this.props.currentRoute.get('handler');
         let params = this.props.currentRoute.get('params');
