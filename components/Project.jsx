@@ -161,32 +161,32 @@ class Project extends React.Component {
 		}
 	}
 
-	componentWillReceiveProps() {
-		let projects = this.props.ProjectsStore.projects,
-			state = {};
+	componentWillReceiveProps(props) {
+		let projects = props.ProjectsStore.projects;
 
-		if (projects && projects[this.props.repository]) {
-			state.project = projects[this.props.repository];
+		if (projects && projects[props.repository]) {
+			let state = {};
+			state.project = projects[props.repository];
 
 			if (!window.location.hash.replace(/^#(.*)$/i, '$1')) {
 				state.currentBranch = state.project.branch;
 			}
 
 			if (!this.state.currentBranch) {
-				state.currentBranch = projects[this.props.repository].branch;
+				state.currentBranch = projects[props.repository].branch;
 			}
 
 			state.primaryBranchField = state.project.branch;
 
 			this.setState(state);
-		} else {
-			if (this.props.ProjectsStore.projectsNotFound[this.props.repository]) {
-				state.project = false;
-				this.setState(state);
-			}
-			this.context.executeAction(readProject, { repository: this.props.repository });
+		} else if (props.ProjectsStore.projectsNotFound && props.ProjectsStore.projectsNotFound[props.repository]) {
+			this.setState({ project: false });
 		}
 	}
+
+	componentWillMount() {
+ 		this.context.executeAction(readProject, { repository: this.props.repository });
+    }
 
 	changeBranch(event) {
 		event.preventDefault();

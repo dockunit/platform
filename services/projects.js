@@ -60,7 +60,7 @@ module.exports = {
 		
 		project.repository = params.repository;
 		project.branch = params.branch;
-		project.private = params.private;
+		project.private = params.privateRepository;
 		project.user = user._id;
 
 		project.save(function(error) {
