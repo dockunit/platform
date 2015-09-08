@@ -106,7 +106,7 @@ module.exports = {
 						arrayPop: true,
 						mongooseModel: Build,
 						idField: 'project'
-					};
+					}, projectToSave;
 
 					reversePopulate(reversePopulateOptions, function(error) {
 						if (error) {
@@ -114,10 +114,11 @@ module.exports = {
 						}
 
 						projects.forEach(function(project) {
-							project = project.toObject();
-							project.mine = true;
+							projectToSave = project.toObject();
+							projectToSave.builds = project.builds; // Weird hack.
+							projectToSave.mine = true;
 
-							projectObjects[project.repository] = project;
+							projectObjects[project.repository] = projectToSave;
 						});
 
 						callback(null, projectObjects);
@@ -143,16 +144,15 @@ module.exports = {
 
 					var reversePopulateOptions = {
 						modelArray: projects,
-						storeWhere: 'buildsss',
+						storeWhere: 'builds',
 						arrayPop: true,
 						mongooseModel: Build,
 						idField: 'project'
 					};
 
 					reversePopulate(reversePopulateOptions, function(error) {
-						console.log(projects);
-
 						var project = projects[0].toObject();
+						project.builds = projects[0].builds; // Weird hack.
 						project.mine = false;
 
 						debug('Found one project');

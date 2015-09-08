@@ -163,7 +163,7 @@ Webhooks.prototype.createJob = function() {
 				} else {
 					self.socket.emit('newBuild', { build: build, user: user.username, repository: self.project.repository });
 
-					queue.create('builder', { user: user, project: self.project, buildId: build._id }).save(function(error){
+					queue.create('builder', { user: user, project: self.project, repository: self.project.repository, buildId: build._id }).save(function(error){
 						if (error) {
 							debug('Could not save builder job');
 						} else {

@@ -8,6 +8,7 @@ var constants = require('./constants');
 global.db = mongoose.connect('mongodb://localhost/dockunit');
 
 var Project = require('./models/Project');
+var Build = require('./models/Build');
 
 var Builder = require('./clients/Builder');
 

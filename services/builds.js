@@ -51,7 +51,7 @@ module.exports = {
 
 							socket.emit('rerunBuild', { build: build, user: user.username, repository: params.project.repository });
 
-							queue.create('builder', {user: user, repository: params.project.repository, buildId: params.buildId}).save(function(error) {
+							queue.create('builder', {user: user, project: params.project, repository: params.project.repository, buildId: params.buildId}).save(function(error) {
 								if (error) {
 									callback(true);
 								} else {
@@ -73,6 +73,7 @@ module.exports = {
 				build.commit = response.commit.sha;
 				build.branch = params.branch;
 				build.output = '';
+				build.project = params.project._id;
 				build.commitUser = response.commit.committer.login;
 
 				build.save(function(error) {
@@ -86,7 +87,7 @@ module.exports = {
 
 						socket.emit('newBuild', { build: build, user: user.username, repository: params.project.repository });
 
-						queue.create('builder', {user: user, repository: params.project.repository, buildId: build._id}).save(function(error) {
+						queue.create('builder', {user: user, project: params.project, repository: params.project.repository, buildId: build._id}).save(function(error) {
 							if (error) {
 								callback(true);
 							} else {
@@ -99,6 +100,8 @@ module.exports = {
 						});
 					}
 				});
+			}, function() {
+				debug('Could not find project branch to build');
 			});
 		}
 	}
