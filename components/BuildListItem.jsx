@@ -60,8 +60,7 @@ class BuildListItem extends React.Component {
     		.replace(/&/g, '&amp;')
     		.replace(/>/g, '&gt;')
     		.replace(/</g, '&lt;');
-    	output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
-
+    	output = output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 		
     	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
 
