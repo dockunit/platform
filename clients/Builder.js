@@ -116,10 +116,10 @@ Builder.prototype.startContainer = function() {
 			directory = process.env.HOME + '/buildfiles'
 		}
 
-		debug('Running - git clone https://github.com/' + self.repository + '.git ' + directory + '/' + self.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit);
+		debug('Running - git clone https://' + self.user.githubAccessToken + '@github.com/' + self.repository + '.git ' + directory + '/' + self.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit);
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
-		exec('git clone https://github.com/' + self.repository + '.git ' + directory + '/' + self.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit, function(error, stdout, stderr) {
+		exec('git clone https://' + self.user.githubAccessToken + '@github.com/' + self.repository + '.git ' + directory + '/' + self.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit, function(error, stdout, stderr) {
 			debug('Git clone finished');
 
 			var cmd = spawn('dockunit', [directory + '/' + self.repository + '/' + self.build.commit]);
