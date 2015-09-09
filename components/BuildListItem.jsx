@@ -56,7 +56,11 @@ class BuildListItem extends React.Component {
     	let commitUrl = githubUrl + '/commit/' + this.props.build.commit;
     	let buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
 
-    	let output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
+    	let output = this.props.build.output
+    		.replace(/&/g, '&amp;')
+    		.replace(/>/g, '&gt;')
+    		.replace(/</g, '&lt;');
+    	output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 		
     	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
