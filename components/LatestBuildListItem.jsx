@@ -64,7 +64,7 @@ class LatestBuildListItem extends React.Component {
 
     	var runTime = '';
     	if (this.props.build.finished) {
-    		var runTimeCalc = ((new Date(this.props.build.finished) - new Date(this.props.build.ran)) / 1000 / 60);
+    		var runTimeCalc = ((new Date(this.props.build.finished) - new Date(this.props.build.started)) / 1000 / 60);
 
 			if (runTimeCalc < 1) {
 				runTimeCalc = Math.floor(runTimeCalc * 60);
@@ -96,15 +96,15 @@ class LatestBuildListItem extends React.Component {
     	}
 
     	let lastRan = '';
-		if (!this.props.build.ran && !this.props.build.finished) {
+		if (!this.props.build.started && !this.props.build.finished) {
 			lastRan = 'Queued to run';
-		} else if (this.props.build.ran && !this.props.build.finished) {
-			lastRan = 'Started ' + timeago(this.props.build.ran);
-		}  else if (this.props.build.ran && this.props.build.finished) {
-			lastRan = 'Finished ' + timeago(this.props.build.ran);
+		} else if (this.props.build.started && !this.props.build.finished) {
+			lastRan = 'Started ' + timeago(this.props.build.started);
+		}  else if (this.props.build.started && this.props.build.finished) {
+			lastRan = 'Finished ' + timeago(this.props.build.started);
 		}
 
-    	let rerunDisabled = (this.props.build.ran && this.props.build.finished) ? false : true;
+    	let rerunDisabled = (this.props.build.started && this.props.build.finished) ? false : true;
 
 		return (
 			<div className="project-item latest-build jumbo">
@@ -123,11 +123,11 @@ class LatestBuildListItem extends React.Component {
 								<div>Status: <strong>{passFail} in {runTime}</strong></div>
 							</If>
 
-							<If test={!this.props.build.finished && this.props.build.ran}>
+							<If test={!this.props.build.finished && this.props.build.started}>
 								<div>Status: <strong>Not finished</strong></div>
 							</If>
 
-							<If test={!this.props.build.finished && !this.props.build.ran}>
+							<If test={!this.props.build.finished && !this.props.build.started}>
 								<div>Status: <strong>Waiting to run</strong></div>
 							</If>
 						</div>

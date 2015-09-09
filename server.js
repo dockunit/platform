@@ -67,6 +67,7 @@ var passport = require('passport');
 
 var User = require('./models/User');
 var Project = require('./models/Project');
+var Build = require('./models/Build');
 
 server.post('/webhooks', require('./webhooks'));
 

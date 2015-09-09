@@ -9,6 +9,7 @@ var NPromise = require('promise');
 var kue = require('kue');
 var constants = require('./constants');
 var Builder = require('./clients/Builder');
+var Build = mongoose.model('Build');
 
 var Webhooks = function() {
 	var self = this;
@@ -74,55 +75,6 @@ Webhooks.prototype.verifySignature = function() {
 	}
 };
 
-Webhooks.prototype.createJob = function() {
-	var self = this;
-
-	debug('Creating job');
-
-	return new NPromise(function(fulfill, reject) {
-		var queue = kue.createQueue();
-
-		debug('Finding user with id ' + self.project.user);
-
-		User.findById(self.project.user, function(error, user) {
-			if (error || !user) {
-				debug('Could not find user associated with project');
-				reject();
-				return;
-			}
-
-			var build = {};
-			build.commit = self.commit;
-			build.branch = self.branch;
-			build.output = '';
-			build.ran = null;
-			build.commitUser = self.commitUser;
-			build = self.project.builds.create(build);
-
-			self.project.builds.push(build);
-
-			self.project.save(function(error) {
-				if (error) {
-					debug('Could not save project with new build');
-					reject();
-				} else {
-					self.socket.emit('newBuild', { build: build, user: user.username, repository: self.project.repository });
-
-					queue.create('builder', { user: user, repository: self.project.repository, buildId: build._id }).save(function(error){
-						if (error) {
-							debug('Could not save builder job');
-						} else {
-							debug('Builder job created');
-						}
-
-						fulfill();
-					});
-				}
-			});
-		});
-	});
-};
-
 Webhooks.prototype.verifyRequestBody = function() {
 	debug('Verifying request body');
 
@@ -175,6 +127,53 @@ Webhooks.prototype.verifyAndGetProject = function() {
 				debug(self.project);
 				fulfill();
 			}
+		});
+	});
+};
+
+Webhooks.prototype.createJob = function() {
+	var self = this;
+
+	debug('Creating job');
+
+	return new NPromise(function(fulfill, reject) {
+		var queue = kue.createQueue();
+
+		debug('Finding user with id ' + self.project.user);
+
+		User.findById(self.project.user, function(error, user) {
+			if (error || !user) {
+				debug('Could not find user associated with project');
+				reject();
+				return;
+			}
+
+			var build = new Build();
+			build.commit = self.commit;
+			build.branch = self.branch;
+			build.output = '';
+			build.project = self.project._id;
+			build.ran = null;
+			build.commitUser = self.commitUser;
+
+			build.save(function(error) {
+				if (error) {
+					debug('Could not save new build');
+					reject();
+				} else {
+					self.socket.emit('newBuild', { build: build, user: user.username, repository: self.project.repository });
+
+					queue.create('builder', { user: user, project: self.project, repository: self.project.repository, buildId: build._id }).save(function(error){
+						if (error) {
+							debug('Could not save builder job');
+						} else {
+							debug('Builder job created');
+						}
+
+						fulfill();
+					});
+				}
+			});
 		});
 	});
 };

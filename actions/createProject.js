@@ -12,7 +12,8 @@ module.exports = function(context, payload, done) {
 
 		context.dispatch('CREATE_PROJECT_SUCCESS', response);
 
-		context.service.create('builds', payload, {}, function() {
+		response.branch = payload.branch;
+    	context.service.create('builds', response, {}, function() {
 			navigate(context, {
 		        url: '/projects/' + payload.repository
 		    }, function() {

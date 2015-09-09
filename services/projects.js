@@ -3,16 +3,18 @@
 var mongoose = require('mongoose');
 var debug = require('debug')('dockunit');
 var Project = mongoose.model('Project');
+var Build = mongoose.model('Build');
 var NPromise = require('promise');
 var kue = require('kue');
 var queue = kue.createQueue();
 var Github = require('../clients/Github');
+var reversePopulate = require('mongoose-reverse-populate');
 
 module.exports = {
 	name: 'projects',
 
 	delete: function(req, resource, params, config, callback) {
-		debug('Delete project ' + params.repository);
+		debug('Delete project ' + params.project.repository);
 
 		let user = req.user;
 
@@ -21,19 +23,20 @@ module.exports = {
 			return;
 		}
 
-		if (!params.repository) {
-			callback('No repository provided');
+		if (!params.project) {
+			callback('No project provided');
 			return;
 		}
 
-		Project.findOneAndRemove({ user: user._id, repository: params.repository }, function(error) {
+		Project.findOneAndRemove({ _id: params.project._id }, function(error) {
 			if (error) {
 				debug('Project could not be deleted');
 
 				callback(error);
 			} else {
-				debug('Project ' + params.repository + ' successfully deleted');
-				callback(null, { repository: params.repository });
+				debug('Project ' + params.project.repository + ' successfully deleted');
+
+				callback(null, { repository: params.project.repository });
 			}
 		});
 	},
@@ -93,14 +96,33 @@ module.exports = {
 
 					callback(error);
 				} else {
-					projects.forEach(function(project) {
-						project = project.toObject();
-						project.mine = true;
+					for (var i = 0; i < projects.length; i++) {
+						projects[i].builds = [];
+					}
 
-						projectObjects[project.repository] = project;
+					var reversePopulateOptions = {
+						modelArray: projects,
+						storeWhere: 'builds',
+						arrayPop: true,
+						mongooseModel: Build,
+						idField: 'project'
+					}, projectToSave;
+
+					reversePopulate(reversePopulateOptions, function(error) {
+						if (error) {
+							debug('Error occured whene reverse populating builds');
+						}
+
+						projects.forEach(function(project) {
+							projectToSave = project.toObject();
+							projectToSave.builds = project.builds; // Weird hack.
+							projectToSave.mine = true;
+
+							projectObjects[project.repository] = projectToSave;
+						});
+
+						callback(null, projectObjects);
 					});
-
-					callback(null, projectObjects);
 				}
 			});
 
@@ -116,60 +138,75 @@ module.exports = {
 
 					callback(error);
 				} else {
-					var project = projects[0].toObject();
-					project.mine = false;
+					for (var i = 0; i < projects.length; i++) {
+						projects[i].builds = [];
+					}
 
-					debug('Found one project');
+					var reversePopulateOptions = {
+						modelArray: projects,
+						storeWhere: 'builds',
+						arrayPop: true,
+						mongooseModel: Build,
+						idField: 'project'
+					};
 
-					if (user && user.githubAccessToken) {
-						if (String(user._id) === String(project.user)) {
-							project.mine = true;
-							projectObjects[project.repository] = project;
+					reversePopulate(reversePopulateOptions, function(error) {
+						var project = projects[0].toObject();
+						project.builds = projects[0].builds; // Weird hack.
+						project.mine = false;
 
-							debug('Returning a project that I own');
+						debug('Found one project');
 
-							callback(null, projectObjects);
-						} else {
-							if (project.private) {
-								/**
-								 * Logged in but this is not our project and it's private
-								 * we need to see if our Github account has perms
-								 */
-
-								Github.repos.get(user.githubAccessToken).then(function(repos) {
-									if (repos[params.repository]) {
-										projectObjects[project.repository] = project;
-
-										debug('Returning a project that isn\'t mine but I have access to');
-
-										callback(null, projectObjects);
-									} else {
-										debug('Returning no project since I don\'t have access');
-
-										callback(null, projectObjects);
-									}
-								}, function() {
-									debug('Could not retrieve repos to verify access for private project');
-									callback(null, projectObjects);
-								});
-							} else {
-								debug('Return a non private project that isnt mine');
+						if (user && user.githubAccessToken) {
+							if (String(user._id) === String(project.user)) {
+								project.mine = true;
 								projectObjects[project.repository] = project;
 
-								callback(null, projectObjects);
-							}
-						}
-					} else {
-						if (project.private) {
-							// No access!
-							debug('Returning no project since it\'s private and I\'m not logged in');
-						} else {
-							debug('Returning a project since it\'s public and I\'m not logged in');
-							projectObjects[project.repository] = project;
-						}
+								debug('Returning a project that I own');
 
-						callback(null, projectObjects);
-					}
+								callback(null, projectObjects);
+							} else {
+								if (project.private) {
+									/**
+									 * Logged in but this is not our project and it's private
+									 * we need to see if our Github account has perms
+									 */
+
+									Github.repos.get(user.githubAccessToken).then(function(repos) {
+										if (repos[params.repository]) {
+											projectObjects[project.repository] = project;
+
+											debug('Returning a project that isn\'t mine but I have access to');
+
+											callback(null, projectObjects);
+										} else {
+											debug('Returning no project since I don\'t have access');
+
+											callback(null, projectObjects);
+										}
+									}, function() {
+										debug('Could not retrieve repos to verify access for private project');
+										callback(null, projectObjects);
+									});
+								} else {
+									debug('Return a non private project that isnt mine');
+									projectObjects[project.repository] = project;
+
+									callback(null, projectObjects);
+								}
+							}
+						} else {
+							if (project.private) {
+								// No access!
+								debug('Returning no project since it\'s private and I\'m not logged in');
+							} else {
+								debug('Returning a project since it\'s public and I\'m not logged in');
+								projectObjects[project.repository] = project;
+							}
+
+							callback(null, projectObjects);
+						}
+					});
 				}
 			});
 		}

@@ -55,12 +55,12 @@ class ProjectListItem extends React.Component {
 
 		if (!latestBuild) {
 			status = 'No builds have ran';
-		} else if (!latestBuild.ran && !latestBuild.finished) {
+		} else if (!latestBuild.started && !latestBuild.finished) {
 			status = 'Queued to run';
-		} else if (latestBuild.ran && !latestBuild.finished) {
-			status = 'Started ' + timeago(latestBuild.ran);
-		}  else if (latestBuild.ran && latestBuild.finished) {
-			status = 'Finished ' + timeago(latestBuild.ran);
+		} else if (latestBuild.started && !latestBuild.finished) {
+			status = 'Started ' + timeago(latestBuild.started);
+		}  else if (latestBuild.started && latestBuild.finished) {
+			status = 'Finished ' + timeago(latestBuild.started);
 		}
 
 		return (

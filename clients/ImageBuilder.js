@@ -4,6 +4,7 @@ import NPromise from 'promise';
 import mongoose from 'mongoose';
 
 var Project = mongoose.model('Project');
+var Build = mongoose.model('Build');
 var debug = require('debug')('dockunit');
 
 class ImageBuilder {
@@ -63,18 +64,17 @@ class ImageBuilder {
 					if (!self.branch) {
 						self.branch = self.project.branch;
 					}
-					self.branchBuild = self.project.builds.filter(function(build) {
-						return build.branch === self.branch;
-					}).pop();
 
-					if (!self.branchBuild) {
-						reject(new Error('Could not find a build for branch `' + self.branch + '`'));
-					} else {
-						debug('Result ' + self.branchBuild.result + ' saved');
+					Build.find({ project: self.project._id, branch: self.branch }).sort('-created').exec(function(error, builds) {
+						if (error || !builds.length) {
+							reject(new Error('Could not find a build for branch `' + self.branch + '`'));
+						} else {
+							debug('Result ' + builds[0].result + ' saved');
 
-						self.result = self.branchBuild.result;
-						fulfill();
-					}
+							self.result = builds[0].result;
+							fulfill();
+						}
+					});
 				}
 			});
 		});
