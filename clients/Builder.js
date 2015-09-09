@@ -76,6 +76,8 @@ Builder.prototype.getBuild = function() {
 					} else {
 						debug('Emitting updated build to ' + self.user.username);
 
+						console.log({ build: self.build, user: self.user.username, repository: self.project.repository });
+
 						self.socket.emit('updatedBuild', { build: self.build, user: self.user.username, repository: self.project.repository });
 
 						fulfill();
@@ -173,7 +175,9 @@ Builder.prototype.finish = function() {
 
 			Github.statuses.create(self.user.githubAccessToken, self.project.repository, self.user.username, self.build.commit, status);
 
-			self.socket.emit('completedBuild', { build: build, user: self.user.username, repository: self.project.repository });
+			self.socket.emit('completedBuild', { build: self.build, user: self.user.username, repository: self.project.repository });
+
+			console.log({ build: self.build, user: self.user.username, repository: self.project.repository });
 
 			debug('Build finish saved to project');
 
