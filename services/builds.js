@@ -66,8 +66,6 @@ module.exports = {
 		} else {
 			debug('Creating a fresh build');
 
-			console.log(params);
-
 			Github.branch.get(user.githubAccessToken, params.project.repository, params.branch).then(function(response) {
 
 				build = new Build();

@@ -76,8 +76,6 @@ Builder.prototype.getBuild = function() {
 					} else {
 						debug('Emitting updated build to ' + self.user.username);
 
-						console.log({ build: self.build, user: self.user.username, repository: self.project.repository });
-
 						self.socket.emit('updatedBuild', { build: self.build, user: self.user.username, repository: self.project.repository });
 
 						fulfill();

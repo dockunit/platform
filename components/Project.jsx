@@ -74,7 +74,7 @@ class Project extends React.Component {
 			closeOnConfirm: true
 		}, function() {
 			self.context.executeAction(deleteProject, {
-				project: this.state.project
+				project: self.state.project
 			});
 		});
 	}
