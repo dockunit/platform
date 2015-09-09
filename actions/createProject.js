@@ -12,14 +12,13 @@ module.exports = function(context, payload, done) {
 
 		context.dispatch('CREATE_PROJECT_SUCCESS', response);
 
-		navigate(context, {
-	        url: '/projects/' + payload.repository
-	    }, function() {
-	    	console.log(response);
-	    	response.branch = payload.branch;
-	    	context.service.create('builds', response, {}, function() {
-				done();
-			});
-	    });
+		response.branch = payload.branch;
+    	context.service.create('builds', response, {}, function() {
+			navigate(context, {
+		        url: '/projects/' + payload.repository
+		    }, function() {
+		    	done();
+		    });
+		});
 	});
 };
