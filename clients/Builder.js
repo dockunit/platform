@@ -167,17 +167,15 @@ Builder.prototype.finish = function() {
 			debug('Emitting completed build to ' + self.user.username);
 
 			var status = 'success';
-			if (1 === build.result) {
+			if (1 === self.build.result) {
 				status = 'error';
-			} else if (2 === build.result) {
+			} else if (2 === self.build.result) {
 				status = 'failure';
 			}
 
 			Github.statuses.create(self.user.githubAccessToken, self.project.repository, self.user.username, self.build.commit, status);
 
 			self.socket.emit('completedBuild', { build: self.build, user: self.user.username, repository: self.project.repository });
-
-			console.log({ build: self.build, user: self.user.username, repository: self.project.repository });
 
 			debug('Build finish saved to project');
 
