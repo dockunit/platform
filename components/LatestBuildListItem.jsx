@@ -77,7 +77,11 @@ class LatestBuildListItem extends React.Component {
 			}
     	}
 
-    	var output = this.props.build.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
+    	let output = this.props.build.output
+    		.replace(/&/g, '&amp;')
+    		.replace(/\>/g, '&gt;')
+    		.replace(/\</g, '&lt;');
+    	output = output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 		
     	let buildDetailsButtonsClasses = "btn btn-default expand";
