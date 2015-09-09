@@ -267,7 +267,7 @@ class Project extends React.Component {
 
 				<If test={this.state.project && !builds.length && !Object.keys(nonCurrentBranches).length}>
 					<div className="no-builds">
-						<h3>This project currently has no builds. Sorry!</h3>
+						<h3>This project currently has no builds. Try <a href="" onClick={this.createBuild}>manually running a build.</a></h3>
 					</div>
 				</If>
 
