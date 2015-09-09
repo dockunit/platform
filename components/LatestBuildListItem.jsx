@@ -77,10 +77,16 @@ class LatestBuildListItem extends React.Component {
 			}
     	}
 
+    	// Very hacky way of handling special entities
     	let output = this.props.build.output
+    		.replace(/\<span(.*?)\>/gi, '[#%span$1]')
+    		.replace(/\<\/span\>/gi, '[#%/span]')
     		.replace(/&/g, '&amp;')
     		.replace(/\>/g, '&gt;')
-    		.replace(/\</g, '&lt;');
+    		.replace(/\</g, '&lt;')
+    		.replace(/\[#%span(.*?)\]/g, '<span$1>')
+    		.replace(/\[#%\/span\]/g, '</span>');
+
     	output = output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
 		
