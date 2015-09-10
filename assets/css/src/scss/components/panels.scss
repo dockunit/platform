@@ -55,6 +55,69 @@
     background: #03739C url("../img/pattern1.png"); 
 }
 
+.hot-projects-wrapper {
+    background-color: $brand-primary;
+    text-align: center;
+    padding: 2.5em 0;
+    color: #fff;
+
+    .glyphicon-fire {
+            font-size: 56px;
+            border: 5px solid $brand-warning;
+            color: $brand-warning;
+            padding: 12px;
+            border-radius: 150px;
+    }
+
+    .row {
+        margin-top: 0;
+        margin-bottom: 0;
+    }
+
+    h1 {
+        color: #fff;
+        margin-top: 0;
+    }
+
+    p {
+        margin-bottom: 1em;
+    }
+
+    .home-panel-heading-divider {
+        background-color: #fff;
+        margin: 1em auto;
+    }
+
+    ul {
+        padding: 0;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 1.5em;
+        width: 560px;
+        list-style-type: none;
+    }
+
+    li {
+        background-color: #fafafa;
+        border-radius: 5px;
+        box-shadow: 0 4px 2px rgba(0,0,0,0.2);
+        color: $text-color;
+        padding: 1em 2em;
+        box-sizing: border-box;
+        position: relative;
+    }
+
+    .status {
+        width: 50px;
+        display: block;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        position: absolute;
+        background-color: green;
+    }
+}
+
 .steps {
     padding-bottom: 1em;
     text-align: center;

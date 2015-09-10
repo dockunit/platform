@@ -79,7 +79,52 @@ module.exports = {
 		var projectObjects = {};
 		var user = req.user || false;
 
-		if (params.mine) {
+		if (params.hot) {
+			debug('Getting hot projects');
+
+			var weekAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+
+			Build.aggregate([
+				{
+					$match: {
+						created: {
+							$gt: new Date(weekAgo)
+						}
+					}
+				},
+				{
+					$group: {
+						_id: '$project',
+						count: {
+							$sum: 1
+						},
+						created: {
+							$first: '$created'
+						}
+					}
+				},
+				{
+					$sort: {
+						count: -1
+					}
+				},
+        		{
+        			$limit: 7
+        		}
+			], function(error, buildGroups) {
+				var projects = [];
+
+				buildGroups.forEach(function(build) {
+					Project.findOne({ _id: build._id }, function(error, project) {
+						projects.push(project);
+
+						if (projects.length >= buildGroups.length) {
+							callback(null, projects);
+						}
+					});
+				});
+			});
+		} else if (params.mine) {
 			// Get all my projects
 			debug('Getting my projects');
 
@@ -90,7 +135,7 @@ module.exports = {
 
 			query.user = user._id;
 
-			Project.find(query).sort('-created').exec(function(error, projects) {
+			Build.find(query).sort('-created').exec(function(error, projects) {
 				if (error) {
 					debug('No projects found for ' + user._id);
 

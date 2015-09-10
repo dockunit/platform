@@ -9,6 +9,7 @@ class ProjectsStore extends BaseStore {
 		super(dispatcher);
 
 		this.projects = null;
+		this.hotProjects = [];
 		this.projectsNotFound = {};
 	}
 
@@ -35,6 +36,12 @@ class ProjectsStore extends BaseStore {
 
 	readMyProjectsSuccess(projects) {
 		this.projects = projects;
+		this.emitChange();
+	}
+
+	readHotProjectsSuccess(projects) {
+		this.hotProjects = projects;
+
 		this.emitChange();
 	}
 
@@ -83,6 +90,7 @@ class ProjectsStore extends BaseStore {
 	getState() {
 		return {
 			projects: this.projects,
+			hotProjects: this.hotProjects,
 			projectsNotFound: this.projectsNotFound
 		};
 	}
@@ -113,12 +121,15 @@ class ProjectsStore extends BaseStore {
 
 	rehydrate(state) {
 		this.projects = state.projects;
+		this.hotProjects = state.hotProjects;
 		this.projectsNotFound = state.projectsNotFound;
 	}
 }
 
 ProjectsStore.handlers = {
 	'READ_MY_PROJECTS_SUCCESS': 'readMyProjectsSuccess',
+	'READ_HOT_PROJECTS_SUCCESS': 'readHotProjectsSuccess',
+	'READ_HOT_PROJECTS_FAILURE': 'readHotProjectsFailure',
 	'READ_PROJECT_SUCCESS': 'readProjectSuccess',
 	'READ_PROJECT_FAILURE': 'readProjectFailure',
 	'CREATE_PROJECT_SUCCESS': 'createProjectSuccess',

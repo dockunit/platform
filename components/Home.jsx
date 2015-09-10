@@ -2,8 +2,22 @@
 
 import React from 'react';
 import {NavLink} from 'fluxible-router';
+import {connectToStores} from 'fluxible-addons-react';
+import ProjectsStore from '../stores/ProjectsStore';
+import If from '../components/If';
+import timeago from 'timeago';
 
+@connectToStores(['ProjectsStore'], (context, props) => ({
+    ProjectsStore: context.getStore(ProjectsStore).getState()
+}))
 class Home extends React.Component {
+	constructor(props, context) {
+        super(props, context);
+    }
+
+    static contextTypes = {
+        getStore: React.PropTypes.func.isRequired
+    }
 
     render() {
         return (
@@ -72,6 +86,26 @@ class Home extends React.Component {
 						</div>
 					</div>
 				</div>
+				<If test={this.props.ProjectsStore.hotProjects.length}>
+					<div className="hot-projects-wrapper">
+						<div className="container hot-projects">
+							<div className="row">
+								<h1>Hot Projects</h1>
+								<p>Check out a few of the particularly active Dockunit projects.</p>
+
+								<div className="glyphicon glyphicon-fire"></div>
+								
+								<ul>
+									{this.props.ProjectsStore.hotProjects.map(function(project) {
+										return <li>
+											<NavLink routeName="register"><strong>{project.repository}</strong></NavLink> last activity <strong>{timeago(project.created)}</strong>.
+										</li>
+									}, this)}
+								</ul>
+							</div>
+						</div>
+					</div>
+				</If>
 			</div>
         );
     }
