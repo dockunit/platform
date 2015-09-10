@@ -9,6 +9,7 @@ var kue = require('kue');
 var queue = kue.createQueue();
 var Github = require('../clients/Github');
 var reversePopulate = require('mongoose-reverse-populate');
+var redis = require('redis');
 
 module.exports = {
 	name: 'projects',
@@ -82,50 +83,65 @@ module.exports = {
 		if (params.hot) {
 			debug('Getting hot projects');
 
-			var weekAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+			var client = redis.createClient();
 
-			Build.aggregate([
-				{
-					$match: {
-						created: {
-							$gt: new Date(weekAgo)
-						}
-					}
-				},
-				{
-					$group: {
-						_id: '$project',
-						count: {
-							$sum: 1
+			client.get('hotProjects', function(error, hotProjects) {
+
+				if (error || !hotProjects) {
+					debug('Hot projects cache miss');
+
+					var weekAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
+
+					Build.aggregate([
+						{
+							$match: {
+								created: {
+									$gt: new Date(weekAgo)
+								}
+							}
 						},
-						created: {
-							$first: '$created'
-						}
-					}
-				},
-				{
-					$sort: {
-						count: -1
-					}
-				},
-        		{
-        			$limit: 50
-        		}
-			], function(error, buildGroups) {
-				var projects = [],
-					lastProjectId = buildGroups[buildGroups.length - 1]._id.toString();
+						{
+							$group: {
+								_id: '$project',
+								count: {
+									$sum: 1
+								},
+								created: {
+									$first: '$created'
+								}
+							}
+						},
+						{
+							$sort: {
+								count: -1
+							}
+						},
+			    		{
+			    			$limit: 50
+			    		}
+					], function(error, buildGroups) {
+						var projects = [],
+							lastProjectId = buildGroups[buildGroups.length - 1]._id.toString();
 
-				buildGroups.forEach(function(build) {
-					Project.findOne({ _id: build._id }, function(error, project) {
-						if (!project.private) {
-							projects.push(project);
-						}
+						buildGroups.forEach(function(build) {
+							Project.findOne({ _id: build._id }, function(error, project) {
+								if (!project.private) {
+									projects.push(project);
+								}
 
-						if (lastProjectId == project._id.toString() || projects.length >= 5) {
-							callback(null, projects);
-						}
+								if (lastProjectId === project._id.toString() || projects.length >= 5) {
+									client.set('hotProjects', JSON.stringify(projects));
+
+									callback(null, projects);
+								}
+							});
+						});
 					});
-				});
+				} else {
+					debug('Hot projects cache hit');
+
+					callback(null, JSON.parse(hotProjects));
+				}
 			});
 		} else if (params.mine) {
 			// Get all my projects

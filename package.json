@@ -51,6 +51,7 @@
     "querystring": "^0.2.0",
     "react": "^0.13.3",
     "react-imageloader": "^2.0.0",
+    "redis": "^1.0.0",
     "robots.txt": "^1.1.0",
     "serialize-javascript": "^1.0.0",
     "sitemap": "^1.0.0",
