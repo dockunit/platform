@@ -6227,16 +6227,28 @@ h2 {
   text-align: center;
   padding: 2.5em 0;
   color: #fff; }
+  .hot-projects-wrapper .glyphicon-fire {
+    font-size: 56px;
+    border: 5px solid #FF851B;
+    color: #FF851B;
+    padding: 12px;
+    border-radius: 150px; }
+  .hot-projects-wrapper .row {
+    margin-top: 0;
+    margin-bottom: 0; }
   .hot-projects-wrapper h1 {
     color: #fff;
     margin-top: 0; }
+  .hot-projects-wrapper p {
+    margin-bottom: 1em; }
   .hot-projects-wrapper .home-panel-heading-divider {
-    background-color: #fff; }
+    background-color: #fff;
+    margin: 1em auto; }
   .hot-projects-wrapper ul {
-    margin-top: 2em;
     padding: 0;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 1.5em;
     width: 560px;
     list-style-type: none; }
   .hot-projects-wrapper li {
@@ -6245,7 +6257,16 @@ h2 {
     box-shadow: 0 4px 2px rgba(0, 0, 0, 0.2);
     color: #555555;
     padding: 1em 2em;
-    box-sizing: border-box; }
+    box-sizing: border-box;
+    position: relative; }
+  .hot-projects-wrapper .status {
+    width: 50px;
+    display: block;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    position: absolute;
+    background-color: green; }
 
 .steps {
   padding-bottom: 1em;
