@@ -79,6 +79,10 @@ class ProjectsStore extends BaseStore {
 		this.emitChange();
 	}
 
+	readHotProjectsFailure() {
+		
+	}
+
 	deleteProjectSuccess(repository) {
 		if (this.projects[repository]) {
 			delete this.projects[repository];
