@@ -6179,13 +6179,20 @@ h2 {
 
 .attributes-panel {
   text-align: center;
-  padding: 1em 0 2em 0; }
+  padding: 2.5em 0 2.5em 0; }
 
 .home-panel h1,
 .attributes-panel h1 {
   text-align: center;
   margin-bottom: 0;
   padding-bottom: 0;
+  margin-top: 0; }
+
+.attributes-panel .row {
+  margin-top: 0;
+  margin-bottom: 0; }
+
+.attributes-panel h2 {
   margin-top: 0; }
 
 .home-panel {
@@ -6228,7 +6235,7 @@ h2 {
   padding: 2.5em 0;
   color: #fff; }
   .hot-projects-wrapper .glyphicon-fire {
-    font-size: 56px;
+    font-size: 60px;
     border: 5px solid #FF851B;
     color: #FF851B;
     padding: 12px;
@@ -6274,7 +6281,7 @@ h2 {
   .steps .glyphicon-download-alt {
     font-size: 60px;
     color: #2BBAED;
-    border: 2px solid #2BBAED;
+    border: 5px solid #2BBAED;
     border-radius: 150px;
     padding: 16px;
     text-align: center;
@@ -6283,14 +6290,14 @@ h2 {
   .steps .glyphicon-th-list {
     font-size: 60px;
     color: #2BBAED;
-    border: 2px solid #2BBAED;
+    border: 5px solid #2BBAED;
     border-radius: 150px;
     padding: 18px;
     text-align: center; }
   .steps .glyphicon-cog {
     font-size: 60px;
     color: #2BBAED;
-    border: 2px solid #2BBAED;
+    border: 5px solid #2BBAED;
     border-radius: 150px;
     padding: 19px 17px 17px 19px;
     text-align: center; }

@@ -1,6 +1,6 @@
 .attributes-panel {
     text-align: center;
-    padding: 1em 0 2em 0;
+    padding: 2.5em 0 2.5em 0;
 }
 
 .home-panel h1,
@@ -8,6 +8,15 @@
     text-align: center;
     margin-bottom: 0;
     padding-bottom: 0;
+    margin-top: 0;
+}
+
+.attributes-panel .row {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.attributes-panel h2 {
     margin-top: 0;
 }
 
@@ -62,7 +71,7 @@
     color: #fff;
 
     .glyphicon-fire {
-            font-size: 56px;
+            font-size: 60px;
             border: 5px solid $brand-warning;
             color: $brand-warning;
             padding: 12px;
@@ -125,7 +134,7 @@
     .glyphicon-download-alt {
         font-size: 60px;
         color: $logo-blue;
-        border: 2px solid $logo-blue;
+        border: 5px solid $logo-blue;
         border-radius: 150px;
         padding: 16px;
         text-align: center;
@@ -136,7 +145,7 @@
     .glyphicon-th-list {
         font-size: 60px;
         color: $logo-blue;
-        border: 2px solid $logo-blue;
+        border: 5px solid $logo-blue;
         border-radius: 150px;
         padding: 18px;
         text-align: center;
@@ -145,7 +154,7 @@
     .glyphicon-cog {
         font-size: 60px;
         color: $logo-blue;
-        border: 2px solid $logo-blue;
+        border: 5px solid $logo-blue;
         border-radius: 150px;
         padding: 19px 17px 17px 19px;
         text-align: center;
