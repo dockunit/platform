@@ -135,7 +135,7 @@ module.exports = {
 
 			query.user = user._id;
 
-			Build.find(query).sort('-created').exec(function(error, projects) {
+			Project.find(query).sort('-created').exec(function(error, projects) {
 				if (error) {
 					debug('No projects found for ' + user._id);
 
