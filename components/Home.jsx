@@ -97,8 +97,11 @@ class Home extends React.Component {
 								
 								<ul>
 									{this.props.ProjectsStore.hotProjects.map(function(project) {
+										let repositoryUser = project.repository.replace(/^(.*?)\/.*/i, '$1');
+										let repositoryName = project.repository.replace(/^.*?\/(.*)$/i, '$1');
+
 										return <li>
-											<NavLink routeName="register"><strong>{project.repository}</strong></NavLink> last activity <strong>{timeago(project.created)}</strong>.
+											<NavLink NavLink navParams={{username: repositoryUser, repository: repositoryName}} routeName="project"><strong>{project.repository}</strong></NavLink> last activity <strong>{timeago(project.created)}</strong>.
 										</li>
 									}, this)}
 								</ul>
