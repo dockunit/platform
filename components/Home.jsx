@@ -72,6 +72,21 @@ class Home extends React.Component {
 						</div>
 					</div>
 				</div>
+				<div className="hot-projects-wrapper">
+					<div className="container hot-projects">
+						<div className="row">
+							<h1>Hot Projects</h1>
+							<p>Check out a few of the particularly active Dockunit projects.</p>
+							<div className="home-panel-heading-divider"></div>
+							
+							<ul>
+								<li>
+									<NavLink routeName="register">tlovett1/Safe-Redirect-Manager</NavLink> last pushed to <strong>6 minutes ago</strong>.
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
         );
     }

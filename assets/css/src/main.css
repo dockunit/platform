@@ -6222,6 +6222,31 @@ h2 {
 .get-started-wrapper {
   background: #03739C url("../img/pattern1.png"); }
 
+.hot-projects-wrapper {
+  background-color: #158CBA;
+  text-align: center;
+  padding: 2.5em 0;
+  color: #fff; }
+  .hot-projects-wrapper h1 {
+    color: #fff;
+    margin-top: 0; }
+  .hot-projects-wrapper .home-panel-heading-divider {
+    background-color: #fff; }
+  .hot-projects-wrapper ul {
+    margin-top: 2em;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    width: 560px;
+    list-style-type: none; }
+  .hot-projects-wrapper li {
+    background-color: #fafafa;
+    border-radius: 5px;
+    box-shadow: 0 4px 2px rgba(0, 0, 0, 0.2);
+    color: #555555;
+    padding: 1em 2em;
+    box-sizing: border-box; }
+
 .steps {
   padding-bottom: 1em;
   text-align: center; }
