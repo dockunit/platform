@@ -6265,7 +6265,10 @@ h2 {
     color: #555555;
     padding: 1em 2em;
     box-sizing: border-box;
-    position: relative; }
+    position: relative;
+    margin-bottom: .5em; }
+  .hot-projects-wrapper li:last-child {
+    margin-bottom: 0; }
   .hot-projects-wrapper .status {
     width: 50px;
     display: block;

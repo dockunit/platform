@@ -114,6 +114,11 @@
         padding: 1em 2em;
         box-sizing: border-box;
         position: relative;
+        margin-bottom: .5em;
+    }
+
+    li:last-child {
+        margin-bottom: 0;
     }
 
     .status {
