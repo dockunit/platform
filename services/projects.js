@@ -109,7 +109,7 @@ module.exports = {
 					}
 				},
         		{
-        			$limit: 7
+        			$limit: 5
         		}
 			], function(error, buildGroups) {
 				var projects = [];
