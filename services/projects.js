@@ -89,7 +89,8 @@ module.exports = {
 					$match: {
 						created: {
 							$gt: new Date(weekAgo)
-						}
+						},
+						private: false
 					}
 				},
 				{
