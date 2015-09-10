@@ -89,8 +89,7 @@ module.exports = {
 					$match: {
 						created: {
 							$gt: new Date(weekAgo)
-						},
-						private: false
+						}
 					}
 				},
 				{
@@ -110,16 +109,19 @@ module.exports = {
 					}
 				},
         		{
-        			$limit: 5
+        			$limit: 50
         		}
 			], function(error, buildGroups) {
-				var projects = [];
+				var projects = [],
+					lastProjectId = buildGroups[buildGroups.length - 1]._id.toString();
 
 				buildGroups.forEach(function(build) {
 					Project.findOne({ _id: build._id }, function(error, project) {
-						projects.push(project);
+						if (!project.private) {
+							projects.push(project);
+						}
 
-						if (projects.length >= buildGroups.length) {
+						if (lastProjectId == project._id.toString() || projects.length >= 5) {
 							callback(null, projects);
 						}
 					});
