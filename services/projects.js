@@ -140,7 +140,11 @@ module.exports = {
 				} else {
 					debug('Hot projects cache hit');
 
-					callback(null, JSON.parse(hotProjects));
+					try {
+						callback(null, JSON.parse(hotProjects));
+					} catch(error) {
+						callback(true);
+					}
 				}
 			});
 		} else if (params.mine) {
