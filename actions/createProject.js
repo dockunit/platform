@@ -12,6 +12,11 @@ module.exports = function(context, payload, done) {
 
 		context.dispatch('CREATE_PROJECT_SUCCESS', response);
 
+		if (window && io) {
+			var socket = io();
+			socket.emit('join', { repository: payload.repository } );
+		}
+
 		response.branch = payload.branch;
     	context.service.create('builds', response, {}, function() {
 			navigate(context, {

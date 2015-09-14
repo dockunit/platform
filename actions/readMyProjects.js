@@ -7,6 +7,13 @@ module.exports = function (context, payload, done) {
 			done();
 			return;
 		}
+		if (window && io) {
+			var socket = io();
+
+			for (var project in projects) {
+				socket.emit('join', { repository: project } );
+			}
+		}
 
 		context.dispatch('READ_MY_PROJECTS_SUCCESS', projects);
 		done();
