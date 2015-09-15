@@ -173,7 +173,10 @@ module.exports = {
 						storeWhere: 'builds',
 						arrayPop: true,
 						mongooseModel: Build,
-						idField: 'project'
+						idField: 'project',
+						sort: {
+							created: 1
+						}
 					}, projectToSave;
 
 					reversePopulate(reversePopulateOptions, function(error) {
@@ -215,7 +218,10 @@ module.exports = {
 						storeWhere: 'builds',
 						arrayPop: true,
 						mongooseModel: Build,
-						idField: 'project'
+						idField: 'project',
+						sort: {
+							created: 1
+						}
 					};
 
 					reversePopulate(reversePopulateOptions, function(error) {
