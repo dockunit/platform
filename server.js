@@ -61,7 +61,7 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({extended: true}));
 
 // Create DB connection
-global.db = mongoose.connect('mongodb://localhost/dockunit');
+global.db = mongoose.connect(constants.mongoServer);
 
 var LocalStrategy = require('passport-local').Strategy;
 var passport = require('passport');
