@@ -125,14 +125,16 @@ module.exports = {
 
 						buildGroups.forEach(function(build) {
 							Project.findOne({ _id: build._id }, function(error, project) {
-								if (!project.private) {
-									projects.push(project);
-								}
+								if (project) {
+									if (!project.private) {
+										projects.push(project);
+									}
 
-								if (lastProjectId === project._id.toString() || projects.length >= 5) {
-									client.set('hotProjects', JSON.stringify(projects));
+									if (lastProjectId === project._id.toString() || projects.length >= 5) {
+										client.set('hotProjects', JSON.stringify(projects));
 
-									callback(null, projects);
+										callback(null, projects);
+									}
 								}
 							});
 						});
