@@ -171,7 +171,7 @@ Builder.prototype.finish = function() {
 				status = 'failure';
 			}
 
-			Github.statuses.create(self.user.githubAccessToken, self.project.repository, self.user.username, self.build.commit, status);
+			Github.statuses.create(self.user.githubAccessToken, self.project.repository, self.user.username, self.build.commit, status, self.build.branch);
 
 			self.socket.emit('completedBuild', { build: self.build, user: self.user.username, repository: self.project.repository });
 

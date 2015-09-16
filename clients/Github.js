@@ -225,7 +225,7 @@ var tokens = {
 };
 
 var statuses = {
-	create: function(token, repository, user, commit, status) {
+	create: function(token, repository, user, commit, status, branch) {
 		return new NPromise(function (fulfill, reject) {
 
 			debug('Create github status');
@@ -247,6 +247,10 @@ var statuses = {
 				description: description,
 				context: 'dockunit'
 			};
+
+			if (branch) {
+				params.target_url += '#' + branch;
+			}
 
 			httpInvoke('https://api.github.com/repos/' + repository + '/statuses/' + commit + '?access_token=' + token, 'POST', {
 				headers: {
