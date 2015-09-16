@@ -5,7 +5,7 @@ var kue = require('kue');
 var debug = require('debug')('dockunit');
 var constants = require('./constants');
 
-global.db = mongoose.connect('mongodb://localhost/dockunit');
+global.db = mongoose.connect(constants.mongoServer);
 
 var Project = require('./models/Project');
 var Build = require('./models/Build');
