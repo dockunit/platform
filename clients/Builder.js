@@ -99,7 +99,7 @@ Builder.prototype.startContainer = function() {
 			directory = process.env.HOME + '/buildfiles'
 		}
 
-		debug('Running - git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit);
+		debug('Running - ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"');
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
 		exec('ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"', function(error, stdout, stderr) {
