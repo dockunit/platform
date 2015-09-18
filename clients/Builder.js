@@ -105,7 +105,7 @@ Builder.prototype.startContainer = function() {
 		exec('ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"', function(error, stdout, stderr) {
 			debug('Git clone finished');
 
-			var cmd = spawn('ssh', ['dockunit@worker-1', '\"dockunit', directory + '/' + self.project.repository + '/' + self.build.commit + '\"']);
+			var cmd = spawn('ssh', ['dockunit@worker-1', '\"dockunit\ ' + directory + '/' + self.project.repository + '/' + self.build.commit + '\"']);
 			cmd.stdout.on('data', function(data) {
 				console.log('' + data);
 				self.output += '' + data;
