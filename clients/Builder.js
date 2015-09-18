@@ -102,7 +102,7 @@ Builder.prototype.startContainer = function() {
 		debug('Running - git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit);
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
-		exec('git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit, function(error, stdout, stderr) {
+		exec('ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"', function(error, stdout, stderr) {
 			debug('Git clone finished');
 
 			var cmd = spawn('dockunit', ['--docker-tls-verify', '--docker-host=tcp://' + constants.workerIp + ':4243', directory + '/' + self.project.repository + '/' + self.build.commit]);
