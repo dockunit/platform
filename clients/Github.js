@@ -85,8 +85,8 @@ var webhooks = {
 				active: true,
 				events: [
 					'push',
-					'public',
-					'pull_request'
+					'public'
+					//'pull_request'
 				],
 				config: {
 					url: 'https://dockunit.io/webhooks',
