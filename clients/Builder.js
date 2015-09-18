@@ -131,7 +131,7 @@ Builder.prototype.startContainer = function() {
 				var convert = new Convert();
 				self.output = convert.toHtml(self.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(\r\n|\n|\r)$/g, ''));
 				
-				exec('rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit, function(error, stdout, stderr) {
+				exec('ssh dockunit@worker-1 "rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit + '"', function(error, stdout, stderr) {
 					debug('Removed repo files');
 					fulfill(self.output);
 				});
