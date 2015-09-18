@@ -84,9 +84,15 @@ Webhooks.prototype.verifyRequestBody = function() {
 		return new Error(500);
 	}
 
+	this.action = 'commit';
+
 	this.payload = this.req.body;
 
-	if (this.payload.ref.match(/^refs\/tags/i)) {
+	if ('opened' === this.payload.action) {
+		this.action = 'opened';
+	}
+
+	if ('commit' === this.action && this.payload.ref.match(/^refs\/tags/i)) {
 		debug('No need to build a tag push');
 
 		return new Error(204);
