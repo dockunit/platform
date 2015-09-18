@@ -101,11 +101,23 @@ Builder.prototype.startContainer = function() {
 
 		debug('Running - ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"');
 
+		var cloneCommand = 'ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"';
+		if (constants.isDevelopment) {
+			cloneCommand = 'git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit;
+		}
+
 		// Todo: This will need to be optmized later so it doesn't clone all the history
-		exec('ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"', function(error, stdout, stderr) {
+		exec(cloneCommand, function(error, stdout, stderr) {
 			debug('Git clone finished');
 
-			var cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + self.project.repository + '/' + self.build.commit]);
+			var cmd;
+
+			if (constants.isDevelopment) {
+				cmd = spawn('dockunit', [directory + '/' + self.project.repository + '/' + self.build.commit]);
+			} else {
+				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + self.project.repository + '/' + self.build.commit]);
+			}
+
 			cmd.stdout.on('data', function(data) {
 				console.log('' + data);
 				self.output += '' + data;
@@ -131,7 +143,12 @@ Builder.prototype.startContainer = function() {
 				var convert = new Convert();
 				self.output = convert.toHtml(self.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(\r\n|\n|\r)$/g, ''));
 				
-				exec('ssh dockunit@worker-1 "rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit + '"', function(error, stdout, stderr) {
+				var removeCommand = 'ssh dockunit@worker-1 "rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit + '"';
+				if (constants.isDevelopment) {
+					removeCommand = 'rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit;
+				}
+
+				exec(removeCommand, function(error, stdout, stderr) {
 					debug('Removed repo files');
 					fulfill(self.output);
 				});
