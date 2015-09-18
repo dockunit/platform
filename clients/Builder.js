@@ -105,7 +105,7 @@ Builder.prototype.startContainer = function() {
 		exec('ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"', function(error, stdout, stderr) {
 			debug('Git clone finished');
 
-			var cmd = spawn('ssh', ['dockunit@worker-1', '\"dockunit\ ' + directory + '/' + self.project.repository + '/' + self.build.commit + '\"']);
+			var cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + self.project.repository + '/' + self.build.commit]);
 			cmd.stdout.on('data', function(data) {
 				console.log('' + data);
 				self.output += '' + data;
@@ -131,7 +131,7 @@ Builder.prototype.startContainer = function() {
 				var convert = new Convert();
 				self.output = convert.toHtml(self.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(\r\n|\n|\r)$/g, ''));
 				
-				exec('rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit, function(error, stdout, stderr) {
+				exec('ssh dockunit@worker-1 "rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit + '"', function(error, stdout, stderr) {
 					debug('Removed repo files');
 					fulfill(self.output);
 				});
