@@ -94,7 +94,7 @@ Builder.prototype.startContainer = function() {
 
 		debug('Start container');
 
-		var directory = '/temp';
+		var directory = '~';
 		if (constants.isDevelopment) {
 			directory = process.env.HOME + '/buildfiles'
 		}
