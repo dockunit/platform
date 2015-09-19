@@ -7,6 +7,7 @@ var Project = mongoose.model('Project');
 var User = mongoose.model('User');
 var NPromise = require('promise');
 var kue = require('kue');
+var Github = require('./clients/Github');
 var constants = require('./constants');
 var Builder = require('./clients/Builder');
 var Build = mongoose.model('Build');
@@ -202,6 +203,12 @@ Webhooks.prototype.createJob = function() {
 					reject();
 				} else {
 					self.socket.emit('newBuild', { build: build, user: user.username, repository: self.project.repository });
+
+					if ('pr' === build.type) {
+						Github.statuses.create(user.githubAccessToken, self.project.repository, user.username, build.prCommit, 'pending', build.branch);
+					} else {
+						Github.statuses.create(user.githubAccessToken, self.project.repository, user.username, build.commit, 'pending', build.branch);
+					}
 
 					queue.create('builder', { user: user, project: self.project, repository: self.project.repository, buildId: build._id }).save(function(error){
 						if (error) {
