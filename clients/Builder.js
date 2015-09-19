@@ -99,11 +99,18 @@ Builder.prototype.startContainer = function() {
 			directory = process.env.HOME + '/buildfiles'
 		}
 
-		debug('Running - ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"');
+		var repository = self.project.repository;
+		var commit = self.build.commit;
+		if ('pr' === self.build.type) {
+			repository = self.build.prRepositoryName;
+			commit = self.build.prCommit;
+		}
 
-		var cloneCommand = 'ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit + '"';
+		debug('Running - ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"');
+
+		var cloneCommand = 'ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"';
 		if (constants.isDevelopment) {
-			cloneCommand = 'git clone https://' + self.user.githubAccessToken + '@github.com/' + self.project.repository + '.git ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && cd ' + directory + '/' + self.project.repository + '/' + self.build.commit + ' && git reset --hard ' + self.build.commit;
+			cloneCommand = 'git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit;
 		}
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
@@ -113,9 +120,9 @@ Builder.prototype.startContainer = function() {
 			var cmd;
 
 			if (constants.isDevelopment) {
-				cmd = spawn('dockunit', [directory + '/' + self.project.repository + '/' + self.build.commit]);
+				cmd = spawn('dockunit', [directory + '/' + repository + '/' + commit]);
 			} else {
-				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + self.project.repository + '/' + self.build.commit]);
+				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit]);
 			}
 
 			cmd.stdout.on('data', function(data) {
@@ -143,9 +150,9 @@ Builder.prototype.startContainer = function() {
 				var convert = new Convert();
 				self.output = convert.toHtml(self.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(\r\n|\n|\r)$/g, ''));
 				
-				var removeCommand = 'ssh dockunit@worker-1 "rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit + '"';
+				var removeCommand = 'ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + '"';
 				if (constants.isDevelopment) {
-					removeCommand = 'rm -rf ' + directory + '/' + self.project.repository + '/' + self.build.commit;
+					removeCommand = 'rm -rf ' + directory + '/' + repository + '/' + commit;
 				}
 
 				exec(removeCommand, function(error, stdout, stderr) {

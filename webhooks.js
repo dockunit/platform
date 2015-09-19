@@ -25,7 +25,7 @@ var Webhooks = function() {
 
 		var steps = [
 			self.verifyRequestBody,
-			self.verifyRequiredProperties,
+			//self.verifyRequiredProperties,
 			self.verifyAndGetProject,
 			self.createJob
 		];
@@ -84,15 +84,15 @@ Webhooks.prototype.verifyRequestBody = function() {
 		return new Error(500);
 	}
 
-	this.action = 'commit';
-
 	this.payload = this.req.body;
 
-	if ('opened' === this.payload.action) {
-		this.action = 'opened';
+	if ('opened' === this.payload.action && this.payload.pull_request) {
+		this.type = 'pr';
+	} else {
+		this.type = 'commit';
 	}
 
-	if ('commit' === this.action && this.payload.ref.match(/^refs\/tags/i)) {
+	if (this.payload.ref && this.payload.ref.match(/^refs\/tags/i)) {
 		debug('No need to build a tag push');
 
 		return new Error(204);
@@ -104,11 +104,11 @@ Webhooks.prototype.verifyRequestBody = function() {
 Webhooks.prototype.verifyRequiredProperties = function() {
 	debug('Verifying required properties');
 
-	if (!this.payload.repository.full_name) {
+	/*if (!this.payload.repository.full_name) {
 		debug('No repo full_name');
 
 		return new Error(404);
-	}
+	}*/
 };
 
 Webhooks.prototype.verifyAndGetProject = function() {
@@ -118,9 +118,29 @@ Webhooks.prototype.verifyAndGetProject = function() {
 
 	return new NPromise(function(fulfill, reject) {
 		self.repository = self.payload.repository.full_name;
-		self.commit = self.payload.after;
-		self.commitUser = self.payload.head_commit.committer.username;
-		self.branch = self.payload.ref.replace(/^refs\/heads\/(.*)$/ig, '$1');
+
+		if ('commit' === self.type) {
+			debug('Creating commit build');
+
+			self.commit = self.payload.after;
+			self.commitUser = self.payload.head_commit.committer.username;
+			self.branch = self.payload.ref.replace(/^refs\/heads\/(.*)$/ig, '$1');
+		} else {
+			debug('Creating pull request build');
+
+			self.prBaseCommit = self.payload.pull_request.base.sha;
+			self.prBaseBranch = self.payload.pull_request.base.ref;
+			self.prBaseUser = self.payload.pull_request.base.user.login;
+
+			self.prCommit = self.payload.pull_request.head.sha;
+			self.prBranch = self.payload.pull_request.head.ref;
+			self.prUser = self.payload.pull_request.head.user.login;
+			self.branch = 'pr-' + self.payload.number;
+			self.prNumber = self.payload.number;
+
+			self.prRepositoryName = self.payload.pull_request.head.repo.full_name;
+		}
+
 		self.project = null;
 
 		Project.find({ repository: self.repository }, function(error, projects) {
@@ -155,12 +175,26 @@ Webhooks.prototype.createJob = function() {
 			}
 
 			var build = new Build();
-			build.commit = self.commit;
+			build.type = self.type;
+
+			if ('commit' === self.type) {
+				build.commitUser = self.commitUser;
+				build.commit = self.commit;
+			} else {
+				build.prCommit = self.prCommit;
+				build.prBranch = self.prBranch;
+				build.prUser = self.prUser;
+				build.prBaseCommit = self.prBaseCommit;
+				build.prBaseBranch = self.prBaseBranch;
+				build.prBaseUser = self.prBaseUser;
+				build.prRepositoryName = self.prRepositoryName;
+				build.prNumber = self.prNumber;
+			}
+
 			build.branch = self.branch;
 			build.output = '';
 			build.project = self.project._id;
 			build.ran = null;
-			build.commitUser = self.commitUser;
 
 			build.save(function(error) {
 				if (error) {

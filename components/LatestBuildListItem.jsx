@@ -32,7 +32,7 @@ class LatestBuildListItem extends React.Component {
 		let statusClasses = 'status glyphicon ';
 		let userUrl = 'https://github.com/' + this.props.build.commitUser;
 		let githubUrl = 'https://github.com/' + this.props.repository;
-		let  dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
+		let dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
 
 		if (this.props.build.finished) {
 			if (255 === this.props.build.result) {
@@ -46,23 +46,26 @@ class LatestBuildListItem extends React.Component {
 			statusClasses += 'glyphicon-option-horizontal';
 		}
 
-		var buildDetailsClasses = 'build-details ';
+		let buildDetailsClasses = 'build-details ';
     	if (!this.state.showBuildDetails) {
     		buildDetailsClasses += 'hide';
     	}
 
-    	var buildShortCommit = this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
-    	var commitUrl = githubUrl + '/commit/' + this.props.build.commit;
-    	var buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
-    	
-    	var passFail = 'Passed';
+    	let buildShortCommit = ('pr' !== this.props.build.type) ? this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1') : '';
+    	let commitUrl = ('pr' !== this.props.build.type) ? githubUrl + '/commit/' + this.props.build.commit : '';
+    	let repoBranchUrl = ('pr' !== this.props.build.type) ? 'https://github.com/' + this.props.repository + '/tree/' + this.props.build.branch : 'https://github.com/' + this.props.repository + '/tree/' + this.props.build.prBaseBranch;
+    	let prBranchUrl = ('pr' !== this.props.build.type) ? '' : 'https://github.com/' + this.props.build.prRepositoryName + '/tree/' + this.props.build.prBranch;
+    	let buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
+    	let prUrl = ('pr' !== this.props.build.type) ? '' : githubUrl + '/pull/' + this.props.build.prNumber;
+
+    	let passFail = 'Passed';
     	if (255 === this.props.build.result) {
     		passFail = 'Errored';
     	} else if (0 < this.props.build.result) {
     		passFail = 'Failed';
     	}
 
-    	var runTime = '';
+    	let runTime = '';
     	if (this.props.build.finished) {
     		var runTimeCalc = ((new Date(this.props.build.finished) - new Date(this.props.build.started)) / 1000 / 60);
 
@@ -135,8 +138,14 @@ class LatestBuildListItem extends React.Component {
 
 					<div className="right">
 						<div className="item"><strong>{lastRan}</strong></div>
-						<div className="item">Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{this.props.build.commitUser}</strong></a></div>
+						<If test={('pr' === this.props.build.type)}>
+							<div className="item"><a href={prUrl}><strong>PR</strong></a> on <a href={repoBranchUrl}><strong>{this.props.build.prBaseUser}:{this.props.build.prBaseBranch}</strong></a> from <a href={prBranchUrl}><strong>{this.props.build.prUser}:{this.props.build.prBranch}</strong></a></div>
+						</If>
 
+						<If test={('pr' !== this.props.build.type)}>
+							<div className="item">Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{this.props.build.commitUser && this.props.build.commitUser}</strong></a></div>
+						</If>
+						
 						<div className="toolbar">
 							<If test={this.props.currentUser}>
 								<a onClick={this.rerun} disabled={rerunDisabled} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>

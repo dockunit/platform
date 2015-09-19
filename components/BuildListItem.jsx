@@ -52,8 +52,8 @@ class BuildListItem extends React.Component {
     		buildDetailsClasses += 'hide';
     	}
 
-    	let buildShortCommit = this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
-    	let commitUrl = githubUrl + '/commit/' + this.props.build.commit;
+    	let buildShortCommit = ('pr' !== this.props.build.type) ? this.props.build.commit.replace(/^([a-z0-9]{0,9}).*$/i, '$1') : this.props.build.prCommit.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
+    	let commitUrl = ('pr' !== this.props.build.type) ? githubUrl + '/commit/' + this.props.build.commit : 'https://github.com/' + this.props.build.prRepositoryName + '/commit/' + this.props.build.prCommit;
     	let buildIdShort = this.props.build._id.replace(/^([a-z0-9]{0,9}).*$/i, '$1');
 
     	// Very hacky way of handling special entities
