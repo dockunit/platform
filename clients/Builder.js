@@ -195,7 +195,7 @@ Builder.prototype.finish = function() {
 				status = 'failure';
 			}
 
-			if ('pr' === build.type) {
+			if ('pr' === self.build.type) {
 				Github.statuses.create(self.user.githubAccessToken, self.project.repository, self.user.username, self.build.prCommit, status, self.build.branch);
 			} else {
 				Github.statuses.create(self.user.githubAccessToken, self.project.repository, self.user.username, self.build.commit, status, self.build.branch);
