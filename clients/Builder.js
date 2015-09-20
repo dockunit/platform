@@ -106,7 +106,7 @@ Builder.prototype.startContainer = function() {
 			commit = self.build.prCommit;
 		}
 
-		debug('Running - ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"');
+		debug('Running - ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"');
 
 		var cloneCommand = 'ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"';
 		if (constants.isDevelopment) {
