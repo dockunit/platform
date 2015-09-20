@@ -108,7 +108,7 @@ Builder.prototype.startContainer = function() {
 
 		debug('Running - ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"');
 
-		var cloneCommand = 'ssh dockunit@worker-1 "git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"';
+		var cloneCommand = 'ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"';
 		if (constants.isDevelopment) {
 			cloneCommand = 'git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit;
 		}
@@ -154,6 +154,8 @@ Builder.prototype.startContainer = function() {
 				if (constants.isDevelopment) {
 					removeCommand = 'rm -rf ' + directory + '/' + repository + '/' + commit;
 				}
+
+				debug('Executing: ' + removeCommand);
 
 				exec(removeCommand, function(error, stdout, stderr) {
 					debug('Removed repo files');
