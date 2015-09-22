@@ -57,8 +57,8 @@ server.use(session({
 	})
 }));
 
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({extended: true}));
+server.use(bodyParser.json({ limit: '20mb' }));
+server.use(bodyParser.urlencoded({ extended: true, limit: '20mb' }));
 
 // Create DB connection
 global.db = mongoose.connect(constants.mongoServer);
