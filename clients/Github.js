@@ -2,7 +2,6 @@
 var NPromise = require('promise');
 var httpInvoke = require('httpinvoke');
 var debug = require('debug')('dockunit');
-var constants = require('../constants');
 var querystring = require('querystring');
 var constants = require('../constants');
 var parseLinkHeader = require('parse-link-header');
