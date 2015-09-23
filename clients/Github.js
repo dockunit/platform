@@ -89,8 +89,7 @@ var webhooks = {
 						if (hook.config.match(/^https?:\/\/(www\.)?dockunit\.io\/webhooks\/?$/i)) {
 							httpInvoke('https://api.github.com/repos/' + repository + '/hooks/' + hook.id + '?access_token=' + token, 'DELETE', {
 								headers: {
-									'User-Agent': 'Dockunit',
-									'Content-Type': 'application/json'
+									'User-Agent': 'Dockunit'
 								}
 							}, function(error, body, statusCode, headers) {
 								if (error) {
