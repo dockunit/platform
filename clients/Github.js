@@ -75,6 +75,38 @@ var webhooks = {
 		});
 	},
 
+	delete: function(token, repository) {
+		return new NPromise(function (fulfill, reject) {
+
+			debug('Delete github repo hook(s) for ' + repository);
+
+			webhooks.get(token, repository).then(function(hooks) {
+				debug('Got webhooks for ' + repository);
+
+				console.log(hooks);
+
+				if (hooks && hooks.length) {
+					hooks.foreach(function(hook) {
+						if (hook.config.match(/^https?:\/\/(www\.)?dockunit\.io\/webhooks\/?$/i)) {
+							httpInvoke('https://api.github.com/repos/' + repository + '/hooks/' + hook.id + '?access_token=' + token, 'DELETE', {
+								headers: {
+									'User-Agent': 'Dockunit',
+									'Content-Type': 'application/json'
+								}
+							}, function(error, body, statusCode, headers) {
+								if (error) {
+									debug('Failed to delete Github webhook ' + hook.id);
+								} else {
+									debug('Deleted Github webhook ' + hook.id);
+								}
+							});
+						}
+					});
+				}
+			});
+		});
+	},
+
 	create: function(token, repository) {
 		return new NPromise(function (fulfill, reject) {
 
@@ -85,8 +117,8 @@ var webhooks = {
 				active: true,
 				events: [
 					'push',
-					'public'
-					//'pull_request'
+					'public',
+					'pull_request'
 				],
 				config: {
 					url: 'https://dockunit.io/webhooks',

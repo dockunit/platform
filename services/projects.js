@@ -32,19 +32,23 @@ module.exports = {
 		Project.findOneAndRemove({ _id: params.project._id }, function(error) {
 			if (error) {
 				debug('Project could not be deleted');
+
+				callback(true);
 			} else {
 				debug('Project ' + params.project.repository + ' successfully deleted');
-			}
-		});
 
-		Build.remove({ project: params.project._id }, function(error) {
-			if (error) {
-				debug('Build(s) could not be deleted');
-			} else {
-				debug('Build(s) deleted.');
-			}
+				Github.webhooks.delete(user.githubAccessToken, params.project.repository);
 
-			callback(null, { repository: params.project.repository });
+				Build.remove({ project: params.project._id }, function(error) {
+					if (error) {
+						debug('Build(s) could not be deleted');
+					} else {
+						debug('Build(s) deleted.');
+					}
+				});
+
+				callback(null, { repository: params.project.repository });
+			}
 		});
 	},
 
