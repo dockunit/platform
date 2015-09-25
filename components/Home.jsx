@@ -101,7 +101,7 @@ class Home extends React.Component {
 										let repositoryName = project.repository.replace(/^.*?\/(.*)$/i, '$1');
 
 										return <li>
-											<NavLink NavLink navParams={{username: repositoryUser, repository: repositoryName}} routeName="project"><strong>{project.repository}</strong></NavLink> last activity <strong>{timeago(project.created)}</strong>.
+											<NavLink NavLink navParams={{username: repositoryUser, repository: repositoryName}} routeName="project"><strong>{project.repository}</strong></NavLink>
 										</li>
 									}, this)}
 								</ul>
