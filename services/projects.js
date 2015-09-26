@@ -95,7 +95,7 @@ module.exports = {
 
 			var client = redis.createClient();
 
-			client.get('hotProjects', function(error, hotProjects) {
+			//client.get('hotProjects', function(error, hotProjects) {
 
 				//if (error || !hotProjects) {
 					debug('Hot projects cache miss');
