@@ -97,7 +97,7 @@ module.exports = {
 
 			client.get('hotProjects', function(error, hotProjects) {
 
-				if (error || !hotProjects) {
+				//if (error || !hotProjects) {
 					debug('Hot projects cache miss');
 
 					var weekAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
@@ -127,29 +127,39 @@ module.exports = {
 							}
 						},
 			    		{
-			    			$limit: 50
+			    			$limit: 100
 			    		}
 					], function(error, buildGroups) {
-						var projects = [],
-							lastProjectId = buildGroups[buildGroups.length - 1]._id.toString();
 
-						buildGroups.forEach(function(build) {
-							Project.findOne({ _id: build._id }, function(error, project) {
-								if (project) {
-									if (!project.private) {
-										projects.push(project);
+						var projects = [];
+
+						function getHotProject() {
+							var build = buildGroups.shift();
+
+							if (!build) {
+								callback(null, projects);
+							} else {
+								Project.findOne({ _id: build._id }, function(error, project) {
+									if (project) {
+										if (projects.length >= 5) {
+											client.set('hotProjects', JSON.stringify(projects));
+
+											callback(null, projects);
+										} else if (!project.private) {
+											projects.push(project);
+
+											getHotProject();
+										}
+									} else {
+										getHotProject();
 									}
+								});
+							}
+						}
 
-									if (lastProjectId === project._id.toString() || projects.length >= 5) {
-										client.set('hotProjects', JSON.stringify(projects));
-
-										callback(null, projects);
-									}
-								}
-							});
-						});
+						getHotProject();
 					});
-				} else {
+				/*} else {
 					debug('Hot projects cache hit');
 
 					try {
@@ -157,8 +167,8 @@ module.exports = {
 					} catch(error) {
 						callback(true);
 					}
-				}
-			});
+				}*/
+			//});
 		} else if (params.mine) {
 			// Get all my projects
 			debug('Getting my projects');

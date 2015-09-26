@@ -9,7 +9,7 @@ class ProjectsStore extends BaseStore {
 		super(dispatcher);
 
 		this.projects = null;
-		this.hotProjects = [];
+		this.hotProjects = null;
 		this.projectsNotFound = {};
 	}
 

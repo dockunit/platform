@@ -30,7 +30,6 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var htmlComponent = React.createFactory(require('./components/Html.jsx'));
 var updateCsrfToken = require('./actions/updateCsrfToken');
-var readHotProjects = require('./actions/readHotProjects');
 var updateCurrentUser = require('./actions/updateCurrentUser');
 var updateLoginHeaderStatus = require('./actions/updateLoginHeaderStatus');
 var updateLoginFormStatus = require('./actions/updateLoginFormStatus');
@@ -305,9 +304,6 @@ server.use(function(req, res, next) {
 
     debug('Setting Csrf token to ' + req.csrfToken());
 	context.executeAction(updateCsrfToken, req.csrfToken());
-
-	debug('Getting hot projects');
-	context.executeAction(readHotProjects);
 
 	debug('Executing navigate action');
     context.executeAction(navigateAction, {

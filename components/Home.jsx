@@ -6,6 +6,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import ProjectsStore from '../stores/ProjectsStore';
 import If from '../components/If';
 import timeago from 'timeago';
+import readHotProjects from '../actions/readHotProjects';
 
 @connectToStores(['ProjectsStore'], (context, props) => ({
     ProjectsStore: context.getStore(ProjectsStore).getState()
@@ -16,7 +17,14 @@ class Home extends React.Component {
     }
 
     static contextTypes = {
-        getStore: React.PropTypes.func.isRequired
+        getStore: React.PropTypes.func.isRequired,
+        executeAction: React.PropTypes.func
+    }
+
+    componentDidMount() {
+    	if (!this.props.ProjectsStore.hotProjects) {
+    		this.context.executeAction(readHotProjects);
+    	}
     }
 
     render() {
@@ -86,7 +94,7 @@ class Home extends React.Component {
 						</div>
 					</div>
 				</div>
-				<If test={this.props.ProjectsStore.hotProjects.length}>
+				<If test={this.props.ProjectsStore.hotProjects && this.props.ProjectsStore.hotProjects.length}>
 					<div className="hot-projects-wrapper">
 						<div className="container hot-projects">
 							<div className="row">
@@ -96,7 +104,7 @@ class Home extends React.Component {
 								<div className="glyphicon glyphicon-fire"></div>
 								
 								<ul>
-									{this.props.ProjectsStore.hotProjects.map(function(project) {
+									{this.props.ProjectsStore.hotProjects && this.props.ProjectsStore.hotProjects.map(function(project) {
 										let repositoryUser = project.repository.replace(/^(.*?)\/.*/i, '$1');
 										let repositoryName = project.repository.replace(/^.*?\/(.*)$/i, '$1');
 
