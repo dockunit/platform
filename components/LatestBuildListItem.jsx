@@ -119,7 +119,7 @@ class LatestBuildListItem extends React.Component {
 
 						<div className="item">
 							<If test={this.props.build.result === 255 && this.props.build.finished}>
-								<div>Status: <strong>No Dockunit.json file found</strong></div>
+								<div>Status: <strong>No Dockunit.json file found. <a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples">Add one?</a></strong></div>
 							</If>
 
 							<If test={this.props.build.result !== 255 && this.props.build.finished}>
