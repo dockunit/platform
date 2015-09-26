@@ -100,18 +100,19 @@ Builder.prototype.startContainer = function() {
 		}
 
 		var repository = self.project.repository;
-		var commit = self.build.commit;
+		var commit = self.build.commit || 'pr-' + self.build.prNumber;
+
+		var cloneCommand = 'rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit;
+		
 		if ('pr' === self.build.type) {
-			repository = self.build.prRepositoryName;
-			commit = self.build.prCommit;
+			cloneCommand = 'rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git fetch origin +refs/pull/' + self.build.prNumber + '/merge && git checkout -f FETCH_HEAD';
 		}
 
-		debug('Running - ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"');
-
-		var cloneCommand = 'ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + ' && git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit + '"';
-		if (constants.isDevelopment) {
-			cloneCommand = 'git clone https://' + self.user.githubAccessToken + '@github.com/' + repository + '.git ' + directory + '/' + repository + '/' + commit + ' && cd ' + directory + '/' + repository + '/' + commit + ' && git reset --hard ' + commit;
+		if (!constants.isDevelopment) {
+			cloneCommand = 'ssh dockunit@worker-1 "' + cloneCommand + '"';
 		}
+
+		debug('Running: ' + cloneCommand);
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
 		exec(cloneCommand, function(error, stdout, stderr) {
