@@ -89,6 +89,12 @@ Webhooks.prototype.verifyRequestBody = function() {
 
 	if ('opened' === this.payload.action && this.payload.pull_request) {
 		this.type = 'pr';
+
+		if (!this.payload.pull_request.mergeable) {
+			debug('Pull request not mergeable');
+
+			return new Error(204);
+		}
 	} else {
 		this.type = 'commit';
 	}
