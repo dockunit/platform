@@ -13,6 +13,11 @@ Sockets.prototype.handleJoins = function() {
 			debug('Joining room ' + message.repository)
 			socket.join(message.repository);
 		});
+
+		socket.on('leave', function(message) {
+			debug('Leaving room ' + message.repository)
+			socket.leave(message.repository);
+		});
 	});
 };
 

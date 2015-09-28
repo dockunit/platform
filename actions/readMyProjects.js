@@ -1,3 +1,5 @@
+/*global window, io */
+
 'use strict';
 
 module.exports = function (context, payload, done) {
@@ -7,7 +9,7 @@ module.exports = function (context, payload, done) {
 			done();
 			return;
 		}
-		if (window && io) {
+		if ('undefined' !== typeof window && 'undefined' !== typeof  io) {
 			var socket = io();
 
 			for (var project in projects) {
