@@ -301,6 +301,8 @@ server.use(function(req, res, next) {
 			req.url = '/login';
 			context.executeAction(updateLoginFormStatus, req.session.errorNum);
 		}
+
+		req.session.errorNum = 0;
 	}
 
     debug('Setting Csrf token to ' + req.csrfToken());
