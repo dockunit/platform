@@ -82,16 +82,15 @@ var webhooks = {
 			webhooks.get(token, repository).then(function(hooks) {
 				debug('Got webhooks for ' + repository);
 
-				console.log(hooks);
-
 				if (hooks && hooks.length) {
-					hooks.foreach(function(hook) {
-						if (hook.config.match(/^https?:\/\/(www\.)?dockunit\.io\/webhooks\/?$/i)) {
+					hooks.forEach(function(hook) {
+						if (hook.config.url.match(/^https?:\/\/(www\.)?dockunit\.io\/webhooks\/?$/i)) {
 							httpInvoke('https://api.github.com/repos/' + repository + '/hooks/' + hook.id + '?access_token=' + token, 'DELETE', {
 								headers: {
 									'User-Agent': 'Dockunit'
 								}
 							}, function(error, body, statusCode, headers) {
+
 								if (error) {
 									debug('Failed to delete Github webhook ' + hook.id);
 								} else {
