@@ -2,25 +2,9 @@
 	'use strict';
 
 	var Socket = function() {
-		if (!this.isLoggedIn()) {
-			return false;
-		}
-
-		this.socket = io(); 
-
-		this.socket.emit('join', { user: this.user.username } );
+		this.socket = io();
 
 		this.listen();
-	};
-
-	Socket.prototype.isLoggedIn = function() {
-		try {
-			this.user = App.context.dispatcher.stores.UserStore.currentUser;
-		} catch(error) {
-			this.user = null;
-		}
-
-		return !!this.user;
 	};
 
 	Socket.prototype.listen = function() {

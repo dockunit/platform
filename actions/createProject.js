@@ -1,3 +1,5 @@
+/*global window, io */
+
 'use strict';
 
 var navigate = require('fluxible-router').navigateAction;
@@ -11,6 +13,11 @@ module.exports = function(context, payload, done) {
 		}
 
 		context.dispatch('CREATE_PROJECT_SUCCESS', response);
+
+		if ('undefined' !== typeof window && 'undefined' !== typeof io) {
+			var socket = io();
+			socket.emit('join', { repository: payload.repository } );
+		}
 
 		response.branch = payload.branch;
     	context.service.create('builds', response, {}, function() {

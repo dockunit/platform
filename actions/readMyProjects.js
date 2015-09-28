@@ -1,3 +1,5 @@
+/*global window, io */
+
 'use strict';
 
 module.exports = function (context, payload, done) {
@@ -6,6 +8,13 @@ module.exports = function (context, payload, done) {
 			context.dispatch('READ_MY_PROJECTS_FAILURE', payload);
 			done();
 			return;
+		}
+		if ('undefined' !== typeof window && 'undefined' !== typeof  io) {
+			var socket = io();
+
+			for (var project in projects) {
+				socket.emit('join', { repository: project } );
+			}
 		}
 
 		context.dispatch('READ_MY_PROJECTS_SUCCESS', projects);

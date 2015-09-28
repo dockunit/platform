@@ -29,6 +29,8 @@ module.exports = {
 			return;
 		}
 
+		var socket = require('socket.io-client')('http://localhost:3000');
+
 		Project.findOneAndRemove({ _id: params.project._id }, function(error) {
 			if (error) {
 				debug('Project could not be deleted');
@@ -169,6 +171,7 @@ module.exports = {
 					}
 				}*/
 			//});
+
 		} else if (params.mine) {
 			// Get all my projects
 			debug('Getting my projects');

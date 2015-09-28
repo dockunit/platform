@@ -45,7 +45,7 @@ module.exports = {
 							debug('Build save error: ' + error);
 							callback(true);
 						} else {
-							debug('Emitting new build to ' + user.username);
+							debug('Emitting new build to ' + params.project.repository);
 
 							if ('pr' === build.type) {
 								Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.prCommit, 'pending', build.branch);
@@ -85,7 +85,7 @@ module.exports = {
 						debug('Build save error: ' + error);
 						callback(true);
 					} else {
-						debug('Emitting new build to ' + user.username);
+						debug('Emitting new build to ' + params.project.repository);
 
 						Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending', params.branch);
 
