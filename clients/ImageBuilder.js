@@ -67,9 +67,12 @@ class ImageBuilder {
 
 					Build.find({ project: self.project._id, branch: self.branch }).sort('-created').exec(function(error, builds) {
 						if (error || !builds.length) {
+							debug('Could not find build');
 							reject(new Error('Could not find a build for branch `' + self.branch + '`'));
 						} else {
 							debug('Result ' + builds[0].result + ' saved');
+
+							self.branchBuild = builds[0];
 
 							self.result = builds[0].result;
 							fulfill();

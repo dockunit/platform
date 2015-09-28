@@ -54,6 +54,7 @@ class Html extends React.Component {
             <script src="/public/js/sweetalert.min.js"></script>
             <script src="https://cdn.socket.io/socket.io-1.3.6.js"></script>
             <script src="/public/js/sockets.min.js"></script>
+            <script src="/public/js/menus.min.js"></script>
             <script src="/public/js/main.min.js"></script>
             </html>
         );

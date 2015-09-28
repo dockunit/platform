@@ -47,7 +47,11 @@ module.exports = {
 						} else {
 							debug('Emitting new build to ' + user.username);
 
-							Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending');
+							if ('pr' === build.type) {
+								Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.prCommit, 'pending', build.branch);
+							} else {
+								Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending', build.branch);
+							}
 
 							socket.emit('rerunBuild', { build: build, user: user.username, repository: params.project.repository });
 
@@ -83,7 +87,7 @@ module.exports = {
 					} else {
 						debug('Emitting new build to ' + user.username);
 
-						Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending');
+						Github.statuses.create(user.githubAccessToken, params.project.repository, user.username, build.commit, 'pending', params.branch);
 
 						socket.emit('newBuild', { build: build, user: user.username, repository: params.project.repository });
 

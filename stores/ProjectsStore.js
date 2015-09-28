@@ -9,7 +9,7 @@ class ProjectsStore extends BaseStore {
 		super(dispatcher);
 
 		this.projects = null;
-		this.hotProjects = [];
+		this.hotProjects = null;
 		this.projectsNotFound = {};
 	}
 
@@ -100,11 +100,15 @@ class ProjectsStore extends BaseStore {
 	}
 
 	static filterMyProjects(projects) {
-		let myProjects = {};
+		let myProjects = null;
 
-		for (let repo in projects) {
-			if (projects[repo].mine) {
-				myProjects[repo] = projects[repo];
+		if (projects instanceof Object) {
+			myProjects = {};
+			
+			for (let repo in projects) {
+				if (projects[repo].mine) {
+					myProjects[repo] = projects[repo];
+				}
 			}
 		}
 

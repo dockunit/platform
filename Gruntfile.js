@@ -127,6 +127,7 @@ module.exports = function (grunt) {
         	all: {
 				files: {
 					'assets/js/dist/sockets.min.js': ['assets/js/src/sockets.js'],
+					'assets/js/dist/menus.min.js': ['assets/js/src/menus.js'],
 					'assets/js/dist/bootstrap.min.js': ['assets/js/src/bootstrap.js']
 				}
 			}

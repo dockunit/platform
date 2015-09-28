@@ -53,7 +53,7 @@ class Nav extends React.Component {
 
             return (
                 <li className={className} key={link.path}>
-                    <NavLink data-toggle="collapse" data-target=".navbar-collapse" routeName={link.page}>{link.title}</NavLink>
+                    <NavLink routeName={link.page}>{link.title}</NavLink>
                 </li>
             );
         });
@@ -72,7 +72,7 @@ class Nav extends React.Component {
 
 			return (
 				<li className={className} key={link.path}>
-					<NavLink data-toggle="collapse" data-target=".navbar-collapse" routeName={link.page}>{link.title}</NavLink>
+					<NavLink routeName={link.page}>{link.title}</NavLink>
 				</li>
 			);
 		});

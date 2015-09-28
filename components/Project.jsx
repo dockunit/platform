@@ -16,6 +16,7 @@ import deleteProject from '../actions/deleteProject';
 import createBuild from '../actions/createBuild';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
 import SelectField from './SelectField';
+import _ from 'lodash';
 
 @connectToStores(['UserStore', 'ProjectsStore'], (context, props) => ({
     UserStore: context.getStore(UserStore).getState(),
@@ -49,7 +50,7 @@ class Project extends React.Component {
 
 	rerun(buildId) {
 		this.context.executeAction(rerunBuild, {
-			project: this.state.project,
+			project: _.omit( this.state.project, 'builds' ),
 			buildId: buildId
 		});
 
@@ -83,7 +84,7 @@ class Project extends React.Component {
 		event.preventDefault();
 
 		this.context.executeAction(createBuild, {
-			project: this.state.project,
+			project: _.omit( this.state.project, 'builds' ),
 			branch: this.state.currentBranch
 		});
 

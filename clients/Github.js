@@ -2,7 +2,6 @@
 var NPromise = require('promise');
 var httpInvoke = require('httpinvoke');
 var debug = require('debug')('dockunit');
-var constants = require('../constants');
 var querystring = require('querystring');
 var constants = require('../constants');
 var parseLinkHeader = require('parse-link-header');
@@ -75,6 +74,36 @@ var webhooks = {
 		});
 	},
 
+	delete: function(token, repository) {
+		return new NPromise(function (fulfill, reject) {
+
+			debug('Delete github repo hook(s) for ' + repository);
+
+			webhooks.get(token, repository).then(function(hooks) {
+				debug('Got webhooks for ' + repository);
+
+				if (hooks && hooks.length) {
+					hooks.forEach(function(hook) {
+						if (hook.config.url.match(/^https?:\/\/(www\.)?dockunit\.io\/webhooks\/?$/i)) {
+							httpInvoke('https://api.github.com/repos/' + repository + '/hooks/' + hook.id + '?access_token=' + token, 'DELETE', {
+								headers: {
+									'User-Agent': 'Dockunit'
+								}
+							}, function(error, body, statusCode, headers) {
+
+								if (error) {
+									debug('Failed to delete Github webhook ' + hook.id);
+								} else {
+									debug('Deleted Github webhook ' + hook.id);
+								}
+							});
+						}
+					});
+				}
+			});
+		});
+	},
+
 	create: function(token, repository) {
 		return new NPromise(function (fulfill, reject) {
 
@@ -85,7 +114,8 @@ var webhooks = {
 				active: true,
 				events: [
 					'push',
-					'public'
+					'public',
+					'pull_request'
 				],
 				config: {
 					url: 'https://dockunit.io/webhooks',
@@ -225,7 +255,7 @@ var tokens = {
 };
 
 var statuses = {
-	create: function(token, repository, user, commit, status) {
+	create: function(token, repository, user, commit, status, branch) {
 		return new NPromise(function (fulfill, reject) {
 
 			debug('Create github status');
@@ -247,6 +277,10 @@ var statuses = {
 				description: description,
 				context: 'dockunit'
 			};
+
+			if (branch) {
+				params.target_url += '#' + branch;
+			}
 
 			httpInvoke('https://api.github.com/repos/' + repository + '/statuses/' + commit + '?access_token=' + token, 'POST', {
 				headers: {

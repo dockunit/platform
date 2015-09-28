@@ -35,9 +35,19 @@ module.exports = {
 			if (error) {
 				debug('Project could not be deleted');
 
-				callback(error);
+				callback(true);
 			} else {
 				debug('Project ' + params.project.repository + ' successfully deleted');
+
+				Github.webhooks.delete(user.githubAccessToken, params.project.repository);
+
+				Build.remove({ project: params.project._id }, function(error) {
+					if (error) {
+						debug('Build(s) could not be deleted');
+					} else {
+						debug('Build(s) deleted.');
+					}
+				});
 
 				callback(null, { repository: params.project.repository });
 			}
@@ -87,9 +97,9 @@ module.exports = {
 
 			var client = redis.createClient();
 
-			client.get('hotProjects', function(error, hotProjects) {
+			//client.get('hotProjects', function(error, hotProjects) {
 
-				if (error || !hotProjects) {
+				//if (error || !hotProjects) {
 					debug('Hot projects cache miss');
 
 					var weekAgo = new Date().getTime() - 7 * 24 * 60 * 60 * 1000;
@@ -119,27 +129,39 @@ module.exports = {
 							}
 						},
 			    		{
-			    			$limit: 50
+			    			$limit: 100
 			    		}
 					], function(error, buildGroups) {
-						var projects = [],
-							lastProjectId = buildGroups[buildGroups.length - 1]._id.toString();
 
-						buildGroups.forEach(function(build) {
-							Project.findOne({ _id: build._id }, function(error, project) {
-								if (!project.private) {
-									projects.push(project);
-								}
+						var projects = [];
 
-								if (lastProjectId === project._id.toString() || projects.length >= 5) {
-									client.set('hotProjects', JSON.stringify(projects));
+						function getHotProject() {
+							var build = buildGroups.shift();
 
-									callback(null, projects);
-								}
-							});
-						});
+							if (!build) {
+								callback(null, projects);
+							} else {
+								Project.findOne({ _id: build._id }, function(error, project) {
+									if (project) {
+										if (projects.length >= 5) {
+											client.set('hotProjects', JSON.stringify(projects));
+
+											callback(null, projects);
+										} else if (!project.private) {
+											projects.push(project);
+
+											getHotProject();
+										}
+									} else {
+										getHotProject();
+									}
+								});
+							}
+						}
+
+						getHotProject();
 					});
-				} else {
+				/*} else {
 					debug('Hot projects cache hit');
 
 					try {
@@ -147,8 +169,9 @@ module.exports = {
 					} catch(error) {
 						callback(true);
 					}
-				}
-			});
+				}*/
+			//});
+
 		} else if (params.mine) {
 			// Get all my projects
 			debug('Getting my projects');
@@ -175,7 +198,10 @@ module.exports = {
 						storeWhere: 'builds',
 						arrayPop: true,
 						mongooseModel: Build,
-						idField: 'project'
+						idField: 'project',
+						sort: {
+							created: 1
+						}
 					}, projectToSave;
 
 					reversePopulate(reversePopulateOptions, function(error) {
@@ -217,7 +243,10 @@ module.exports = {
 						storeWhere: 'builds',
 						arrayPop: true,
 						mongooseModel: Build,
-						idField: 'project'
+						idField: 'project',
+						sort: {
+							created: 1
+						}
 					};
 
 					reversePopulate(reversePopulateOptions, function(error) {
