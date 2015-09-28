@@ -22,7 +22,7 @@ class LoginForm extends React.Component {
 	render() {
 		return (
 			<form method="post" action="/login" noValidate>
-				<If test={(1 === this.props.UserStore.loginStatus)}>
+				<If test={(1 === this.props.UserStore.loginFormStatus)}>
 					<div className="alert alert-danger" role="alert">
 						<span className="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
 						<span className="sr-only">Error:</span>

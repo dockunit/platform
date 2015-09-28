@@ -5852,10 +5852,10 @@ h2 {
     padding: 5px;
     border: 1px solid #fff; }
 
-.navbar-form.failed-login input[type=password] {
+.navbar-form.failed-login input {
   background-color: #f2dede;
   border-color: #ebccd1; }
-  .navbar-form.failed-login input[type=password]:-webkit-autofill {
+  .navbar-form.failed-login input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0px 1000px #f2dede inset; }
 .navbar-form .form-group:first-child {
   margin-right: .3em; }
@@ -5865,6 +5865,9 @@ h2 {
 .glyphicon-chevron-down,
 .glyphicon-chevron-up {
   top: 2px; }
+
+.glyphicon-exclamation-sign {
+  margin-right: 10px; }
 
 .submit-notification-icon {
   visibility: hidden;

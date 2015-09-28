@@ -60,7 +60,8 @@ class UserStore extends BaseStore {
 		// We don't want to save the password
 		delete newUser.password;
 
-		this.loginStatus = 0;
+		this.loginFormStatus = 0;
+		this.loginHeaderStatus = 0;
 
 		this.currentUser = this.currentUser || {};
 		_.assign(this.currentUser, newUser);

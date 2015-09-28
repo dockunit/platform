@@ -17,7 +17,7 @@ class Nav extends React.Component {
 	constructor(props, context) {
         super(props, context);
 
-        this.getPasswordClasses = this.getPasswordClasses.bind(this);
+        this.getLoginFormClasses = this.getLoginFormClasses.bind(this);
     }
 
 	static defaultProps = {
@@ -25,7 +25,7 @@ class Nav extends React.Component {
 		links: {}
     }
 
-    getPasswordClasses() {
+    getLoginFormClasses() {
 		let loginStatus = this.props.UserStore.loginHeaderStatus;
 
 		if (1 === loginStatus) {
@@ -126,7 +126,7 @@ class Nav extends React.Component {
 							</If>
 
 							<If test={!this.props.UserStore.currentUser}>
-								<form method="post" action="/login" className={this.getPasswordClasses()} noValidate>
+								<form method="post" action="/login" className={this.getLoginFormClasses()} noValidate>
 									<div className="form-group">
 										<input type="text" name="username" placeholder="Username" className="form-control"/>
 									</div>

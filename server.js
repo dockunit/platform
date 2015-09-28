@@ -298,6 +298,7 @@ server.use(function(req, res, next) {
 		if ('header' === req.session.loginType) {
 			context.executeAction(updateLoginHeaderStatus, req.session.errorNum);
 		} else {
+			req.url = '/login';
 			context.executeAction(updateLoginFormStatus, req.session.errorNum);
 		}
 	}
