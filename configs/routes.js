@@ -32,7 +32,7 @@ export default {
 		path: '/blog',
 		method: 'get',
 		page: 'blog',
-		type: 'explore',
+		//type: 'explore',
 		title: 'Blog',
 		handler: require('../components/Blog'),
 		action: (context, payload, done) => {
