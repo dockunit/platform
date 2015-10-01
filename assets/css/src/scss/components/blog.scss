@@ -9,14 +9,15 @@
 
 .blog .byline {
 	text-align: center;
+	color: $gray-light;
 }
 
 .blog .post {
-	margin-bottom: $padding-large-horizontal*3;
+	margin-bottom: $padding-large-horizontal*5;
 }
 
 .blog .entry {
-	margin-top: $padding-large-horizontal;
+	margin-top: $padding-large-horizontal*2;
 }
 
 .blog .post:last-child {

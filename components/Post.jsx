@@ -12,9 +12,9 @@ class Post extends React.Component {
 
 		return (
 			<div className="post">
-				<h2>{post.title.rendered}</h2>
+				<h1>{post.title.rendered}</h1>
 				<div className="byline">
-					<time class="timeago" datetime={post.date}>{timeago(post.date)}</time>
+					Posted <time class="timeago" datetime={post.date}>{timeago(post.date)}</time>
 				</div>
 
 				<div className="entry" dangerouslySetInnerHTML={{ __html: post.content.rendered }}></div>

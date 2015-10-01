@@ -5877,13 +5877,14 @@ h2 {
   text-align: center; }
 
 .blog .byline {
-  text-align: center; }
+  text-align: center;
+  color: #999999; }
 
 .blog .post {
-  margin-bottom: 48px; }
+  margin-bottom: 80px; }
 
 .blog .entry {
-  margin-top: 16px; }
+  margin-top: 32px; }
 
 .blog .post:last-child {
   margin-bottom: 0; }
