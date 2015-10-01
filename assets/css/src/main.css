@@ -5869,25 +5869,25 @@ h2 {
 .glyphicon-exclamation-sign {
   margin-right: 5px; }
 
+.loading-section .glyphicon-refresh {
+  font-size: 75px; }
+
 .blog {
   max-width: 600px;
   margin: 0 auto; }
 
-.blog h2 {
+.blog h1 {
   text-align: center; }
 
 .blog .byline {
   text-align: center;
   color: #999999; }
 
-.blog .post {
-  margin-bottom: 80px; }
-
 .blog .entry {
   margin-top: 32px; }
 
-.blog .post:last-child {
-  margin-bottom: 0; }
+.blog .post {
+  margin-top: 4em; }
 
 .submit-notification-icon {
   visibility: hidden;
@@ -6182,7 +6182,8 @@ h2 {
   margin-left: 4px; }
 
 .loading-section {
-  text-align: center; }
+  text-align: center;
+  margin: 4em 0; }
 
 .loading-section.inline {
   text-align: left;

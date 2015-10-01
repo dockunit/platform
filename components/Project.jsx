@@ -262,7 +262,7 @@ class Project extends React.Component {
 
 				<If test={null === this.state.project}>
 					<div className="loading-section">
-						<h3>Hey there, we are loading your project. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h3>
+						<span className="glyphicon glyphicon-refresh" aria-hidden="true"></span>
 					</div>
 				</If>
 

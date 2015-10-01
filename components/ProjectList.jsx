@@ -33,7 +33,7 @@ class ProjectList extends React.Component {
 
 				<If test={null === projects}>
 					<div className="loading-section">
-						<h3>Hey there, we are looking up your projects. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h3>
+						<span className="glyphicon glyphicon-refresh" aria-hidden="true"></span>
 					</div>
 				</If>
 

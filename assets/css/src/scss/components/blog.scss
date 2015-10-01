@@ -3,7 +3,7 @@
 	margin: 0 auto;
 }
 
-.blog h2 {
+.blog h1 {
 	text-align: center;
 }
 
@@ -12,14 +12,10 @@
 	color: $gray-light;
 }
 
-.blog .post {
-	margin-bottom: $padding-large-horizontal*5;
-}
-
 .blog .entry {
 	margin-top: $padding-large-horizontal*2;
 }
 
-.blog .post:last-child {
-	margin-bottom: 0;
+.blog .post {
+	margin-top: 4em;
 }
