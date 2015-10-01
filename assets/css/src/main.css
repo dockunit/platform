@@ -5877,7 +5877,8 @@ h2 {
   margin: 0 auto; }
 
 .blog h1 {
-  text-align: center; }
+  text-align: center;
+  margin-top: 0; }
 
 .blog .byline {
   text-align: center;
