@@ -28,6 +28,18 @@ export default {
             done();
         }
 	},
+	blog: {
+		path: '/blog',
+		method: 'get',
+		page: 'blog',
+		type: 'explore',
+		title: 'Blog',
+		handler: require('../components/Blog'),
+		action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', { pageTitle: 'Dockunit.io - Blog' });
+            done();
+        }
+	},
 	login: {
 		path: '/login',
 		method: 'get',

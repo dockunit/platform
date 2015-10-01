@@ -5869,6 +5869,25 @@ h2 {
 .glyphicon-exclamation-sign {
   margin-right: 5px; }
 
+.blog {
+  max-width: 600px;
+  margin: 0 auto; }
+
+.blog h2 {
+  text-align: center; }
+
+.blog .byline {
+  text-align: center; }
+
+.blog .post {
+  margin-bottom: 48px; }
+
+.blog .entry {
+  margin-top: 16px; }
+
+.blog .post:last-child {
+  margin-bottom: 0; }
+
 .submit-notification-icon {
   visibility: hidden;
   display: inline;

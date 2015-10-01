@@ -3,6 +3,7 @@
 var _ = require('lodash');
 
 var baseUrl = 'https://dockunit.io';
+var wpBase = 'https://dockunit.io/wp/wp-json/wp/v2/';
 var isDevelopment = false;
 
 if (process.env.BASE_URL) {
@@ -10,11 +11,13 @@ if (process.env.BASE_URL) {
 } else if (process.env.NODE_ENV && 'dev' === process.env.NODE_ENV) {
 	baseUrl = 'http://localhost:3000';
 	isDevelopment = true;
+	wpBase = 'http://local.wordpress-trunk.dev/wp-json/wp/v2';
 }
 
 module.exports = _.extend({
 	baseUrl: baseUrl,
-	isDevelopment: isDevelopment
+	isDevelopment: isDevelopment,
+	wpBase: wpBase
 }, require('../secrets'));
 
 /**

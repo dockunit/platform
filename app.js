@@ -7,6 +7,7 @@ import fetchrPlugin from 'fluxible-plugin-fetchr';
 import ApplicationStore from './stores/ApplicationStore';
 import UserStore from './stores/UserStore';
 import ProjectsStore from './stores/ProjectsStore';
+import PostsStore from './stores/PostsStore';
 
 // create new fluxible instance
 let app = new Fluxible({
@@ -15,7 +16,8 @@ let app = new Fluxible({
 		ApplicationStore,
 		UserStore,
 		ProjectsStore,
-		RouteStore
+		RouteStore,
+		PostsStore
 	]
 });
 
