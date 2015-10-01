@@ -2,3 +2,4 @@ Sitemap: https://dockunit.io/sitemap.xml
 
 User-agent: *
 Disallow: /mongo
+Disallow: /wp
