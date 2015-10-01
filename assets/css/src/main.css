@@ -5874,7 +5874,7 @@ h2 {
 
 .blog {
   max-width: 600px;
-  margin: 0 auto; }
+  margin: 0 auto 2.5em auto; }
 
 .blog h1 {
   text-align: center;
