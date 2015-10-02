@@ -11,7 +11,7 @@ class Post extends React.Component {
 		let avatarUrl = 'https://www.gravatar.com/avatar/' + post.author.email_hash + '?s=36';
 
 		return (
-			<div className="post">
+			<div id={post.slug} className="post">
 				<h1>{post.title.rendered}</h1>
 				<div className="byline">
 					<img className="avatar" src={avatarUrl} /> <strong>{post.author.display_name}</strong> <time class="timeago" datetime={post.date}>{timeago(post.date)}</time>
