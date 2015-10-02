@@ -5888,7 +5888,20 @@ h2 {
   margin-top: 32px; }
 
 .blog .post {
+  margin-top: 5.5em; }
+
+.blog .post:first-child {
   margin-top: 4em; }
+
+.blog .post ul {
+  margin-top: 2em; }
+
+.blog .post ul li {
+  margin-bottom: 1em; }
+
+.blog .post .avatar {
+  margin-right: 6px;
+  border-radius: 100px; }
 
 .submit-notification-icon {
   visibility: hidden;
