@@ -244,7 +244,7 @@ class AddProject extends React.Component {
 
 				<If test={!this.state.repositories}>
 					<div className="loading-section">
-						<h3>Hey there, we are looking up your Github repositories. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h3>
+						<span className="glyphicon glyphicon-refresh" aria-hidden="true"></span>
 					</div>
 				</If>
 
