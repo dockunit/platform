@@ -6201,7 +6201,10 @@ h2 {
 
 .loading-section.inline {
   text-align: left;
-  font-style: italic; }
+  font-style: italic;
+  margin: 0; }
+  .loading-section.inline .glyphicon-refresh {
+    font-size: inherit; }
 
 .loading-section .glyphicon-refresh {
   animation-name: rotateThis;

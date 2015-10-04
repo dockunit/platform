@@ -6,6 +6,11 @@
 .loading-section.inline {
 	text-align: left;
 	font-style: italic;
+	margin: 0;
+
+	.glyphicon-refresh {
+		font-size: inherit;
+	}
 }
 
 .loading-section .glyphicon-refresh {
