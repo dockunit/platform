@@ -192,7 +192,7 @@ class Project extends React.Component {
 	changeBranch(event) {
 		event.preventDefault();
 
-		window.location.hash = event.target.innerText;
+		window.location.hash = event.target.innerText || event.target.textContent;
 	}
 
     render() {
