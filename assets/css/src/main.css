@@ -6129,6 +6129,9 @@ h2 {
 .build-item:nth-child(even) {
   background-color: #fff; }
 
+.build-wrapper {
+  clear: both; }
+
 .no-builds {
   text-align: center; }
 
