@@ -12,6 +12,7 @@ class UserStore extends BaseStore {
 
 		this.currentUser = null;
 		this.userCache = {};
+		this.newRegistration = false;
 		this.loginFormStatus = 0;
 		this.loginHeadertatus = 0;
 	}
@@ -74,6 +75,7 @@ class UserStore extends BaseStore {
 			currentUser: this.currentUser,
 			userCache: this.userCache,
 			loginFormStatus: this.loginFormStatus,
+			newRegistration: this.newRegistration,
 			loginHeaderStatus: this.loginHeaderStatus
 		};
 	}
@@ -84,6 +86,7 @@ class UserStore extends BaseStore {
 
 	rehydrate(state) {
 		this.currentUser = state.currentUser;
+		this.newRegistration = state.newRegistration;
 		this.userCache = state.userCache;
 		this.loginFormStatus = state.loginFormStatus;
 		this.loginHeaderStatus = state.loginHeaderStatus;

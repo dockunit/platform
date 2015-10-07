@@ -23,7 +23,6 @@ class Register extends React.Component {
         this.validateEmail = this.validateEmail.bind(this);
         this.validatePassword = this.validatePassword.bind(this);
         this.handleFormChange = this.handleFormChange.bind(this);
-        this.submit = this.submit.bind(this);
         this.click = this.click.bind(this);
         this.register = this.register.bind(this);
         this.importantEmailChange = this.importantEmailChange.bind(this);
@@ -67,12 +66,6 @@ class Register extends React.Component {
 		this.context.executeAction(createUser, user);
 	}
 
-	submit() {
-		this.context.executeAction(navigateAction, {
-	        url: '/login'
-	    });
-	}
-
 	componentWillReceiveProps() {
 		if (this.props.UserStore.userCache[this.state.username.value]) {
 			let newState = {};
@@ -80,6 +73,10 @@ class Register extends React.Component {
 			newState.username.errors.taken = 'This username is already in use.';
 
 			this.setState(newState);
+		}
+
+		if (this.props.UserStore.newRegistration) {
+			this.refs.form.getDOMNode().submit();
 		}
 	}
 
@@ -212,7 +209,7 @@ class Register extends React.Component {
 						Signing up for Dockunit.io is quick, easy, and best of all free. After you setup your account, we will help you connect your repositories so you can start continuous integration tests immediatly.
 					</p>
 					<div className="row">
-						<form method="post" noValidate>
+						<form ref="form" action="/login" method="post" noValidate>
 							<div className="col-md-4">
 								<InputField
 									label="Username"
@@ -279,9 +276,10 @@ class Register extends React.Component {
 									value={this.props.ApplicationStore.csrfToken}
 								/>
 
+								<input type="hidden" name="redirectPath" value="/projects" />
 								<input onChange={this.importantEmailChange} id="important_email" type="text" name="important_email" size="25" value="" />
 
-								<SubmitButton value="Sign Up" onSubmit={this.submit} onClick={this.click} />
+								<SubmitButton type="button" value="Sign Up" onClick={this.click} />
 							</div>
 						</form>
 					</div>

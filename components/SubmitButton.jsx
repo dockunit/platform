@@ -36,10 +36,15 @@ class SubmitButton extends React.Component {
 	}
 
 	render() {
+		let type = 'submit';
+		if (this.props.type) {
+			type = this.props.type;
+		}
+		
 		return (
 			<div>
 				<input
-					type="submit"
+					type={type}
 					className="btn btn-lg btn-primary"
 					value={this.props.value}
 					onClick={this.onClick}
