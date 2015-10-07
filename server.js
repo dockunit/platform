@@ -140,7 +140,8 @@ var sitemap = sm.createSitemap({
 	urls: [
 		{ url: '/',  changefreq: 'daily', priority: 0.8 },
 		{ url: '/register/',  changefreq: 'daily', priority: 0.5 },
-		{ url: '/about/',  changefreq: 'daily',  priority: 0.3 }
+		{ url: '/about/',  changefreq: 'daily',  priority: 0.3 },
+		{ url: '/blog/',  changefreq: 'daily',  priority: 0.7 }
 	]
 });
  
