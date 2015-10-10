@@ -25,6 +25,12 @@ class Projects extends React.Component {
 		return (
 			<div className="container">
 				<div className="projects-nav">
+					<div className="right">
+						<button className="btn btn-success btn-sm" type="button" data-toggle="collapse" data-target=".help" aria-expanded="false">
+							Help
+						</button>
+					</div>
+
 					<NavLink routeName="addProject">
 						<button type="button" className="btn btn-sm btn-primary">
 							<span className="glyphicon glyphicon-plus" aria-hidden="true"></span>
