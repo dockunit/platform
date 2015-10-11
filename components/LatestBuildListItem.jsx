@@ -30,9 +30,10 @@ class LatestBuildListItem extends React.Component {
 
 	render() {
 		let statusClasses = 'status glyphicon ';
-		let userUrl = 'https://github.com/' + this.props.build.commitUser;
 		let githubUrl = 'https://github.com/' + this.props.repository;
 		let dockunitUrl = githubUrl + '/blob/' + this.props.branch + '/Dockunit.json';
+		let commitUser = (this.props.build.commitUser) ? this.props.build.commitUser : 'Unknown';
+		let userUrl = (this.props.build.commitUser) ? 'https://github.com/' + this.props.build.commitUser : '';
 
 		if (this.props.build.finished) {
 			if (255 === this.props.build.result) {
@@ -143,7 +144,9 @@ class LatestBuildListItem extends React.Component {
 						</If>
 
 						<If test={('pr' !== this.props.build.type)}>
-							<div className="item">Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{this.props.build.commitUser && this.props.build.commitUser}</strong></a></div>
+							<div className="item">
+								Commit <a href={commitUrl}><strong>{buildShortCommit}</strong></a> by <a href={userUrl}><strong>{commitUser}</strong></a>
+							</div>
 						</If>
 						
 						<div className="toolbar">

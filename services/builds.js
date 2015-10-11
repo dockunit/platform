@@ -71,14 +71,13 @@ module.exports = {
 			debug('Creating a fresh build');
 
 			Github.branch.get(user.githubAccessToken, params.project.repository, params.branch).then(function(response) {
-
 				build = new Build();
 
 				build.commit = response.commit.sha;
 				build.branch = params.branch;
 				build.output = '';
 				build.project = params.project._id;
-				build.commitUser = response.commit.committer.login;
+				build.commitUser = (response.commit.committer && response.commit.committer.login) ? response.commit.committer.login : '';
 
 				build.save(function(error) {
 					if (error) {
