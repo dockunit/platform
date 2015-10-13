@@ -6,7 +6,7 @@ import ProjectsStore from '../stores/ProjectsStore';
 import If from './If';
 import ProjectListItem from './ProjectListItem';
 import {connectToStores} from 'fluxible-addons-react';
-
+import updateShowHelp from '../actions/updateShowHelp';
 
 @connectToStores(['ProjectsStore'], (context, props) => ({
     ProjectsStore: context.getStore(ProjectsStore).getState()
@@ -20,6 +20,14 @@ class ProjectList extends React.Component {
         getStore: React.PropTypes.func.isRequired
     }
 
+    componentDidMount() {
+    	jQuery(React.findDOMNode(this.refs.addProject)).popover({
+			placement: 'bottom',
+			html: true,
+			content: 'hello'
+		}).popover('show');
+    }
+
 	render() {
 		let projects = ProjectsStore.filterMyProjects(this.props.ProjectsStore.projects);
 
@@ -27,7 +35,7 @@ class ProjectList extends React.Component {
 			<div>
 				<If test={projects instanceof Object && Object.keys(projects).length === 0}>
 					<div className="no-projects">
-						<h3>No projects to show right now. <NavLink routeName="addProject">Add one?</NavLink></h3>
+						<h3>No projects to show right now. <NavLink className="addProjectLink help-pointer" data-help-number="1" routeName="addProject">Add one?</NavLink></h3>
 					</div>
 				</If>
 

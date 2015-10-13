@@ -27,7 +27,7 @@ class SelectField extends React.Component {
 		return (
 			<div className={groupClasses}>
 				<If test={this.props.label}>
-					<label for={this.props.id}>{this.props.label}:</label>
+					<label data-help-tab={this.props.labelHelpTab} for={this.props.id} className={this.props.labelClassName}>{this.props.label}:</label>
 				</If>
 
 				<If test={this.props.options.length}>
