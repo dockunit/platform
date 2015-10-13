@@ -7,6 +7,8 @@ import ProjectsStore from '../stores/ProjectsStore';
 import ApplicationStore from '../stores/ApplicationStore';
 import readGithubRepositories from '../actions/readGithubRepositories';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
+import HelpButton from './HelpButton';
+import Help from './Help';
 import readMyProjects from '../actions/readMyProjects';
 import If from './If';
 import InputField from './InputField';
@@ -239,8 +241,40 @@ class AddProject extends React.Component {
 		return (
 			<div className="container">
 				<div className="page-header">
+					<div className="help-button-wrapper">
+						<HelpButton />
+					</div>
 					<h1>Create a Project</h1>
 				</div>
+
+				<Help>
+					<ul className="help-menu" role="tablist">
+						<li role="presentation" className="active"><a href="#add-project-overview" data-tab="add-project-overview" data-toggle="tab">Overview</a></li>
+						<li role="presentation"><a href="#add-project-repository" data-tab="add-project-repository" data-toggle="tab">Repository</a></li>
+						<li role="presentation"><a href="#add-project-branch" data-tab="add-project-branch" data-toggle="tab">Branch</a></li>
+						<li role="presentation"><a href="#add-project-private" data-tab="add-project-private" data-toggle="tab">Private</a></li>
+					</ul>
+
+					<div className="tab-content">
+						<div role="tabpanel" className="tab-pane active" id="add-project-overview">
+							<h4>Add a Project</h4>
+
+							<p>To begin testing your software, you must create a Dockunit project and associate it with a Github repository. After you create your project, testing will start automatically.</p>
+						</div>
+
+						<div role="tabpanel" className="tab-pane" id="add-project-repository">
+							Every Dockunit project is associated with a Github project
+						</div>
+
+						<div role="tabpanel" className="tab-pane" id="add-project-branch">
+							The primary branch of a project is the focal point of the project. Dockunit will test all your Github branches but will feature the primary branch a bit more prominantly.
+						</div>
+
+						<div role="tabpanel" className="tab-pane" id="add-project-private">
+							Private projects wont be accessible to the world. By default the will be visible to anyone who has access to the project in Github. Users will need to create Dockunit.io accounts and associate them with Github accounts in order to access private projects.
+						</div>
+					</div>
+				</Help>
 
 				<If test={!this.state.repositories}>
 					<div className="loading-section">
@@ -261,6 +295,8 @@ class AddProject extends React.Component {
 							name="repository"
 							onChange={this.handleRepositoryChange}
 							className="form-control"
+							labelClassName="help-pointer"
+							labelHelpTab="add-project-repository"
 							id="repository"
 							options={Object.keys(this.state.repositories)}
 							helpText="Tell us which repository you want to use."
@@ -271,8 +307,10 @@ class AddProject extends React.Component {
 							label="Primary Repository Branch"
 							name="branch"
 							className="form-control"
+							labelClassName="help-pointer"
 							onChange={this.handleFormChange}
 							id="branch"
+							labelHelpTab="add-project-branch"
 							errors={this.state.branch.errors}
 							options={branches}
 							helpText="This branches status will be featured more prominently in your dashboard."
@@ -281,9 +319,12 @@ class AddProject extends React.Component {
 						<SelectField
 							label="Private"
 							name="privateRepository"
+							labelClassName="help-pointer"
+							labelHelpTab="add-project-private"
 							onChange={this.handleFormChange}
 							className="form-control"
 							id="privateRepository"
+							labelHelpNumber="3"
 							options={statuses}
 							helpText="Private projects will only be viewable to those who have access to the Github project."
 							errors={this.state.privateRepository.errors}

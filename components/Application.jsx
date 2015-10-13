@@ -34,6 +34,11 @@ class Application extends React.Component {
         let repository = false;
         let redirectPath = false;
 
+        let classes = '';
+        if (this.props.ApplicationStore.showHelp) {
+            classes += 'show-help';
+        }
+
         if ('project' === this.props.currentRoute.get('page')) {
             repository = params.get('username') + '/' + params.get('repository');
         }
@@ -53,7 +58,7 @@ class Application extends React.Component {
         }
 
         return (
-            <div>
+            <div className={classes}>
                 <Nav selected={this.props.currentRoute.get('page')} redirectPath={redirectPath} />
                 
                 <Handler repository={repository} redirectPath={redirectPath} />

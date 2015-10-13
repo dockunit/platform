@@ -4248,20 +4248,21 @@ a.thumbnail:focus,
 a.thumbnail.active {
   border-color: #158CBA; }
 
-.alert {
+.alert, .help {
   padding: 15px;
   margin-bottom: 20px;
   border: 1px solid transparent;
   border-radius: 4px; }
-  .alert h4 {
+  .alert h4, .help h4 {
     margin-top: 0;
     color: inherit; }
-  .alert .alert-link {
+  .alert .alert-link, .help .alert-link {
     font-weight: bold; }
-  .alert > p,
-  .alert > ul {
+  .alert > p, .help > p,
+  .alert > ul,
+  .help > ul {
     margin-bottom: 0; }
-  .alert > p + p {
+  .alert > p + p, .help > p + p {
     margin-top: 5px; }
 
 .alert-dismissable,
@@ -5744,6 +5745,11 @@ h1,
 h2 {
   font-family: 'Montserrat', sans-serif; }
 
+.page-header .help-button-wrapper {
+  float: right;
+  top: .6em;
+  position: relative; }
+
 /* Components
 ------------------------------------------------*/
 .row {
@@ -5946,6 +5952,9 @@ h2 {
 .projects-nav {
   margin-top: 1.5em; }
 
+.projects-nav .right {
+  float: right; }
+
 .edit-branch-icon {
   margin-left: 10px;
   vertical-align: middle;
@@ -6120,6 +6129,102 @@ h2 {
         display: none; }
     .project-item .status:before {
       display: none; } }
+.help {
+  display: none;
+  margin-top: 20px;
+  margin-bottom: 40px;
+  position: relative;
+  padding: 0;
+  overflow: auto;
+  background-color: #e4f9e5;
+  border-color: #28B62C; }
+
+.show-help .help {
+  display: block; }
+
+.help .tab-content {
+  padding: 15px; }
+
+.help h4 {
+  font-weight: bold; }
+
+.help .close {
+  color: #555555;
+  position: absolute;
+  top: 8px;
+  right: 12px; }
+
+.help .help-menu {
+  background-color: #fff;
+  float: left;
+  list-style-type: none;
+  padding: 0;
+  margin-right: 15px; }
+
+.help .help-menu li {
+  padding: 5px 0; }
+
+.help .help-menu a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #555555; }
+
+.help .help-menu .active a {
+  text-decoration: underline; }
+
+.show-help .help-number {
+  border-radius: 5px;
+  display: inline-block;
+  cursor: pointer;
+  padding: 2px 6px;
+  background: #2abf2f;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2abf2f), color-stop(86%, #28b62c), color-stop(100%, #28b62c));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2abf2f', endColorstr='#28b62c',GradientType=0 );
+  /* IE6-9 */
+  color: #fff; }
+
+.show-help .help-pointer {
+  border-radius: 5px;
+  border: 2px dashed #28B62C;
+  padding: 10px; }
+  .show-help .help-pointer:after {
+    border-radius: 5px;
+    display: inline-block;
+    cursor: pointer;
+    padding: 2px 6px;
+    background: #2abf2f;
+    /* Old browsers */
+    background: -moz-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+    /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #2abf2f), color-stop(86%, #28b62c), color-stop(100%, #28b62c));
+    /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+    /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+    /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+    /* IE10+ */
+    background: linear-gradient(to bottom, #2abf2f 0%, #28b62c 86%, #28b62c 100%);
+    /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2abf2f', endColorstr='#28b62c',GradientType=0 );
+    /* IE6-9 */
+    color: #fff;
+    margin-left: 5px;
+    content: "?"; }
+
 .builds {
   margin-top: 1.5em; }
 

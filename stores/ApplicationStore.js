@@ -9,6 +9,7 @@ class ApplicationStore extends BaseStore {
         
         this.csrfToken = null;
         this.pageTitle = '';
+        this.showHelp = false;
     }
 
     setCsrfToken(token) {
@@ -21,10 +22,16 @@ class ApplicationStore extends BaseStore {
         this.emitChange();
     }
 
+    updateShowHelp(showHelp) {
+        this.showHelp = showHelp;
+        this.emitChange();
+    }
+
     getState() {
         return {
             csrfToken: this.csrfToken,
-            pageTitle: this.pageTitle
+            pageTitle: this.pageTitle,
+            showHelp: this.showHelp
         };
     }
 
@@ -35,6 +42,7 @@ class ApplicationStore extends BaseStore {
     rehydrate(state) {
         this.csrfToken = state.csrfToken;
         this.pageTitle = state.pageTitle;
+        this.showHelp = state.showHelp;
     }
 }
 
@@ -42,6 +50,7 @@ ApplicationStore.storeName = 'ApplicationStore';
 
 ApplicationStore.handlers = {
     'UPDATE_CSRF_TOKEN': 'setCsrfToken',
+    'UPDATE_SHOW_HELP': 'updateShowHelp',
     'UPDATE_PAGE_TITLE': 'updatePageTitle'
 };
 
