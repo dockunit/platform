@@ -12,6 +12,8 @@ var constants = require('./constants');
 var Builder = require('./clients/Builder');
 var Build = mongoose.model('Build');
 
+debug = console.log;
+
 var Webhooks = function() {
 	var self = this;
 
