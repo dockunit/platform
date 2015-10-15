@@ -28,21 +28,29 @@ class ProjectList extends React.Component {
 			<div>
 				<Help>
 					<div className="tab-content">
-						<h4>Projects</h4>
-
 						<If test={projects instanceof Object && Object.keys(projects).length === 0}>
-							<p>Hey! Welcome to Dockunit.io. You need to add some of your projects from Github to get started.</p>
+							<div className="first-project">
+								<h1>Hey! Welcome to Dockunit.io.</h1>
+
+								<p>You need to add some of your projects from Github to get started. <strong>Creating a Dockunit.io project is super easy</strong></p>
+
+								<NavLink className="btn btn-primary btn-lg" routeName="addProject">Create My First Project</NavLink>
+							</div>
 						</If>
 
 						<If test={projects instanceof Object && Object.keys(projects).length > 0}>
-							<p>This screen shows all Dockunit.io projects. Remember, each Dockunit.io project is associated with a Github project. You can add as many Dockunit.io projects as you like.</p>
+							<div>
+								<h4>Projects</h4>
+
+								<p>This screen shows all Dockunit.io projects. Remember, each Dockunit.io project is associated with a Github project. You can add as many Dockunit.io projects as you like.</p>
+							</div>
 						</If>
 					</div>
 				</Help>
 
 				<If test={projects instanceof Object && Object.keys(projects).length === 0}>
 					<div className="no-projects">
-						<h3>No projects to show right now. <NavLink className="addProjectLink help-pointer" data-help-number="1" routeName="addProject">Add one?</NavLink></h3>
+						<h3>No projects to show right now.</h3>
 					</div>
 				</If>
 

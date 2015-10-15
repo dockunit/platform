@@ -23,6 +23,19 @@
 	font-weight: bold;
 }
 
+.help .first-project {
+	text-align: center;
+	font-size: $font-size-large;
+}
+
+.help .first-project p {
+	margin: 1.5em 0;
+}
+
+.help .first-project .btn-massive {
+	margin-top: 1.5em;
+}
+
 .help .close {
 	color: $text-color;
 	position: absolute;

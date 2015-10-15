@@ -6148,6 +6148,16 @@ h2 {
 .help h4 {
   font-weight: bold; }
 
+.help .first-project {
+  text-align: center;
+  font-size: 18px; }
+
+.help .first-project p {
+  margin: 1.5em 0; }
+
+.help .first-project .btn-massive {
+  margin-top: 1.5em; }
+
 .help .close {
   color: #555555;
   position: absolute;
