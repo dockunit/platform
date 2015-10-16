@@ -28,7 +28,7 @@ var Webhooks = function() {
 
 		var steps = [
 			self.verifyRequestBody,
-			//self.verifyRequiredProperties,
+			self.verifyRequiredProperties,
 			self.verifyAndGetProject,
 			self.createJob
 		];
@@ -110,14 +110,17 @@ Webhooks.prototype.verifyRequestBody = function() {
 	debug(this.payload);
 };
 
+// Todo: verify better here
 Webhooks.prototype.verifyRequiredProperties = function() {
 	debug('Verifying required properties');
 
-	/*if (!this.payload.repository.full_name) {
-		debug('No repo full_name');
+	if ('commit' === this.type) {
+		if (!this.payload.after) {
+			debug('Wrong content type');
 
-		return new Error(404);
-	}*/
+			return new Error(500);
+		}
+	}
 };
 
 Webhooks.prototype.verifyAndGetProject = function() {
