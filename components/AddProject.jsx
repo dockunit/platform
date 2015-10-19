@@ -1,3 +1,5 @@
+/*global jQuery */
+
 'use strict';
 
 import React from 'react';
@@ -54,7 +56,8 @@ class AddProject extends React.Component {
 			errors: {},
 			validators: [this.validateRequired('privateRepository')]
 		},
-		repositories: false
+		repositories: false,
+		containsDockunitjson: {}
     }
 
     componentWillMount() {
@@ -227,16 +230,39 @@ class AddProject extends React.Component {
 		return true;
 	}
 
+	componentWillUpdate(props, state) {
+		let self = this;
+		let containsDockunitjson = self.state.containsDockunitjson;
+
+		if (state.branch.value !== this.state.branch.value) {
+			if (state.repository && state.repository.value && state.branch && state.branch.value && 'undefined' === typeof containsDockunitjson[state.repository.value + '/' + state.branch.value]) {
+
+				console.log('checking...');
+				jQuery.get('https://api.github.com/repos/' + state.repository.value + '/contents/Dockunit.json?access_token=' + self.props.UserStore.currentUser.githubAccessToken + '&ref=' + state.branch.value).
+					done(function() {
+						containsDockunitjson[state.repository.value + '/' + state.branch.value] = true;
+						self.setState(containsDockunitjson);
+					}).
+					fail(function() {
+						containsDockunitjson[state.repository.value + '/' + state.branch.value] = false;
+						self.setState(containsDockunitjson);
+					});
+			}
+		}
+	}
+
 	render() {
-		var branches = [];
+		let branches = [];
 		if (this.state.repository.value && this.state.repositories[this.state.repository.value] && this.state.repositories[this.state.repository.value].branches) {
 			branches = Object.keys(this.state.repositories[this.state.repository.value].branches);
 		}
 
-		var statuses = ['No', 'Yes'];
+		let statuses = ['No', 'Yes'];
 		if (this.state.repository.value && this.state.repositories[this.state.repository.value] && this.state.repositories[this.state.repository.value].private) {
 			statuses = ['Yes', 'No'];
 		}
+
+		let projects = ProjectsStore.filterMyProjects(this.props.ProjectsStore.projects);
 
 		return (
 			<div className="container">
@@ -248,30 +274,51 @@ class AddProject extends React.Component {
 				</div>
 
 				<Help>
-					<ul className="help-menu" role="tablist">
-						<li role="presentation" className="active"><a href="#add-project-overview" data-tab="add-project-overview" data-toggle="tab">Overview</a></li>
-						<li role="presentation"><a href="#add-project-repository" data-tab="add-project-repository" data-toggle="tab">Repository</a></li>
-						<li role="presentation"><a href="#add-project-branch" data-tab="add-project-branch" data-toggle="tab">Branch</a></li>
-						<li role="presentation"><a href="#add-project-private" data-tab="add-project-private" data-toggle="tab">Private</a></li>
-					</ul>
+					<div className="wrap">
+						<ul className="help-menu" role="tablist">
+							<If test={projects instanceof Object && Object.keys(projects).length === 0}>
+								<li role="presentation" className="active"><a href="#add-first-project" data-tab="add-first-project" data-toggle="tab">Your First Project</a></li>
+							</If>
+							<If test={!(projects instanceof Object && Object.keys(projects).length === 0)}>
+								<li role="presentation" className="active"><a href="#add-project-overview" data-tab="add-project-overview" data-toggle="tab">Overview</a></li>
+							</If>
+							<li role="presentation"><a href="#add-project-repository" data-tab="add-project-repository" data-toggle="tab">Repository</a></li>
+							<li role="presentation"><a href="#add-project-branch" data-tab="add-project-branch" data-toggle="tab">Branch</a></li>
+							<li role="presentation"><a href="#add-project-private" data-tab="add-project-private" data-toggle="tab">Private</a></li>
+						</ul>
 
-					<div className="tab-content">
-						<div role="tabpanel" className="tab-pane active" id="add-project-overview">
-							<h4>Add a Project</h4>
+						<div className="tab-content">
+							<If test={projects instanceof Object && Object.keys(projects).length === 0}>
+								<div role="tabpanel" className="first-project active tab-pane" id="add-first-project">
+									<h1>Adding Your First Project</h1>
 
-							<p>To begin testing your software, you must create a Dockunit project and associate it with a Github repository. After you create your project, testing will start automatically.</p>
-						</div>
+									<p>Dockunit is a simple tool that allows you to test your projects (Github repositories) across any number of environments you define.</p>
 
-						<div role="tabpanel" className="tab-pane" id="add-project-repository">
-							Every Dockunit project is associated with a Github project
-						</div>
+									<p><strong>In order for Dockunit.io to work, your project must contain a Dockunit.json file.</strong></p>
 
-						<div role="tabpanel" className="tab-pane" id="add-project-branch">
-							The primary branch of a project is the focal point of the project. Dockunit will test all your Github branches but will feature the primary branch a bit more prominantly.
-						</div>
+									<a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples" className="btn btn-primary btn-lg">Help Me Create a Dockunit.json</a>
+								</div>
+							</If>
 
-						<div role="tabpanel" className="tab-pane" id="add-project-private">
-							Private projects wont be accessible to the world. By default the will be visible to anyone who has access to the project in Github. Users will need to create Dockunit.io accounts and associate them with Github accounts in order to access private projects.
+							<If test={!(projects instanceof Object && Object.keys(projects).length === 0)}>
+								<div role="tabpanel" className="tab-pane active" id="add-project-overview">
+									<h4>Add a Project</h4>
+
+									<p>To begin testing your software, you must create a Dockunit project and associate it with a Github repository. After you create your project, testing will start automatically.</p>
+								</div>
+							</If>
+
+							<div role="tabpanel" className="tab-pane" id="add-project-repository">
+								Every Dockunit project is associated with a Github project
+							</div>
+
+							<div role="tabpanel" className="tab-pane" id="add-project-branch">
+								The primary branch of a project is the focal point of the project. Dockunit will test all your Github branches but will feature the primary branch a bit more prominantly.
+							</div>
+
+							<div role="tabpanel" className="tab-pane" id="add-project-private">
+								Private projects wont be accessible to the world. By default the will be visible to anyone who has access to the project in Github. Users will need to create Dockunit.io accounts and associate them with Github accounts in order to access private projects.
+							</div>
 						</div>
 					</div>
 				</Help>
@@ -335,6 +382,18 @@ class AddProject extends React.Component {
 							name="_csrf"
 							value={this.props.ApplicationStore.csrfToken}
 						/>
+
+						<If test={null === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value] || 'undefined' === typeof this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>
+							<div className="alert alert-info alert-large" role="alert">Checking if you have properly added a Dockunit.json file. <span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></div>
+						</If>
+
+						<If test={false === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>
+							<div className="alert alert-danger alert-large" role="alert">This project does not have a Dockunit.json file. Every project (Github repository) MUST contain a Dockunit.json file. <a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples">Add one?</a></div>
+						</If>
+
+						<If test={true === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>
+							<div className="alert alert-success alert-large" role="alert">Yes! Your project has a Dockunit.json file.</div>
+						</If>
 
 						<SubmitButton value="Create Project" repository={this.state.repository.value} onSubmit={this.submit} onClick={this.click} />
 					</form>

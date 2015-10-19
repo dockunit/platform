@@ -4,6 +4,7 @@
 	margin-bottom: 40px;
 	position: relative;
 	padding: 0;
+	width: 100%;
 	overflow: auto;
 
 	@extend .alert;
@@ -11,16 +12,27 @@
 	border-color: $brand-success;
 }
 
+.help .wrap {
+	display: table-row;
+	width: 100%;
+}
+
 .show-help .help {
-	display: block;
+	display: table;
 }
 
 .help .tab-content {
-	padding: 15px;
+	padding: 20px;
+	display: table-cell;
+	vertical-align: top;
 }
 
 .help h4 {
 	font-weight: bold;
+}
+
+.help .btn {
+	color: #fff;
 }
 
 .help .first-project {
@@ -39,16 +51,19 @@
 .help .close {
 	color: $text-color;
 	position: absolute;
-	top: 8px;
-	right: 12px;
+	top: 2px;
+	right: 7px;
 }
 
 .help .help-menu {
 	background-color: #fff;
-	float: left;
+	display: table-cell;
 	list-style-type: none;
-	padding: 0;
+	padding: 5px 0;
 	margin-right: 15px;
+	margin-bottom: 0;
+	width: 20%;
+	vertical-align: top;
 }
 
 .help .help-menu li {

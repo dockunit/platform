@@ -7,6 +7,9 @@
 	margin-right: 5px;
 }
 
-.loading-section .glyphicon-refresh {
-	font-size: 75px;
+.glyphicon-refresh {
+	animation-name: rotateThis;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
 }

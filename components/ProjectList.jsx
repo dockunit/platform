@@ -27,24 +27,26 @@ class ProjectList extends React.Component {
 		return (
 			<div>
 				<Help>
-					<div className="tab-content">
-						<If test={projects instanceof Object && Object.keys(projects).length === 0}>
-							<div className="first-project">
-								<h1>Hey! Welcome to Dockunit.io.</h1>
+					<div className="wrap">
+						<div className="tab-content">
+							<If test={projects instanceof Object && Object.keys(projects).length === 0}>
+								<div className="first-project">
+									<h1>Hey! Welcome to Dockunit.io.</h1>
 
-								<p>You need to add some of your projects from Github to get started. <strong>Creating a Dockunit.io project is super easy</strong></p>
+									<p>You need to add some of your projects from Github to get started. <strong>Creating a Dockunit.io project is super easy</strong></p>
 
-								<NavLink className="btn btn-primary btn-lg" routeName="addProject">Create My First Project</NavLink>
-							</div>
-						</If>
+									<NavLink className="btn btn-primary btn-lg" routeName="addProject">Create My First Project</NavLink>
+								</div>
+							</If>
 
-						<If test={projects instanceof Object && Object.keys(projects).length > 0}>
-							<div>
-								<h4>Projects</h4>
+							<If test={projects instanceof Object && Object.keys(projects).length > 0}>
+								<div>
+									<h4>Projects</h4>
 
-								<p>This screen shows all Dockunit.io projects. Remember, each Dockunit.io project is associated with a Github project. You can add as many Dockunit.io projects as you like.</p>
-							</div>
-						</If>
+									<p>This screen shows all Dockunit.io projects. Remember, each Dockunit.io project is associated with a Github project. You can add as many Dockunit.io projects as you like.</p>
+								</div>
+							</If>
+						</div>
 					</div>
 				</Help>
 
