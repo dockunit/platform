@@ -13,3 +13,10 @@
 	animation-iteration-count: infinite;
 	animation-timing-function: linear;
 }
+
+.glyphicon-refresh.no-rotate {
+	animation-name: none;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+	animation-timing-function: linear;
+}

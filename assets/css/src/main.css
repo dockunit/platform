@@ -5881,6 +5881,12 @@ h2 {
   animation-iteration-count: infinite;
   animation-timing-function: linear; }
 
+.glyphicon-refresh.no-rotate {
+  animation-name: none;
+  animation-duration: 1s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; }
+
 .blog {
   max-width: 600px;
   margin: 0 auto 25px auto; }
