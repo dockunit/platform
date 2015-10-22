@@ -4,6 +4,7 @@ import React from 'react';
 import ApplicationStore from '../stores/ApplicationStore';
 import {connectToStores} from 'fluxible-addons-react';
 import updateShowDockunitSetup from '../actions/updateShowDockunitSetup';
+import If from './If';
 
 class Start extends React.Component {
 	constructor(props, context) {
@@ -23,7 +24,7 @@ class Start extends React.Component {
 			<div>
 				<h2>Setting Up Dockunit on a Project</h2>
 
-				<p>Dockunit is an extremely versatile and is easy to setup once you get the hang of it. There are three major parts to this tutorial:</p>
+				<p>Dockunit is an extremely versatile and is easy to setup once you get the hang of it. This tutorial will get you completely up-and-running with Dockunit locally and project testing.</p>
 
 				<ul>
 					<li><a data-handler="Introduction" onClick={this.changeSection} href="#Introduction">Introduction to Dockunit</a></li>
@@ -508,18 +509,274 @@ class DockunitLocalSetup extends React.Component {
 }
 
 class DockunitjsonCreate extends React.Component {
+	constructor(props, context) {
+        super(props, context);
+
+        this.changeLanguage = this.changeLanguage.bind(this);
+        this.changeUnitTests = this.changeUnitTests.bind(this);
+        this.changeLanguageVersion = this.changeLanguageVersion.bind(this);
+        this.changeTestCommand = this.changeTestCommand.bind(this);
+    }
+
+    state = {
+		language: (this.props.repository && this.props.repository.language) ? this.props.repository.language.toLowerCase() : 'php',
+		unitTests: true,
+		languageVersion: '',
+		testCommand: '',
+		framework: '',
+		beforeScripts: []
+	}
+
+	changeLanguage(event) {
+		this.setState({ language: event.target.getAttribute('data-language') });
+	}
+
+	changeLanguageVersion(event) {
+		this.setState({ languageVersion: event.target.value });
+	}
+
+	changeTestCommand(event) {
+		this.setState({ testCommand: event.target.value });
+	}
+
+	changeFramework(event) {
+		this.setState({ framework: event.target.value });
+	}
+
+	changeUnitTests(event) {
+		this.setState({ unitTests: !!parseInt(event.target.value) });
+	}
+
+	changeUpdateBeforeScripts(event) {
+		let scripts = event.target.value.split("\n");
+		this.setState({ beforeScripts: scripts });
+	}
+
 	render() {
 		return (
 			<div>
-				<h2>Setting Up a Project with Dockunit.josn</h2>
+				<h2>Setting Up a Project with Dockunit.json</h2>
 
-				<p>Running Dockunit locally allows you to run your test suite on your local computer. This setup assumes you have already setup Docker.</p>
+				<p>This tutorial will ask you a number of questions to guide you in creating a Dockunit.json file</p>
 
-				<p>
-					OSX
-					Windows
-					Linux Distro
-				</p>
+				<p><strong>What is the primary coding language of your project?</strong></p>
+
+				<div className="btn-group" role="group" aria-label="...">
+					<button data-language="php" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('php' === this.state.language) ? 'active' : '')}>PHP</button>
+					<button data-language="nodejs" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('nodejs' === this.state.language) ? 'active' : '')}>Node.js</button>
+					<button data-language="python" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('python' === this.state.language) ? 'active' : '')}>Python</button>
+					<button data-language="java" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('java' === this.state.language) ? 'active' : '')}>Java</button>
+					<button data-language="ruby" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('ruby' === this.state.language) ? 'active' : '')}>Ruby</button>
+				</div>
+
+				<div className={'language ' + (('php' === this.state.language) ? 'show' : '')}>
+					<p><em>By default a PHP container will contain the following:</em></p>
+					<ul>
+						<li>MySQL</li>
+						<li>Git and Subversion</li>
+						<li>Composer</li>
+						<li>wget</li>
+					</ul>
+				</div>
+
+				<div className={'language ' + (('node' === this.state.language) ? 'show' : '')}>
+					<p><em>By default a PHP container will contain the following:</em></p>
+					<ul>
+						<li>MongoDB</li>
+						<li>Git and Subversion</li>
+						<li>wget</li>
+					</ul>
+				</div>
+
+				<div className={'language ' + (('python' === this.state.language) ? 'show' : '')}>
+					<p><em>By default a Python container will contain the following:</em></p>
+					<ul>
+						<li>PostgreSQL</li>
+						<li>Git and Subversion</li>
+						<li>wget</li>
+					</ul>
+				</div>
+				<p><strong>What framework/CMS are you using?</strong></p>
+
+				<div className="dropdown">
+					<button className="btn btn-default dropdown-toggle" type="button" id="framekwork" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						Choose
+						<span className="caret"></span>
+					</button>
+
+					<If test={'php' === this.state.language}>
+						<ul className="dropdown-menu" aria-labelledby="framework">
+							<li><a href="#">WordPress</a></li>
+							<li><a href="#">Drupal</a></li>
+							<li><a href="#">Joomla!</a></li>
+							<li><a href="#">Laravel</a></li>
+							<li><a href="#">Other/None</a></li>
+						</ul>
+					</If>
+
+					<If test={'python' === this.state.language}>
+						<ul className="dropdown-menu" aria-labelledby="framework">
+							<li><a href="#">Django</a></li>
+							<li><a href="#">Other/None</a></li>
+						</ul>
+					</If>
+
+					<If test={'nodejs' === this.state.language}>
+						<ul className="dropdown-menu" aria-labelledby="framework">
+							<li><a href="#">Meteor</a></li>
+							<li><a href="#">Other/None</a></li>
+						</ul>
+					</If>
+
+					<If test={'ruby' === this.state.language}>
+						<ul className="dropdown-menu" aria-labelledby="framework">
+							<li><a href="#">Rails</a></li>
+							<li><a href="#">Other/None</a></li>
+						</ul>
+					</If>
+				</div>
+
+				<div className={'language ' + (('php' === this.state.language) ? 'show' : '')}>
+					<p><strong>What versions of PHP do you want to test?</strong></p>
+
+					<div className="checkbox">
+						<label>
+							<input onClick={this.changeLanguageVersion} value="7.0" type="checkbox" /> 7.0
+						</label>
+					</div>
+
+					<div className="checkbox">
+						<label>
+							<input onClick={this.changeLanguageVersion} value="5.6" type="checkbox" /> 5.6.x
+						</label>
+					</div>
+
+					<div className="checkbox">
+						<label>
+							<input onClick={this.changeLanguageVersion} value="5.2" type="checkbox" /> 5.2.x
+						</label>
+					</div>
+				</div>
+
+				<div className={'language ' + (('python' === this.state.language) ? 'show' : '')}>
+					<p><strong>What versions of Python do you want to test?</strong></p>
+
+					<div className="checkbox">
+						<label>
+							<input onClick={this.changeLanguageVersion} value="3.5" type="checkbox" /> 3.5.x
+						</label>
+					</div>
+
+					<div className="checkbox">
+						<label>
+							<input onClick={this.changeLanguageVersion} value="2.7" type="checkbox" /> 2.7.x
+						</label>
+					</div>
+				</div>
+
+				<p><strong>Does your project contain unit or integration tests?</strong></p>
+
+				<div className="radio">
+					<label>
+						<input onClick={this.changeUnitTests} type="radio" name="unitTests" value="1" />
+						Yes
+					</label>
+				</div>
+				<div className="radio">
+					<label>
+						<input onClick={this.changeUnitTests} type="radio" name="unitTests" value="0" />
+						No
+					</label>
+				</div>
+
+				<div className={'initial-hide ' + ((this.state.unitTests) ? 'show' : '')}>
+					<p><strong>Provide Unix commands needed to install additional unit/integration test dependancies (one command per line):</strong></p>
+
+					<textarea className="form-control" onChange={this.updateBeforeScripts} rows="3"></textarea>
+
+					<span className="help-block">
+						* Commands must be Debian based<br />
+						* Scripts run from the root of your project<br /><br />
+						
+						<strong>Example:</strong><br />
+						apt-get install elasticsearch<br />
+						./my-bootstrap-script
+					</span>
+				</div>
+
+				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
+					<p><strong>Want to run any Unix commands before testing your application?</strong></p>
+
+					<textarea className="form-control" onChange={this.updateBeforeScripts} rows="3"></textarea>
+
+					<span className="help-block">
+						* Commands must be Debian based<br />
+						* Scripts run from the root of your project<br /><br />
+						
+						<strong>Example:</strong><br />
+						apt-get install elasticsearch<br />
+						<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
+							npm install
+						</span>
+
+						<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
+							composer install
+						</span>
+						./my-bootstrap-script
+					</span>
+				</div>
+
+				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
+					<p><strong>What is the command to run your test suite?</strong></p>
+
+					<input type="text" className="form-control" onChange={this.changeTestCommand} />
+
+					<span className="help-block">
+						<strong>Example:</strong><br />
+
+						<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
+							phpunit
+						</span>
+
+						<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
+							mocha
+						</span>
+
+						<span className={'initial-hide ' + (('python' === this.state.language) ? 'show' : '')}>
+							bin/command.py
+						</span>
+
+						<span className={'initial-hide ' + (('ruby' === this.state.language) ? 'show' : '')}>
+							bin/command.rb
+						</span>
+					</span>
+				</div>
+
+				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
+					<p><strong>What is the main file or entry point of your application?</strong></p>
+
+					<input type="text" className="form-control" onChange={this.changeEntryPoint} />
+
+					<span className="help-block">
+						<strong>Example:</strong><br />
+
+						<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
+							bin/command.php
+						</span>
+
+						<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
+							bin/command.js
+						</span>
+
+						<span className={'initial-hide ' + (('python' === this.state.language) ? 'show' : '')}>
+							bin/command.py
+						</span>
+
+						<span className={'initial-hide ' + (('ruby' === this.state.language) ? 'show' : '')}>
+							bin/command.rb
+						</span>
+					</span>
+				</div>
 			</div>
 		);
 	}
@@ -565,7 +822,7 @@ class DockunitSetup extends React.Component {
     }
 
     state = {
-    	section: 'Start'
+    	section: (this.props.section) ? this.props.section : 'Start'
     }
 
 	changeSection(event) {
@@ -583,7 +840,10 @@ class DockunitSetup extends React.Component {
 	}
 
 	toggleShowDockunitSetup() {
-        this.context.executeAction(updateShowDockunitSetup, false);
+        this.context.executeAction(updateShowDockunitSetup, {
+        	showDockunitSetup: false,
+        	repository: null
+        });
     }
 
 	render() {
@@ -601,6 +861,8 @@ class DockunitSetup extends React.Component {
 			);
 		}, this);
 
+		let repository = this.props.ApplicationStore.dockunitSetupRepository;
+
 		return (
 			<div className="dockunit-setup">
 				<div className="overlay"></div>
@@ -614,7 +876,7 @@ class DockunitSetup extends React.Component {
 								</ul>
 
 								<div className="content">
-									<Handler changeSection={this.changeSection} />
+									<Handler repository={repository} changeSection={this.changeSection} />
 								</div>
 							</div>
 						</div>

@@ -11,6 +11,7 @@ class ApplicationStore extends BaseStore {
         this.pageTitle = '';
         this.showHelp = false;
         this.showDockunitSetup = false;
+        this.dockunitSetupRepository = null;
     }
 
     setCsrfToken(token) {
@@ -28,8 +29,9 @@ class ApplicationStore extends BaseStore {
         this.emitChange();
     }
 
-    updateShowDockunitSetup(showDockunitSetup) {
-        this.showDockunitSetup = showDockunitSetup;
+    updateShowDockunitSetup(data) {
+        this.showDockunitSetup = data.showDockunitSetup;
+        this.dockunitSetupRepository = data.repository;
         this.emitChange();
     }
 
@@ -38,7 +40,8 @@ class ApplicationStore extends BaseStore {
             csrfToken: this.csrfToken,
             pageTitle: this.pageTitle,
             showHelp: this.showHelp,
-            showDockunitSetup: this.showDockunitSetup
+            showDockunitSetup: this.showDockunitSetup,
+            dockunitSetupRepository: this.dockunitSetupRepository
         };
     }
 
@@ -51,6 +54,7 @@ class ApplicationStore extends BaseStore {
         this.pageTitle = state.pageTitle;
         this.showHelp = state.showHelp;
         this.showDockunitSetup = state.showDockunitSetup;
+        this.dockunitSetupRepository = state.dockunitSetupRepository;
     }
 }
 

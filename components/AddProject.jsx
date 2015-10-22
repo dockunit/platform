@@ -208,8 +208,11 @@ class AddProject extends React.Component {
 		this.setState(object);
 	}
 
-	toggleShowDockunitSetup() {
-        this.context.executeAction(updateShowDockunitSetup, !this.props.ApplicationStore.showShowDockunitSetup);
+	toggleShowDockunitSetup(event) {
+        this.context.executeAction(updateShowDockunitSetup, {
+        	showDockunitSetup: !this.props.ApplicationStore.showDockunitSetup,
+        	repository: this.state.repositories[this.state.repository.value]
+        });
     }
 
 	submit() {
@@ -271,9 +274,11 @@ class AddProject extends React.Component {
 
 		let projects = ProjectsStore.filterMyProjects(this.props.ProjectsStore.projects);
 
+		let repository = (this.state.repository.value) ? this.state.repositories[this.state.repository.value] : false;
+
 		return (
 			<div className="container">
-				<DockunitSetup />
+				<DockunitSetup section="DockunitjsonCreate" />
 
 				<div className="page-header">
 					<div className="help-button-wrapper">

@@ -98,8 +98,20 @@
 	display: none;
 }
 
-.dockunit-setup .dialog .content .environment.show {
+.dockunit-setup .dialog .content .language {
+	display: none;
+}
+
+.dockunit-setup .dialog .initial-hide {
+	display: none;
+}
+
+.dockunit-setup .dialog .content .show {
 	display: block;
+}
+
+.dockunit-setup .dialog .content .dropdown {
+	margin: 0 0 10px;
 }
 
 .dockunit-setup .dialog .content .btn-group {
