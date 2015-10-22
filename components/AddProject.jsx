@@ -6,6 +6,7 @@ import React from 'react';
 import createProject from '../actions/createProject';
 import UserStore from '../stores/UserStore';
 import ProjectsStore from '../stores/ProjectsStore';
+import updateShowDockunitSetup from '../actions/updateShowDockunitSetup';
 import ApplicationStore from '../stores/ApplicationStore';
 import readGithubRepositories from '../actions/readGithubRepositories';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
@@ -16,6 +17,7 @@ import If from './If';
 import InputField from './InputField';
 import SelectField from './SelectField';
 import SubmitButton from './SubmitButton';
+import DockunitSetup from './DockunitSetup';
 import _ from 'lodash';
 import {connectToStores} from 'fluxible-addons-react';
 
@@ -33,6 +35,7 @@ class AddProject extends React.Component {
         this.handleRepositoryChange = this.handleRepositoryChange.bind(this);
         this.submit = this.submit.bind(this);
         this.click = this.click.bind(this);
+        this.toggleShowDockunitSetup = this.toggleShowDockunitSetup.bind(this);
     }
 
     static contextTypes = {
@@ -205,6 +208,10 @@ class AddProject extends React.Component {
 		this.setState(object);
 	}
 
+	toggleShowDockunitSetup() {
+        this.context.executeAction(updateShowDockunitSetup, !this.props.ApplicationStore.showShowDockunitSetup);
+    }
+
 	submit() {
 		this.context.executeAction(createProject, {
 			repository: this.state.repository.value,
@@ -266,6 +273,8 @@ class AddProject extends React.Component {
 
 		return (
 			<div className="container">
+				<DockunitSetup />
+
 				<div className="page-header">
 					<div className="help-button-wrapper">
 						<HelpButton />
@@ -296,7 +305,7 @@ class AddProject extends React.Component {
 
 									<p><strong>In order for Dockunit.io to work, your project must contain a Dockunit.json file.</strong></p>
 
-									<a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples" className="btn btn-primary btn-lg">Help Me Create a Dockunit.json</a>
+									<a onClick={this.toggleShowDockunitSetup} className="btn btn-primary btn-lg">Help Me Create a Dockunit.json</a>
 								</div>
 							</If>
 

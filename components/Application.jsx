@@ -39,6 +39,10 @@ class Application extends React.Component {
             classes += 'show-help';
         }
 
+        if (this.props.ApplicationStore.showDockunitSetup) {
+            classes += ' show-dockunit-setup';
+        }
+
         if ('project' === this.props.currentRoute.get('page')) {
             repository = params.get('username') + '/' + params.get('repository');
         }

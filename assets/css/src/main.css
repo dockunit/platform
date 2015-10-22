@@ -6259,6 +6259,103 @@ h2 {
     margin-left: 5px;
     content: "?"; }
 
+.dockunit-setup {
+  display: none; }
+
+.show-dockunit-setup .dockunit-setup {
+  display: block; }
+
+.dockunit-setup .overlay {
+  background-color: #000;
+  opacity: .2;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 10000; }
+
+.dockunit-setup .menu {
+  display: table-cell;
+  width: 20%;
+  border-right: 1px solid #ccc;
+  list-style-type: none;
+  padding: 5px 0;
+  margin-right: 15px;
+  margin-bottom: 0;
+  width: 25%;
+  vertical-align: top; }
+
+.dockunit-setup .menu li {
+  padding: 5px 0; }
+
+.dockunit-setup .menu a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none; }
+
+.dockunit-setup .menu li.active a {
+  text-decoration: underline; }
+
+.dockunit-setup .content {
+  display: table-cell;
+  padding-left: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px; }
+
+.dockunit-setup .wrap {
+  display: table-row; }
+
+.dockunit-setup .close {
+  color: #555555;
+  position: absolute;
+  top: 7px;
+  right: 14px; }
+
+.dockunit-setup .dialog {
+  height: 500px;
+  width: 640px;
+  max-width: 100%;
+  margin: auto;
+  top: 0;
+  left: 0;
+  display: block;
+  bottom: 0;
+  box-sizing: border-box;
+  right: 0;
+  position: absolute;
+  background-color: #fff;
+  z-index: 10001;
+  border-radius: 20px;
+  border: 20px solid #fff; }
+
+.dockunit-setup .box {
+  overflow: scroll;
+  height: 100%; }
+
+.dockunit-setup .table {
+  display: table;
+  height: 100%; }
+
+.dockunit-setup .dialog .content h2 {
+  margin-top: 0;
+  margin-bottom: 1em; }
+
+.dockunit-setup .dialog .content .environment {
+  display: none; }
+
+.dockunit-setup .dialog .content .environment.show {
+  display: block; }
+
+.dockunit-setup .dialog .content .btn-group {
+  margin: 10px 0 20px 0; }
+
+.dockunit-setup .dialog .content h3 {
+  margin-top: 0; }
+
+.dockunit-setup .dialog .content ul {
+  margin-bottom: 10px; }
+
 .builds {
   margin-top: 1.5em; }
 
