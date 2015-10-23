@@ -98,7 +98,7 @@ class BuildListItem extends React.Component {
 				<div className={buildDetailsClasses}>
 					<div className="toolbar">
 						<If test={this.props.currentUser}>
-							<a onClick={this.rerun} disabled={rerunDisabled} className="btn btn-default" href="">Rerun <span className="glyphicon glyphicon-refresh"></span></a>
+							<a onClick={this.rerun} disabled={rerunDisabled} className="btn btn-default" href="">Rerun <span className="glyphicon no-rotate glyphicon-refresh"></span></a>
 						</If>
 
 						<a className="btn btn-default" href={dockunitUrl}>Dockunit.json <span className="icomoon icomoon-anchor"></span></a>
