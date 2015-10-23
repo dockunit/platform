@@ -123,7 +123,7 @@ Builder.prototype.startContainer = function() {
 			if (constants.isDevelopment) {
 				cmd = spawn('dockunit', [directory + '/' + repository + '/' + commit]);
 			} else {
-				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit]);
+				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ --du-verbose\ ' + directory + '/' + repository + '/' + commit]);
 			}
 
 			cmd.stdout.on('data', function(data) {
