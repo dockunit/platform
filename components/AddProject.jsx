@@ -402,7 +402,7 @@ class AddProject extends React.Component {
 						</If>
 
 						<If test={false === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>
-							<div className="alert alert-danger alert-large" role="alert">This project does not have a Dockunit.json file. Every project (Github repository) MUST contain a Dockunit.json file. <a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples">Add one?</a></div>
+							<div className="alert alert-danger alert-large" role="alert">This project does not have a Dockunit.json file. Every project (Github repository) MUST contain a Dockunit.json file. <a href="#" onClick={this.toggleShowDockunitSetup}>Add one?</a></div>
 						</If>
 
 						<If test={true === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>

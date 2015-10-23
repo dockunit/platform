@@ -513,9 +513,12 @@ class DockunitjsonCreate extends React.Component {
         super(props, context);
 
         this.changeLanguage = this.changeLanguage.bind(this);
+        this.changeFramework = this.changeFramework.bind(this);
         this.changeUnitTests = this.changeUnitTests.bind(this);
         this.changeLanguageVersion = this.changeLanguageVersion.bind(this);
         this.changeTestCommand = this.changeTestCommand.bind(this);
+        this.changeWpThemePlugin = this.changeWpThemePlugin.bind(this);
+        this.changeWpMainPluginFile = this.changeWpMainPluginFile.bind(this);
     }
 
     state = {
@@ -524,11 +527,30 @@ class DockunitjsonCreate extends React.Component {
 		languageVersion: '',
 		testCommand: '',
 		framework: '',
-		beforeScripts: []
+		wpMainPluginFile: '',
+		beforeScripts: [],
+		wpThemePlugin: ''
+	}
+
+	changeWpMainPluginFile() {
+		this.setState({ wpMainPluginFile: event.target.value });
+	}
+
+	changeWpThemePlugin(event) {
+		event.preventDefault();
+		
+		this.setState({ wpThemePlugin: event.target.value });
 	}
 
 	changeLanguage(event) {
 		this.setState({ language: event.target.getAttribute('data-language') });
+	}
+
+	changeFramework(event) {
+		event.preventDefault();
+		
+		let value = event.target.getAttribute('data-value') || false;
+		this.setState({ language: value });
 	}
 
 	changeLanguageVersion(event) {
@@ -606,32 +628,32 @@ class DockunitjsonCreate extends React.Component {
 
 					<If test={'php' === this.state.language}>
 						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a href="#">WordPress</a></li>
-							<li><a href="#">Drupal</a></li>
-							<li><a href="#">Joomla!</a></li>
-							<li><a href="#">Laravel</a></li>
-							<li><a href="#">Other/None</a></li>
+							<li><a onClick={this.changeFramework} data-value="wordpress" href="#">WordPress</a></li>
+							<li><a onClick={this.changeFramework} data-value="drupal" href="#">Drupal</a></li>
+							<li><a onClick={this.changeFramework} data-value="joomla" href="#">Joomla!</a></li>
+							<li><a onClick={this.changeFramework} data-value="laravel" href="#">Laravel</a></li>
+							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
 						</ul>
 					</If>
 
 					<If test={'python' === this.state.language}>
 						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a href="#">Django</a></li>
-							<li><a href="#">Other/None</a></li>
+							<li><a onClick={this.changeFramework} data-value="django" href="#">Django</a></li>
+							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
 						</ul>
 					</If>
 
 					<If test={'nodejs' === this.state.language}>
 						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a href="#">Meteor</a></li>
-							<li><a href="#">Other/None</a></li>
+							<li><a onClick={this.changeFramework} data-value="meteor" href="#">Meteor</a></li>
+							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
 						</ul>
 					</If>
 
 					<If test={'ruby' === this.state.language}>
 						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a href="#">Rails</a></li>
-							<li><a href="#">Other/None</a></li>
+							<li><a onClick={this.changeFramework} data-value="rails" href="#">Rails</a></li>
+							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
 						</ul>
 					</If>
 				</div>
@@ -678,13 +700,13 @@ class DockunitjsonCreate extends React.Component {
 
 				<div className="radio">
 					<label>
-						<input onClick={this.changeUnitTests} type="radio" name="unitTests" value="1" />
+						<input onClick={this.changeUnitTests} type="radio" value="1" />
 						Yes
 					</label>
 				</div>
 				<div className="radio">
 					<label>
-						<input onClick={this.changeUnitTests} type="radio" name="unitTests" value="0" />
+						<input onClick={this.changeUnitTests} type="radio" value="0" />
 						No
 					</label>
 				</div>
@@ -726,7 +748,7 @@ class DockunitjsonCreate extends React.Component {
 					</span>
 				</div>
 
-				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
+				<div className={'initial-hide ' + ((this.state.unitTests) ? 'show' : '')}>
 					<p><strong>What is the command to run your test suite?</strong></p>
 
 					<input type="text" className="form-control" onChange={this.changeTestCommand} />
@@ -753,29 +775,65 @@ class DockunitjsonCreate extends React.Component {
 				</div>
 
 				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
-					<p><strong>What is the main file or entry point of your application?</strong></p>
+					<If test={'wordpress' === this.state.framework}>
+						<div>
+							<p><strong>Is this a theme or a plugin?</strong></p>
 
-					<input type="text" className="form-control" onChange={this.changeEntryPoint} />
+							<div className="radio">
+								<label>
+									<input onClick={this.changeWpThemePlugin} type="radio" value="theme" />
+									Theme
+								</label>
+							</div>
+							<div className="radio">
+								<label>
+									<input onClick={this.changeWpThemePlugin} type="radio" value="plugin" />
+									Plugin
+								</label>
+							</div>
+						</div>
+					</If>
 
-					<span className="help-block">
-						<strong>Example:</strong><br />
+					<If test={'plugin' === this.state.wpThemePlugin}>
+						<div>
+							<p><strong>What is the name of the main plugin file?</strong></p>
 
-						<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
-							bin/command.php
-						</span>
+							<input type="text" className="form-control" onChange={this.changeWpMainPluginFile} />
 
-						<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
-							bin/command.js
-						</span>
+							<span className="help-block">
+								<strong>Example:</strong><br />
+								my-plugin-file.php
+							</span>
+						</div>
+					</If>
 
-						<span className={'initial-hide ' + (('python' === this.state.language) ? 'show' : '')}>
-							bin/command.py
-						</span>
+					<If test={'wordpress' !== this.state.framework}>
+						<div>
+							<p><strong>What command can be run to test your application? Perhaps just executing the main file?</strong></p>
 
-						<span className={'initial-hide ' + (('ruby' === this.state.language) ? 'show' : '')}>
-							bin/command.rb
-						</span>
-					</span>
+							<input type="text" className="form-control" onChange={this.changeEntryPoint} />
+
+							<span className="help-block">
+								<strong>Example:</strong><br />
+
+								<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
+									bin/command.php
+								</span>
+
+								<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
+									bin/command.js
+								</span>
+
+								<span className={'initial-hide ' + (('python' === this.state.language) ? 'show' : '')}>
+									bin/command.py
+								</span>
+
+								<span className={'initial-hide ' + (('ruby' === this.state.language) ? 'show' : '')}>
+									bin/command.rb
+								</span>
+							</span>
+						</div>
+					</If>
 				</div>
 			</div>
 		);
