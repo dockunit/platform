@@ -11,7 +11,6 @@ var Github = require('./Github');
 var constants = require('../constants');
 var Convert = require('ansi-to-html');
 
-
 var Builder = function(user, project, buildId) {
 	var self = this;
 
@@ -126,7 +125,7 @@ Builder.prototype.startContainer = function() {
 
 				cmd = spawn('dockunit', [directory + '/' + repository + '/' + commit]);
 			} else {
-				debug('Running: ssh dockunit@worker-1 "dockunit ' + directory + '/' + repository + '/' + commit + '"');
+				debug('Running: ssh dockunit@worker-1 "dockunit ' + directory + '/' + repository + '/' + commit + ' --du-verbose"');
 
 				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit + '\ --du-verbose']);
 			}
