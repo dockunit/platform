@@ -11,6 +11,8 @@ var Github = require('./Github');
 var constants = require('../constants');
 var Convert = require('ansi-to-html');
 
+debug = console.log;
+
 var Builder = function(user, project, buildId) {
 	var self = this;
 
