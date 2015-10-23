@@ -234,10 +234,9 @@ class AddProject extends React.Component {
 		let self = this;
 		let containsDockunitjson = self.state.containsDockunitjson;
 
-		if (state.branch.value !== this.state.branch.value) {
+		if (state.repository.value !== this.state.repository.value || state.branch.value !== this.state.branch.value) {
 			if (state.repository && state.repository.value && state.branch && state.branch.value && 'undefined' === typeof containsDockunitjson[state.repository.value + '/' + state.branch.value]) {
 
-				console.log('checking...');
 				jQuery.get('https://api.github.com/repos/' + state.repository.value + '/contents/Dockunit.json?access_token=' + self.props.UserStore.currentUser.githubAccessToken + '&ref=' + state.branch.value).
 					done(function() {
 						containsDockunitjson[state.repository.value + '/' + state.branch.value] = true;
