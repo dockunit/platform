@@ -14,13 +14,55 @@ class Generator {
 
 		params.languageVersions.forEach(function(version) {
 			let tag = '',
-				testCommand = '';
+				testCommand = '',
+				beforeScripts = [];
+
+
+			if (params.beforeScripts && params.beforeScripts.trim()) {
+				beforeScripts = params.beforeScripts.trim().split("\n")
+			}
 
 			if (true === params.unitTests) {
 				testCommand = params.testCommand;
 			} else {
 				if ('WordPress' === framework) {
-					
+					tag = 'php-mysql-phpunit-wordpress-' + versionMap[version] + '-fpm';
+
+					if ('Plugin' === params.wpThemePlugin) {
+						if ('5.2' === versionMap[version]) {
+							testCommand = 'wp-activate-plugin ' + params.wpMainPluginFile;
+
+							beforeScripts = ['service mysql start', 'wp-install latest'].concat(beforeScripts);
+						} else {
+							beforeScripts = [
+								"service mysql start",
+						        "wp core download --path=/temp/wp --allow-root",
+						        "wp core config --path=/temp/wp --dbname=test --dbuser=root --allow-root",
+						        "wp core install --url=http://localhost --title=Test --admin_user=admin --admin_password=12345 --admin_email=test@test.com --path=/temp/wp --allow-root",
+						        "mkdir /temp/wp/wp-content/plugins/test",
+						        "cp -r . /temp/wp/wp-content/plugins/test"
+							].concat(beforeScripts);
+
+							testCommand = 'wp plugin activate test --allow-root --path=/temp/wp';
+						}
+					} else {
+						if ('5.2' === versionMap[version]) {
+							testCommand = 'wp-activate-theme test';
+
+							beforeScripts = ['service mysql start', 'wp-install latest'].concat(beforeScripts);
+						} else {
+							beforeScripts = [
+								"service mysql start",
+						        "wp core download --path=/temp/wp --allow-root",
+						        "wp core config --path=/temp/wp --dbname=test --dbuser=root --allow-root",
+						        "wp core install --url=http://localhost --title=Test --admin_user=admin --admin_password=12345 --admin_email=test@test.com --path=/temp/wp --allow-root",
+						        "mkdir /temp/wp/wp-content/plugins/test",
+						        "cp -r . /temp/wp/wp-content/plugins/test"
+							].concat(beforeScripts);
+
+							testCommand = 'wp theme activate test --allow-root --path=/temp/wp';
+						}
+					}
 				} else {
 					testCommand = params.testCommand;
 					tag = 'php-mysql-phpunit-' + versionMap[version] + '-fpm';
@@ -30,12 +72,9 @@ class Generator {
 			let container = {
 				prettyName: params.language + ' ' + versionMap[version],
 				image: 'dockunit/prebuilt-images:' + tag,
-				testCommand: testCommand
+				testCommand: testCommand,
+				beforeScripts: beforeScripts
 			};
-
-			if (params.beforeScripts && params.beforeScripts.trim()) {
-				container.beforeScripts = params.beforeScripts.trim().split("\n")
-			}
 
 			file.containers.push(container);
 		});

@@ -28,7 +28,7 @@ class Start extends React.Component {
 			<div>
 				<h2>Setting Up Dockunit on a Project</h2>
 
-				<p>Dockunit is an extremely versatile and is easy to setup once you get the hang of it. This tutorial will get you completely up-and-running with Dockunit locally and project testing.</p>
+				<p>Dockunit is extremely versatile and easy to setup once you get the hang of it. This tutorial will get you completely up-and-running with Dockunit.</p>
 
 				<ul>
 					<li><a data-handler="Introduction" onClick={this.changeSection} href="#Introduction">Introduction to Dockunit</a></li>
@@ -589,7 +589,7 @@ class DockunitjsonCreate extends React.Component {
 					errors = _.extend(errors, newErrors);
 				});
 
-				if ('plugin' === self.state.wpThemePlugin) {
+				if ('Plugin' === self.state.wpThemePlugin) {
 					['wpMainPluginFile'].forEach(function(field) {
 						var newErrors = self.validate.call(self, field)();
 						errors = _.extend(errors, newErrors);
@@ -705,7 +705,6 @@ class DockunitjsonCreate extends React.Component {
 	}
 
 	render() {
-		console.log(this.state);
 		return (
 			<div>
 				<h2>Creating a Dockunit.json File</h2>
@@ -944,7 +943,7 @@ class DockunitjsonCreate extends React.Component {
 							</span>
 						</span>
 
-						<button type="button" onClick={this.generate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+						<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
 					</div>
 				</If>
 
@@ -982,12 +981,12 @@ class DockunitjsonCreate extends React.Component {
 									my-plugin-file.php
 								</span>
 
-								<button type="button" onClick={this.generate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+								<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
 							</div>
 						</If>
 
 						<If test={'Theme' === this.state.wpThemePlugin.value}>
-							<button type="button" onClick={this.generate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+							<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
 						</If>
 
 						<If test={'WordPress' !== this.state.framework.value}>
