@@ -24,6 +24,8 @@ class Generator {
 
 			if (true === params.unitTests) {
 				testCommand = params.testCommand;
+
+				tag = 'php-mysql-phpunit-' + versionMap[version] + '-fpm';
 			} else {
 				if ('WordPress' === framework) {
 					tag = 'php-mysql-phpunit-wordpress-' + versionMap[version] + '-fpm';
