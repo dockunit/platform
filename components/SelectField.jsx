@@ -24,10 +24,15 @@ class SelectField extends React.Component {
 			groupClasses += ' has-error';
 		}
 
+		let labelClasses = this.props.labelClassName || '';
+		if (this.props.required) {
+			labelClasses += ' required';
+		}
+
 		return (
 			<div className={groupClasses}>
 				<If test={this.props.label}>
-					<label data-help-tab={this.props.labelHelpTab} for={this.props.id} className={this.props.labelClassName}>{this.props.label}:</label>
+					<label className={labelClasses} data-help-tab={this.props.labelHelpTab} for={this.props.id}>{this.props.label}:</label>
 				</If>
 
 				<If test={this.props.options.length}>
@@ -38,6 +43,7 @@ class SelectField extends React.Component {
 						name={this.props.name}
 						id={this.props.id}
 						required={this.props.required}
+						multiple={this.props.multiple}
 						onChange={this.props.onChange}
 					>
 						{this.props.options.map(function(label) {

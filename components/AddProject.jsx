@@ -6,6 +6,7 @@ import React from 'react';
 import createProject from '../actions/createProject';
 import UserStore from '../stores/UserStore';
 import ProjectsStore from '../stores/ProjectsStore';
+import updateShowDockunitSetup from '../actions/updateShowDockunitSetup';
 import ApplicationStore from '../stores/ApplicationStore';
 import readGithubRepositories from '../actions/readGithubRepositories';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
@@ -16,6 +17,7 @@ import If from './If';
 import InputField from './InputField';
 import SelectField from './SelectField';
 import SubmitButton from './SubmitButton';
+import DockunitSetup from './DockunitSetup';
 import _ from 'lodash';
 import {connectToStores} from 'fluxible-addons-react';
 
@@ -33,6 +35,7 @@ class AddProject extends React.Component {
         this.handleRepositoryChange = this.handleRepositoryChange.bind(this);
         this.submit = this.submit.bind(this);
         this.click = this.click.bind(this);
+        this.toggleShowDockunitSetup = this.toggleShowDockunitSetup.bind(this);
     }
 
     static contextTypes = {
@@ -205,6 +208,13 @@ class AddProject extends React.Component {
 		this.setState(object);
 	}
 
+	toggleShowDockunitSetup(event) {
+        this.context.executeAction(updateShowDockunitSetup, {
+        	showDockunitSetup: !this.props.ApplicationStore.showDockunitSetup,
+        	repository: this.state.repositories[this.state.repository.value]
+        });
+    }
+
 	submit() {
 		this.context.executeAction(createProject, {
 			repository: this.state.repository.value,
@@ -263,8 +273,12 @@ class AddProject extends React.Component {
 
 		let projects = ProjectsStore.filterMyProjects(this.props.ProjectsStore.projects);
 
+		let repository = (this.state.repository.value) ? this.state.repositories[this.state.repository.value] : false;
+
 		return (
 			<div className="container">
+				<DockunitSetup section="DockunitjsonCreate" />
+
 				<div className="page-header">
 					<div className="help-button-wrapper">
 						<HelpButton />
@@ -295,7 +309,7 @@ class AddProject extends React.Component {
 
 									<p><strong>In order for Dockunit.io to work, your project must contain a Dockunit.json file.</strong></p>
 
-									<a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples" className="btn btn-primary btn-lg">Help Me Create a Dockunit.json</a>
+									<a onClick={this.toggleShowDockunitSetup} className="btn btn-primary btn-lg">Help Me Create a Dockunit.json</a>
 								</div>
 							</If>
 
@@ -387,7 +401,7 @@ class AddProject extends React.Component {
 						</If>
 
 						<If test={false === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>
-							<div className="alert alert-danger alert-large" role="alert">This project does not have a Dockunit.json file. Every project (Github repository) MUST contain a Dockunit.json file. <a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples">Add one?</a></div>
+							<div className="alert alert-danger alert-large" role="alert">This project does not have a Dockunit.json file. Every project (Github repository) MUST contain a Dockunit.json file. <a href="#" onClick={this.toggleShowDockunitSetup}>Add one?</a></div>
 						</If>
 
 						<If test={true === this.state.containsDockunitjson[this.state.repository.value + '/' + this.state.branch.value]}>
