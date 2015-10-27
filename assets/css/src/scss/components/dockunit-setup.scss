@@ -102,6 +102,12 @@
 	display: none;
 }
 
+.dockunit-setup .dialog .content .required:before {
+	content: '*';
+	margin-right: 4px;
+	color: red;
+}
+
 .dockunit-setup .dialog .initial-hide {
 	display: none;
 }
@@ -124,5 +130,17 @@
 
 .dockunit-setup .dialog .content ul {
 	margin-bottom: 10px;
+}
+
+.dockunit-setup .errorList {
+	color: red;
+}
+
+.dockunit-setup .generate {
+	margin-top: 20px;
+}
+
+.dockunit-setup .generate p {
+	font-weight: bold;
 }
 

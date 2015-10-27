@@ -5,6 +5,10 @@ import ApplicationStore from '../stores/ApplicationStore';
 import {connectToStores} from 'fluxible-addons-react';
 import updateShowDockunitSetup from '../actions/updateShowDockunitSetup';
 import If from './If';
+import DockunitGenerator from '../clients/DockunitGenerator';
+import InputField from './InputField';
+import SelectField from './SelectField';
+import _ from 'lodash';
 
 class Start extends React.Component {
 	constructor(props, context) {
@@ -512,329 +516,525 @@ class DockunitjsonCreate extends React.Component {
 	constructor(props, context) {
         super(props, context);
 
-        this.changeLanguage = this.changeLanguage.bind(this);
-        this.changeFramework = this.changeFramework.bind(this);
-        this.changeUnitTests = this.changeUnitTests.bind(this);
-        this.changeLanguageVersion = this.changeLanguageVersion.bind(this);
-        this.changeTestCommand = this.changeTestCommand.bind(this);
-        this.changeWpThemePlugin = this.changeWpThemePlugin.bind(this);
-        this.changeWpMainPluginFile = this.changeWpMainPluginFile.bind(this);
+        this.handleFormChange = this.handleFormChange.bind(this);
+        this.generate = this.generate.bind(this);
+        this.validateRequired = this.validateRequired.bind(this);
+        this.validate = this.validate.bind(this);
+        this.onGenerate = this.onGenerate.bind(this);
     }
 
     state = {
-		language: (this.props.repository && this.props.repository.language) ? this.props.repository.language.toLowerCase() : 'php',
-		unitTests: true,
-		languageVersion: '',
-		testCommand: '',
-		framework: '',
-		wpMainPluginFile: '',
-		beforeScripts: [],
-		wpThemePlugin: ''
+		language: {
+			value: (this.props.repository && this.props.repository.language) ? this.props.repository.language.toLowerCase() : 'php',
+			errors: {},
+			validators: [this.validateRequired('language')]
+		},
+		unitTests: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('unitTests')]
+		},
+		beforeScripts: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('beforeScripts')]
+		},
+		languageVersions: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('languageVersions')]
+		},
+		testCommand: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('testCommand')]
+		},
+		framework: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('framework')]
+		},
+		wpMainPluginFile: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('wpMainPluginFile')]
+		},
+		wpThemePlugin: {
+			value: null,
+			errors: {},
+			validators: [this.validateRequired('wpThemePlugin')]
+		},
+		generated: false
 	}
 
-	changeWpMainPluginFile() {
-		this.setState({ wpMainPluginFile: event.target.value });
+	onGenerate() {
+		var self = this;
+
+		var errors = {};
+
+		['language', 'unitTests', 'languageVersions', 'framework'].forEach(function(field) {
+			var newErrors = self.validate.call(self, field)();
+			errors = _.extend(errors, newErrors);
+		});
+
+		if (true === self.state.unitTests) {
+			['testCommand'].forEach(function(field) {
+				var newErrors = self.validate.call(self, field)();
+				errors = _.extend(errors, newErrors);
+			});
+		} else {
+			if ('WordPress' === self.state.framework) {
+				['wpThemePlugin'].forEach(function(field) {
+					var newErrors = self.validate.call(self, field)();
+					errors = _.extend(errors, newErrors);
+				});
+
+				if ('plugin' === self.state.wpThemePlugin) {
+					['wpMainPluginFile'].forEach(function(field) {
+						var newErrors = self.validate.call(self, field)();
+						errors = _.extend(errors, newErrors);
+					});
+				}
+			} else {
+				['testCommand'].forEach(function(field) {
+					var newErrors = self.validate.call(self, field)();
+					errors = _.extend(errors, newErrors);
+				});
+			}
+		}
+
+		if (Object.keys(errors).length) {
+			return false;
+		}
+
+		return this.generate();
 	}
 
-	changeWpThemePlugin(event) {
-		event.preventDefault();
-		
-		this.setState({ wpThemePlugin: event.target.value });
+	validate(field) {
+		var self = this;
+
+		return function() {
+			var validators = self.state[field].validators,
+				errors = {};
+
+			if (validators.length) {
+				for (let i = 0; i < validators.length; i++) {
+					errors = _.extend(errors, validators[i].call(self));
+				}
+			}
+
+			var newState = {};
+			newState[field] = _.extend({}, self.state[field]);
+
+			if (errors.required) {
+				newState[field].errors = {};
+				newState[field].errors.required = errors.required;
+			} else {
+				newState[field].errors = errors;
+			}
+
+			self.setState(newState);
+
+			return newState[field].errors;
+		};
 	}
 
-	changeLanguage(event) {
-		this.setState({ language: event.target.getAttribute('data-language') });
+	generate() {
+		let generated = DockunitGenerator.generate({
+			language: this.state.language.value,
+			unitTests: this.state.unitTests.value,
+			beforeScripts: this.state.beforeScripts.value,
+			languageVersions: this.state.languageVersions.value,
+			testCommand: this.state.testCommand.value,
+			framework: this.state.framework.value,
+			wpMainPluginFile: this.state.wpMainPluginFile.value,
+			wpThemePlugin: this.state.wpThemePlugin.value
+		});
+
+		this.setState({ generated: generated });
 	}
 
-	changeFramework(event) {
-		event.preventDefault();
-		
-		let value = event.target.getAttribute('data-value') || false;
-		this.setState({ language: value });
-	}
+	handleFormChange(event) {
+		let object = { generated: false };
 
-	changeLanguageVersion(event) {
-		this.setState({ languageVersion: event.target.value });
-	}
+		object[event.target.name] = _.extend({}, this.state[event.target.name]);
+		object[event.target.name].value = event.target.value;
 
-	changeTestCommand(event) {
-		this.setState({ testCommand: event.target.value });
-	}
+		if ('Yes' === object[event.target.name].value) {
+			object[event.target.name].value = true;
+		} else if ('No' === object[event.target.name].value) {
+			object[event.target.name].value = false;
+		} else if ('Choose' === object[event.target.name].value) {
+			object[event.target.name].value = null;
+		}
 
-	changeFramework(event) {
-		this.setState({ framework: event.target.value });
+		if (event.target.multiple) {
+			object[event.target.name].value = [];
+
+			for (var i = 0; i < event.target.options.length; i++) {
+				if (event.target.options[i].selected) {
+					object[event.target.name].value.push(event.target.options[i].value);
+				}
+			}
+		}
+
+		this.setState(object);
 	}
 
 	changeUnitTests(event) {
-		this.setState({ unitTests: !!parseInt(event.target.value) });
+		this.setState({ unitTests: !!parseInt(event.target.value), generated: false });
 	}
 
 	changeUpdateBeforeScripts(event) {
 		let scripts = event.target.value.split("\n");
-		this.setState({ beforeScripts: scripts });
+		this.setState({ beforeScripts: scripts, generated: false });
+	}
+
+	validateRequired(field) {
+		var self = this;
+
+		return function() {
+			var errors = {};
+
+			if (null === self.state[field].value) {
+				errors.required = 'This field is required.';
+			}
+
+			return errors;
+		};
 	}
 
 	render() {
+		console.log(this.state);
 		return (
 			<div>
-				<h2>Setting Up a Project with Dockunit.json</h2>
+				<h2>Creating a Dockunit.json File</h2>
 
-				<p>This tutorial will ask you a number of questions to guide you in creating a Dockunit.json file</p>
+				<p>This tutorial will ask you a number of questions to guide you in creating a Dockunit.json file. <em>Note: Dockunit supports ALL programming languages and environments. If your language or environment isn't shown below, you can easily just create your own Dockunit.json file.</em></p>
 
-				<p><strong>What is the primary coding language of your project?</strong></p>
+				<p className="required"><strong>What is the primary coding language of your project?</strong></p>
 
 				<div className="btn-group" role="group" aria-label="...">
-					<button data-language="php" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('php' === this.state.language) ? 'active' : '')}>PHP</button>
-					<button data-language="nodejs" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('nodejs' === this.state.language) ? 'active' : '')}>Node.js</button>
-					<button data-language="python" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('python' === this.state.language) ? 'active' : '')}>Python</button>
-					<button data-language="java" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('java' === this.state.language) ? 'active' : '')}>Java</button>
-					<button data-language="ruby" onClick={this.changeLanguage} type="button" className={'btn btn-default ' + (('ruby' === this.state.language) ? 'active' : '')}>Ruby</button>
-				</div>
-
-				<div className={'language ' + (('php' === this.state.language) ? 'show' : '')}>
-					<p><em>By default a PHP container will contain the following:</em></p>
-					<ul>
-						<li>MySQL</li>
-						<li>Git and Subversion</li>
-						<li>Composer</li>
-						<li>wget</li>
-					</ul>
-				</div>
-
-				<div className={'language ' + (('node' === this.state.language) ? 'show' : '')}>
-					<p><em>By default a PHP container will contain the following:</em></p>
-					<ul>
-						<li>MongoDB</li>
-						<li>Git and Subversion</li>
-						<li>wget</li>
-					</ul>
-				</div>
-
-				<div className={'language ' + (('python' === this.state.language) ? 'show' : '')}>
-					<p><em>By default a Python container will contain the following:</em></p>
-					<ul>
-						<li>PostgreSQL</li>
-						<li>Git and Subversion</li>
-						<li>wget</li>
-					</ul>
-				</div>
-				<p><strong>What framework/CMS are you using?</strong></p>
-
-				<div className="dropdown">
-					<button className="btn btn-default dropdown-toggle" type="button" id="framekwork" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-						Choose
-						<span className="caret"></span>
-					</button>
-
-					<If test={'php' === this.state.language}>
-						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a onClick={this.changeFramework} data-value="wordpress" href="#">WordPress</a></li>
-							<li><a onClick={this.changeFramework} data-value="drupal" href="#">Drupal</a></li>
-							<li><a onClick={this.changeFramework} data-value="joomla" href="#">Joomla!</a></li>
-							<li><a onClick={this.changeFramework} data-value="laravel" href="#">Laravel</a></li>
-							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
-						</ul>
-					</If>
-
-					<If test={'python' === this.state.language}>
-						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a onClick={this.changeFramework} data-value="django" href="#">Django</a></li>
-							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
-						</ul>
-					</If>
-
-					<If test={'nodejs' === this.state.language}>
-						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a onClick={this.changeFramework} data-value="meteor" href="#">Meteor</a></li>
-							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
-						</ul>
-					</If>
-
-					<If test={'ruby' === this.state.language}>
-						<ul className="dropdown-menu" aria-labelledby="framework">
-							<li><a onClick={this.changeFramework} data-value="rails" href="#">Rails</a></li>
-							<li><a onClick={this.changeFramework} href="#">Other/None</a></li>
-						</ul>
-					</If>
-				</div>
-
-				<div className={'language ' + (('php' === this.state.language) ? 'show' : '')}>
-					<p><strong>What versions of PHP do you want to test?</strong></p>
-
-					<div className="checkbox">
-						<label>
-							<input onClick={this.changeLanguageVersion} value="7.0" type="checkbox" /> 7.0
-						</label>
-					</div>
-
-					<div className="checkbox">
-						<label>
-							<input onClick={this.changeLanguageVersion} value="5.6" type="checkbox" /> 5.6.x
-						</label>
-					</div>
-
-					<div className="checkbox">
-						<label>
-							<input onClick={this.changeLanguageVersion} value="5.2" type="checkbox" /> 5.2.x
-						</label>
-					</div>
-				</div>
-
-				<div className={'language ' + (('python' === this.state.language) ? 'show' : '')}>
-					<p><strong>What versions of Python do you want to test?</strong></p>
-
-					<div className="checkbox">
-						<label>
-							<input onClick={this.changeLanguageVersion} value="3.5" type="checkbox" /> 3.5.x
-						</label>
-					</div>
-
-					<div className="checkbox">
-						<label>
-							<input onClick={this.changeLanguageVersion} value="2.7" type="checkbox" /> 2.7.x
-						</label>
-					</div>
-				</div>
-
-				<p><strong>Does your project contain unit or integration tests?</strong></p>
-
-				<div className="radio">
-					<label>
-						<input onClick={this.changeUnitTests} type="radio" value="1" />
-						Yes
-					</label>
-				</div>
-				<div className="radio">
-					<label>
-						<input onClick={this.changeUnitTests} type="radio" value="0" />
-						No
-					</label>
-				</div>
-
-				<div className={'initial-hide ' + ((this.state.unitTests) ? 'show' : '')}>
-					<p><strong>Provide Unix commands needed to install additional unit/integration test dependancies (one command per line):</strong></p>
-
-					<textarea className="form-control" onChange={this.updateBeforeScripts} rows="3"></textarea>
-
-					<span className="help-block">
-						* Commands must be Debian based<br />
-						* Scripts run from the root of your project<br /><br />
-						
-						<strong>Example:</strong><br />
-						apt-get install elasticsearch<br />
-						./my-bootstrap-script
-					</span>
-				</div>
-
-				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
-					<p><strong>Want to run any Unix commands before testing your application?</strong></p>
-
-					<textarea className="form-control" onChange={this.updateBeforeScripts} rows="3"></textarea>
-
-					<span className="help-block">
-						* Commands must be Debian based<br />
-						* Scripts run from the root of your project<br /><br />
-						
-						<strong>Example:</strong><br />
-						apt-get install elasticsearch<br />
-						<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
-							npm install
-						</span>
-
-						<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
-							composer install
-						</span>
-						./my-bootstrap-script
-					</span>
-				</div>
-
-				<div className={'initial-hide ' + ((this.state.unitTests) ? 'show' : '')}>
-					<p><strong>What is the command to run your test suite?</strong></p>
-
-					<input type="text" className="form-control" onChange={this.changeTestCommand} />
-
-					<span className="help-block">
-						<strong>Example:</strong><br />
-
-						<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
-							phpunit
-						</span>
-
-						<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
-							mocha
-						</span>
-
-						<span className={'initial-hide ' + (('python' === this.state.language) ? 'show' : '')}>
-							bin/command.py
-						</span>
-
-						<span className={'initial-hide ' + (('ruby' === this.state.language) ? 'show' : '')}>
-							bin/command.rb
-						</span>
-					</span>
-				</div>
-
-				<div className={'initial-hide ' + ((!this.state.unitTests) ? 'show' : '')}>
-					<If test={'wordpress' === this.state.framework}>
+					<button name="language" data-language="php" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('php' === this.state.language.value) ? 'active' : '')}>PHP</button>
+					
+					<If test={false}>
 						<div>
-							<p><strong>Is this a theme or a plugin?</strong></p>
-
-							<div className="radio">
-								<label>
-									<input onClick={this.changeWpThemePlugin} type="radio" value="theme" />
-									Theme
-								</label>
-							</div>
-							<div className="radio">
-								<label>
-									<input onClick={this.changeWpThemePlugin} type="radio" value="plugin" />
-									Plugin
-								</label>
-							</div>
+							<button name="language" data-language="nodejs" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('nodejs' === this.state.language.value) ? 'active' : '')}>Node.js</button>
+							<button name="language" data-language="python" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('python' === this.state.language.value) ? 'active' : '')}>Python</button>
+							<button name="language" data-language="java" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('java' === this.state.language.value) ? 'active' : '')}>Java</button>
+							<button name="language" data-language="ruby" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('ruby' === this.state.language.value) ? 'active' : '')}>Ruby</button>
 						</div>
 					</If>
+				</div>
 
-					<If test={'plugin' === this.state.wpThemePlugin}>
-						<div>
-							<p><strong>What is the name of the main plugin file?</strong></p>
+				<If test={'php' === this.state.language.value}>
+					<div>
+						<p><em>By default a PHP container will contain the following:</em></p>
+						<ul>
+							<li>MySQL</li>
+							<li>Git and Subversion</li>
+							<li>Composer</li>
+							<li>wget</li>
+						</ul>
+					</div>
+				</If>
 
-							<input type="text" className="form-control" onChange={this.changeWpMainPluginFile} />
+				<If test={'nodejs' === this.state.language.value}>
+					<div>
+						<p><em>By default a PHP container will contain the following:</em></p>
+						<ul>
+							<li>MongoDB</li>
+							<li>Git and Subversion</li>
+							<li>wget</li>
+							<li>PHPUnit</li>
+						</ul>
+					</div>
+				</If>
 
-							<span className="help-block">
-								<strong>Example:</strong><br />
-								my-plugin-file.php
+				<If test={'python' === this.state.language.value}>
+					<div>
+						<p><em>By default a Python container will contain the following:</em></p>
+						<ul>
+							<li>PostgreSQL</li>
+							<li>Git and Subversion</li>
+							<li>wget</li>
+						</ul>
+					</div>
+				</If>
+
+				<If test={'php' === this.state.language.value}>
+					<SelectField
+						label="What framework/CMS are you using"
+						name="framework"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="framework"
+						required={true}
+						options={['Choose', 'WordPress', 'Other/None']}
+						errors={this.state.framework.errors}
+					/>
+				</If>
+
+				<If test={'python' === this.state.language.value}>
+					<SelectField
+						label="What framework/CMS are you using"
+						name="framework"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="framework"
+						required={true}
+						options={['Choose', 'Django', 'Other/None']}
+						errors={this.state.framework.errors}
+					/>
+				</If>
+
+				<If test={'nodejs' === this.state.language.value}>
+					<SelectField
+						label="What framework/CMS are you using"
+						name="framework"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="framework"
+						required={true}
+						options={['Choose', 'Meteor', 'Other/None']}
+						errors={this.state.framework.errors}
+					/>
+				</If>
+
+				<If test={'ruby' === this.state.language.value}>
+					<SelectField
+						label="What framework/CMS are you using"
+						name="framework"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="framework"
+						required={true}
+						options={['Choose', 'Rails', 'Other/None']}
+						errors={this.state.framework.errors}
+					/>
+				</If>
+
+				<If test={'php' === this.state.language.value}>
+					<SelectField
+						label="What PHP versions do you want to test"
+						name="languageVersions"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="languageVersions"
+						multiple={true}
+						required={true}
+						options={['7.0.x', '5.6.x', '5.2.x']}
+						errors={this.state.languageVersions.errors}
+					/>
+				</If>
+
+				<If test={'python' === this.state.language.value}>
+					<SelectField
+						label="What Python versions do you want to test"
+						name="languageVersions"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="languageVersions"
+						multiple={true}
+						required={true}
+						options={['2.7.x', '3.5.x']}
+						errors={this.state.languageVersions.errors}
+					/>
+				</If>
+
+				<SelectField
+					label="Does your project contain unit or integration tests"
+					name="unitTests"
+					onChange={this.handleFormChange}
+					className="form-control"
+					id="unitTests"
+					required={true}
+					options={['Choose', 'Yes', 'No']}
+					errors={this.state.unitTests.errors}
+				/>
+
+				<If test={true === this.state.unitTests.value}>
+					<div>
+						<InputField
+							label="Provide Unix commands needed to install/start additional unit/integration test dependancies (one command per line)"
+							name="beforeScripts"
+							onChange={this.handleFormChange}
+							className="form-control"
+							id="beforeScripts"
+							type="textarea"
+							rows={4}
+							errors={this.state.beforeScripts.errors}
+						/>
+
+						<span className="help-block">
+							* Commands must be Debian based<br />
+							* Scripts run from the root of your project<br /><br />
+							
+							<strong>Example:</strong><br />
+							apt-get install elasticsearch<br />
+							./my-bootstrap-script<br /><br />
+
+							<strong>Note:</strong> Services like MySQL and MongoDB needed to be started before they can be used.
+						</span>
+					</div>
+				</If>
+
+				<If test={false === this.state.unitTests.value}>
+					<div>
+						<InputField
+							label="List any Unix commands to run before testing your application (one command per line)"
+							name="beforeScripts"
+							onChange={this.handleFormChange}
+							className="form-control"
+							id="beforeScripts"
+							type="textarea"
+							rows={4}
+							errors={this.state.beforeScripts.errors}
+						/>
+
+						<span className="help-block">
+							* Commands must be Debian based<br />
+							* Scripts run from the root of your project<br /><br />
+							
+							<strong>Example:</strong><br />
+							apt-get install elasticsearch<br />
+							<span className={'initial-hide ' + (('nodejs' === this.state.language.value) ? 'show' : '')}>
+								npm install
 							</span>
-						</div>
-					</If>
 
-					<If test={'wordpress' !== this.state.framework}>
-						<div>
-							<p><strong>What command can be run to test your application? Perhaps just executing the main file?</strong></p>
-
-							<input type="text" className="form-control" onChange={this.changeEntryPoint} />
-
-							<span className="help-block">
-								<strong>Example:</strong><br />
-
-								<span className={'initial-hide ' + (('php' === this.state.language) ? 'show' : '')}>
-									bin/command.php
-								</span>
-
-								<span className={'initial-hide ' + (('nodejs' === this.state.language) ? 'show' : '')}>
-									bin/command.js
-								</span>
-
-								<span className={'initial-hide ' + (('python' === this.state.language) ? 'show' : '')}>
-									bin/command.py
-								</span>
-
-								<span className={'initial-hide ' + (('ruby' === this.state.language) ? 'show' : '')}>
-									bin/command.rb
-								</span>
+							<span className={'initial-hide ' + (('php' === this.state.language.value) ? 'show' : '')}>
+								composer install
 							</span>
-						</div>
-					</If>
-				</div>
+							./my-bootstrap-script<br /><br />
+
+							<strong>Note:</strong> Services like MySQL and MongoDB needed to be started before they can be used.
+						</span>
+					</div>
+				</If>
+
+				<If test={true === this.state.unitTests.value}>
+					<div>
+						<InputField
+							label="What is the command to run your test suite"
+							name="testCommand"
+							onChange={this.handleFormChange}
+							className="form-control"
+							id="testCommand"
+							required={true}
+							errors={this.state.testCommand.errors}
+						/>
+
+						<span className="help-block">
+							<strong>Example:</strong><br />
+
+							<span className={'initial-hide ' + (('php' === this.state.language.value) ? 'show' : '')}>
+								phpunit
+							</span>
+
+							<span className={'initial-hide ' + (('nodejs' === this.state.language.value) ? 'show' : '')}>
+								mocha
+							</span>
+
+							<span className={'initial-hide ' + (('python' === this.state.language.value) ? 'show' : '')}>
+								bin/command.py
+							</span>
+
+							<span className={'initial-hide ' + (('ruby' === this.state.language.value) ? 'show' : '')}>
+								bin/command.rb
+							</span>
+						</span>
+
+						<button type="button" onClick={this.generate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+					</div>
+				</If>
+
+				<If test={false === this.state.unitTests.value}>
+					<div>
+						<If test={'WordPress' === this.state.framework.value}>
+							<div>
+								<SelectField
+									label="Is this a theme or plugin"
+									name="wpThemePlugin"
+									onChange={this.handleFormChange}
+									className="form-control"
+									required={true}
+									id="wpThemePlugin"
+									options={['Choose', 'Theme', 'Plugin']}
+									errors={this.state.unitTests.errors}
+								/>
+							</div>
+						</If>
+
+						<If test={'Plugin' === this.state.wpThemePlugin.value}>
+							<div>
+								<InputField
+									label="What is the name of the main plugin file"
+									name="wpMainPluginFile"
+									required={true}
+									onChange={this.handleFormChange}
+									className="form-control"
+									id="wpMainPluginFile"
+									errors={this.state.wpMainPluginFile.errors}
+								/>
+
+								<span className="help-block">
+									<strong>Example:</strong><br />
+									my-plugin-file.php
+								</span>
+
+								<button type="button" onClick={this.generate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+							</div>
+						</If>
+
+						<If test={'Theme' === this.state.wpThemePlugin.value}>
+							<button type="button" onClick={this.generate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+						</If>
+
+						<If test={'WordPress' !== this.state.framework.value}>
+							<div>
+								<InputField
+									label="What command can be run to test your application? Perhaps just executing the main file"
+									name="testCommand"
+									required={true}
+									onChange={this.handleFormChange}
+									className="form-control"
+									id="testCommand"
+									errors={this.state.testCommand.errors}
+								/>
+
+								<span className="help-block">
+									<strong>Example:</strong><br />
+
+									<If test={'php' === this.state.language.value}>
+										<span>php bin/command.php</span>
+									</If>
+
+									<If test={'nodejs' === this.state.language.value}>
+										<span>node bin/command.js</span>
+									</If>
+
+									<If test={'python' === this.state.language.value}>
+										<span>python bin/command.py</span>
+									</If>
+
+									<If test={'ruby' === this.state.language.value}>
+										<span>ruby bin/command.rb</span>
+									</If>
+								</span>
+
+								<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+							</div>
+						</If>
+					</div>
+				</If>
+
+				<If test={this.state.generated !== false}>
+					<div className="generate">
+						<p>Create a file in the root of your project called <strong>Dockunit.json</strong>. Paste the following code into the file and commit it to your Github repository:</p>
+
+						<textarea className="form-control" rows="6">{JSON.stringify(this.state.generated)}</textarea>
+					</div>
+				</If>
 			</div>
 		);
 	}
