@@ -1,3 +1,5 @@
+/*global jQuery */
+
 'use strict';
 
 import React from 'react';
@@ -52,6 +54,13 @@ class Introduction extends React.Component {
 				<p><strong>What does Dockunit do?</strong></p>
 
 				<p>Dockunit allows you to test your software across a variety of Docker containers. We provide standard Docker containers to use or you can create you own.</p>
+
+				<p><strong>What is the difference between Dockunit and Dockunit.io</strong></p>
+
+				<p>Dockunit is an npm package that lets you run containerized tests. You can run Dockunit 
+				locally on your machine. Dockunit.io is a continuous integration service that works with 
+				Github to continouly run the Dockunit npm package on your projects as they receive 
+				updates and pull requests on Github.</p>
 
 				<p><strong>What is Docker?</strong></p>
 
@@ -564,7 +573,8 @@ class DockunitjsonCreate extends React.Component {
 			errors: {},
 			validators: [this.validateRequired('wpThemePlugin')]
 		},
-		generated: false
+		generated: false,
+		hasErrors: false
 	}
 
 	onGenerate() {
@@ -605,10 +615,14 @@ class DockunitjsonCreate extends React.Component {
 		}
 
 		if (Object.keys(errors).length) {
+			self.setState({ hasErrors: true });
+
 			return false;
 		}
 
-		return this.generate();
+		self.setState({ hasErrors: false });
+
+		return self.generate();
 	}
 
 	validate(field) {
@@ -656,10 +670,11 @@ class DockunitjsonCreate extends React.Component {
 	}
 
 	handleFormChange(event) {
-		let object = { generated: false };
+		let object = { generated: false, hasErrors: false };
 
 		object[event.target.name] = _.extend({}, this.state[event.target.name]);
 		object[event.target.name].value = event.target.value;
+		object[event.target.name].errors = {};
 
 		if ('Yes' === object[event.target.name].value) {
 			object[event.target.name].value = true;
@@ -706,8 +721,15 @@ class DockunitjsonCreate extends React.Component {
 	}
 
 	render() {
+		let wrapperClasses = '';
+		if (this.state.hasErrors) {
+			wrapperClasses = 'errors';
+		} else if (this.state.generated) {
+			wrapperClasses = 'generated';
+		}
+
 		return (
-			<div>
+			<div className={wrapperClasses}>
 				<h2>Creating a Dockunit.json File</h2>
 
 				<p>This tutorial will ask you a number of questions to guide you in creating a Dockunit.json file. <em>Note: Dockunit supports ALL programming languages and environments. If your language or environment isn't shown below, you can easily just create your own Dockunit.json file.</em></p>
@@ -944,7 +966,15 @@ class DockunitjsonCreate extends React.Component {
 							</span>
 						</span>
 
-						<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+						<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">
+							<If test={this.state.hasErrors}>
+								<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+							</If>
+							<If test={this.state.generated}>
+								<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+							</If>
+							Create Dockunit.json
+						</button>
 					</div>
 				</If>
 
@@ -982,12 +1012,28 @@ class DockunitjsonCreate extends React.Component {
 									my-plugin-file.php
 								</span>
 
-								<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+								<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">
+									<If test={this.state.hasErrors}>
+										<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+									</If>
+									<If test={this.state.generated}>
+										<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+									</If>
+									Create Dockunit.json
+								</button>
 							</div>
 						</If>
 
 						<If test={'Theme' === this.state.wpThemePlugin.value}>
-							<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+							<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">
+								<If test={this.state.hasErrors}>
+									<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+								</If>
+								<If test={this.state.generated}>
+									<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+								</If>
+								Create Dockunit.json
+							</button>
 						</If>
 
 						<If test={'WordPress' !== this.state.framework.value}>
@@ -1022,7 +1068,15 @@ class DockunitjsonCreate extends React.Component {
 									</If>
 								</span>
 
-								<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">Create Dockunit.json</button>
+								<button type="button" onClick={this.onGenerate} className="btn btn-primary btn-lg btn-block">
+									<If test={this.state.hasErrors}>
+										<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>
+									</If>
+									<If test={this.state.generated}>
+										<span className="glyphicon glyphicon-chevron-down" aria-hidden="true"></span>
+									</If>
+									Create Dockunit.json
+								</button>
 							</div>
 						</If>
 					</div>

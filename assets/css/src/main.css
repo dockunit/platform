@@ -6356,7 +6356,7 @@ h2 {
 .dockunit-setup .dialog .content .required:before {
   content: '*';
   margin-right: 4px;
-  color: red; }
+  color: #FF4136; }
 
 .dockunit-setup .dialog .initial-hide {
   display: none; }
@@ -6377,13 +6377,23 @@ h2 {
   margin-bottom: 10px; }
 
 .dockunit-setup .errorList {
-  color: red; }
+  color: #FF4136; }
 
 .dockunit-setup .generate {
   margin-top: 20px; }
 
 .dockunit-setup .generate p {
   font-weight: bold; }
+
+.dockunit-setup .form-errors {
+  color: #FF4136;
+  margin-top: 10px; }
+
+.dockunit-setup .errors .btn-primary {
+  background-color: #FF4136; }
+
+.dockunit-setup .generated .btn-primary {
+  background-color: #28B62C; }
 
 .builds {
   margin-top: 1.5em; }
