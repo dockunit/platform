@@ -577,19 +577,20 @@ class DockunitjsonCreate extends React.Component {
 			errors = _.extend(errors, newErrors);
 		});
 
-		if (true === self.state.unitTests) {
+		if (true === self.state.unitTests.value) {
 			['testCommand'].forEach(function(field) {
 				var newErrors = self.validate.call(self, field)();
 				errors = _.extend(errors, newErrors);
 			});
 		} else {
-			if ('WordPress' === self.state.framework) {
+			if ('WordPress' === self.state.framework.value) {
+
 				['wpThemePlugin'].forEach(function(field) {
 					var newErrors = self.validate.call(self, field)();
 					errors = _.extend(errors, newErrors);
 				});
 
-				if ('Plugin' === self.state.wpThemePlugin) {
+				if ('Plugin' === self.state.wpThemePlugin.value) {
 					['wpMainPluginFile'].forEach(function(field) {
 						var newErrors = self.validate.call(self, field)();
 						errors = _.extend(errors, newErrors);
