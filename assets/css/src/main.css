@@ -6413,6 +6413,9 @@ h2 {
 .latest-build h2 {
   font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
+.latest-build .add-dockunit {
+  font-weight: bold; }
+
 .build-item {
   overflow: auto;
   border-left: 1px solid #ddd;

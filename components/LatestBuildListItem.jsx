@@ -3,18 +3,37 @@
 import React from 'react';
 import If from './If';
 import timeago from 'timeago';
+import {connectToStores} from 'fluxible-addons-react';
+import ApplicationStore from '../stores/ApplicationStore';
+import updateShowDockunitSetup from '../actions/updateShowDockunitSetup';
 
+@connectToStores(['UserStore', 'ProjectsStore'], (context, props) => ({
+    ApplicationStore: context.getStore(ApplicationStore).getState()
+}))
 class LatestBuildListItem extends React.Component {
 	constructor(props, context) {
         super(props, context);
 
         this.toggleBuildDetails = this.toggleBuildDetails.bind(this);
         this.rerun = this.rerun.bind(this);
+        this.toggleShowDockunitSetup = this.toggleShowDockunitSetup.bind(this);
+    }
+
+    static contextTypes = {
+        getStore: React.PropTypes.func,
+        executeAction: React.PropTypes.func
     }
 
 	state = {
 		showBuildDetails: false
 	}
+
+	toggleShowDockunitSetup(event) {
+        this.context.executeAction(updateShowDockunitSetup, {
+        	showDockunitSetup: !this.props.ApplicationStore.showDockunitSetup,
+        	repository: {}
+        });
+    }
 
 	rerun(event) {
 		event.preventDefault();
@@ -120,7 +139,12 @@ class LatestBuildListItem extends React.Component {
 
 						<div className="item">
 							<If test={this.props.build.result === 255 && this.props.build.finished}>
-								<div>Status: <strong>No Dockunit.json file found. <a href="https://www.npmjs.com/package/dockunit#dockunit-json-examples">Add one?</a></strong></div>
+								<div>
+									Status: <strong>No Dockunit.json file found.&nbsp;</strong> 
+									<If test={this.props.currentUser && this.props.currentUser._id === this.props.project.user}>
+										<a className="add-dockunit" href="#" onClick={this.toggleShowDockunitSetup}>Add one?</a>
+									</If>
+								</div>
 							</If>
 
 							<If test={this.props.build.result !== 255 && this.props.build.finished}>

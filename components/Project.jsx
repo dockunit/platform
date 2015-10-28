@@ -17,6 +17,7 @@ import createBuild from '../actions/createBuild';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
 import SelectField from './SelectField';
 import _ from 'lodash';
+import DockunitSetup from './DockunitSetup';
 
 @connectToStores(['UserStore', 'ProjectsStore'], (context, props) => ({
     UserStore: context.getStore(UserStore).getState(),
@@ -242,6 +243,7 @@ class Project extends React.Component {
 
     	return (
             <div className="container">
+            	<DockunitSetup section="DockunitjsonCreate" />
             	<h1 className="page-header project-header">
 					<If test={this.props.UserStore.currentUser}>
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
@@ -323,7 +325,7 @@ class Project extends React.Component {
 						</div>
 
 						<If test={this.state.project instanceof Object && builds.length}>
-							<BuildList rerun={this.rerun} currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
+							<BuildList project={this.state.project} rerun={this.rerun} currentUser={this.props.UserStore.currentUser} builds={builds} branch={this.state.currentBranch} repository={this.state.project && this.state.project.repository} />
 						</If>
 
 						<If test={this.state.project instanceof Object && !builds.length}>
