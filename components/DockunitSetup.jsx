@@ -147,9 +147,9 @@ class DockunitLocalSetup extends React.Component {
 							<p>By default, the standard Docker Toolbox installation:</p>
 
 							<ul>
-								<li>installs binaries for the Docker tools in /usr/local/bin</li>
-								<li>makes these binaries available to all users</li>
-								<li>updates any existing VirtualBox installation</li>
+								<li>Installs binaries for the Docker tools in /usr/local/bin</li>
+								<li>Makes these binaries available to all users</li>
+								<li>Updates any existing VirtualBox installation</li>
 							</ul>
 
 							<p>Change these defaults by pressing “Customize” or "Change Install Location."</p>
@@ -189,7 +189,7 @@ class DockunitLocalSetup extends React.Component {
 								</pre>
 							</p>
 
-							<p>If you see <em>hello node</em> outputted, it works! Press ctrl+c to exit the node terminal. Iff not, go to the <a href="https://nodejs.org/en/download">Node.js download page</a> and try reinstalling.</p>
+							<p>If you see <em>hello node</em> outputted, it works! Press ctrl+c to exit the node terminal. If not, go to the <a href="https://nodejs.org/en/download">Node.js download page</a> and try reinstalling.</p>
 						</li>
 
 						<li>
@@ -238,7 +238,7 @@ class DockunitLocalSetup extends React.Component {
 
 					<ol>
 						<li>
-							<p>Go to the Docker Toolbox page.</p>
+							<p>Go to the <a href="https://www.docker.com/toolbox">Docker Toolbox</a> page.</p>
 						</li>
 
 						<li>
@@ -257,11 +257,11 @@ class DockunitLocalSetup extends React.Component {
 							<p>The installer presents you with options to customize the standard installation. By default, the standard Docker Toolbox installation:</p>
 
 							<ul>
-								<li>installs executables for the Docker tools in C:\Program Files\Docker Toolbox</li>
-								<li>updates any existing VirtualBox installation</li>
-								<li>adds a Docker Inc. folder to your program shortcuts</li>
-								<li>updates your PATH environment variable</li>
-								<li>adds desktop icons for the Docker Quickstart Terminal and Kitematic</li>
+								<li>Installs executables for the Docker tools in C:\Program Files\Docker Toolbox</li>
+								<li>Updates any existing VirtualBox installation</li>
+								<li>Adds a Docker Inc. folder to your program shortcuts</li>
+								<li>Updates your PATH environment variable</li>
+								<li>Adds desktop icons for the Docker Quickstart Terminal and Kitematic</li>
 							</ul>
 
 							<p>This installation assumes the defaults are acceptable.</p>
@@ -440,7 +440,7 @@ class DockunitLocalSetup extends React.Component {
 								</pre>
 							</p>
 
-							<p>If you see a version number outputted, it works! If not, you probably installed Node.js or npm incorrectly. You can also try putitng <em>sudo</em> before <em>npm install</em>.</p>
+							<p>If you see a version number outputted, it works! If not, you probably installed Node.js or npm incorrectly. You can also try <em>sudo</em> before <em>npm install</em>.</p>
 						</li>
 					</ol>
 
@@ -509,7 +509,7 @@ class DockunitLocalSetup extends React.Component {
 								</pre>
 							</p>
 
-							<p>If you see a version number outputted, it works! If not, you probably installed Node.js or npm incorrectly. You can also try putitng <em>sudo</em> before <em>npm install</em>.</p>
+							<p>If you see a version number outputted, it works! If not, you probably installed Node.js or npm incorrectly. You can also try <em>sudo</em> before <em>npm install</em>.</p>
 						</li>
 					</ol>
 
