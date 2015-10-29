@@ -5909,7 +5909,8 @@ h2 {
   margin-top: 40px; }
 
 .blog .post ul {
-  margin-top: 2em; }
+  margin-top: 2em;
+  margin-bottom: 2em; }
 
 .blog .post ul li {
   margin-bottom: 1em; }
