@@ -317,7 +317,9 @@ class AddProject extends React.Component {
 								<div role="tabpanel" className="tab-pane active" id="add-project-overview">
 									<h4>Add a Project</h4>
 
-									<p>To begin testing your software, you must create a Dockunit project and associate it with a Github repository. After you create your project, testing will start automatically.</p>
+									<p>To begin testing your software, you must create a Dockunit project and associate it with a Github repository. After you create your project, testing will start automatically. Your project needs a <strong>Dockunit.json</strong> file in order for testing to work.</p>
+
+									<a onClick={this.toggleShowDockunitSetup} className="btn btn-primary create-dockunit">Help Me Create a Dockunit.json</a>
 								</div>
 							</If>
 
