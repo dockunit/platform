@@ -5912,6 +5912,11 @@ h2 {
   margin-top: 2em;
   margin-bottom: 2em; }
 
+.blog .post .aligncenter {
+  margin-left: auto;
+  margin-right: auto;
+  display: block; }
+
 .blog .post ul li {
   margin-bottom: 1em; }
 
