@@ -7,9 +7,16 @@ class Generator {
 		};
 
 		let versionMap = {
-			'5.2.x': '5.2',
-			'5.6.x': '5.6',
-			'7.0.x': '7.0-rc-1'
+			php: {
+				'5.2.x': '5.2',
+				'5.6.x': '5.6',
+				'7.0.x': '7.0-rc-1'
+			},
+			nodejs: {
+				'4.2.x': '4.2.1',
+				'0.10.x': '0.10.x',
+				'0.12.x': '0.12.7'
+			}
 		};
 
 		params.languageVersions.forEach(function(version) {
@@ -25,7 +32,11 @@ class Generator {
 			if (true === params.unitTests) {
 				testCommand = params.testCommand;
 
-				tag = 'php-mysql-phpunit-' + versionMap[version] + '-fpm';
+				if ('php' === params.language) {
+					tag = 'php-mysql-phpunit-' + versionMap.php[version] + '-fpm';
+				} else if ('nodejs' === params.language) {
+					tag = 'nodejs-mongodb-mocha-jasmine-' + versionMap.nodejs[version];
+				}
 			} else {
 				if ('WordPress' === framework) {
 					tag = 'php-mysql-phpunit-wordpress-' + versionMap[version] + '-fpm';
@@ -67,12 +78,17 @@ class Generator {
 					}
 				} else {
 					testCommand = params.testCommand;
-					tag = 'php-mysql-phpunit-' + versionMap[version] + '-fpm';
+
+					if ('php' === params.language) {
+						tag = 'php-mysql-phpunit-' + versionMap.php[version] + '-fpm';
+					} else if ('nodejs' === params.language) {
+						tag = 'nodejs-mongodb-mocha-jasmine-' + versionMap.nodejs[version];
+					}
 				}
 			}
 
 			let container = {
-				prettyName: params.language + ' ' + versionMap[version],
+				prettyName: params.language + ' ' + versionMap[params.language][version],
 				image: 'dockunit/prebuilt-images:' + tag,
 				testCommand: testCommand,
 				beforeScripts: beforeScripts

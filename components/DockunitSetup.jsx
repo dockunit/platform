@@ -530,6 +530,7 @@ class DockunitjsonCreate extends React.Component {
         this.validateRequired = this.validateRequired.bind(this);
         this.validate = this.validate.bind(this);
         this.onGenerate = this.onGenerate.bind(this);
+        this.handleLanguageChange = this.handleLanguageChange.bind(this);
     }
 
     state = {
@@ -606,6 +607,9 @@ class DockunitjsonCreate extends React.Component {
 						errors = _.extend(errors, newErrors);
 					});
 				}
+			} else if ('Meteor' === self.state.framework.value) {
+
+				
 			} else {
 				['testCommand'].forEach(function(field) {
 					var newErrors = self.validate.call(self, field)();
@@ -697,6 +701,20 @@ class DockunitjsonCreate extends React.Component {
 		this.setState(object);
 	}
 
+	handleLanguageChange(event) {
+		let object = {
+			generated: false,
+			hasErrors: false,
+			language: {
+				value: event.target.getAttribute('data-language'),
+				errors: {},
+				validators: [this.validateRequired('language')]
+			}
+		};
+
+		this.setState(object);
+	}
+
 	changeUnitTests(event) {
 		this.setState({ unitTests: !!parseInt(event.target.value), generated: false });
 	}
@@ -737,11 +755,11 @@ class DockunitjsonCreate extends React.Component {
 				<p className="required"><strong>What is the primary coding language of your project?</strong></p>
 
 				<div className="btn-group" role="group" aria-label="...">
-					<button name="language" data-language="php" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('php' === this.state.language.value) ? 'active' : '')}>PHP</button>
+					<button name="language" data-language="php" onClick={this.handleLanguageChange} type="button" className={'btn btn-default ' + (('php' === this.state.language.value) ? 'active' : '')}>PHP</button>
+					<button name="language" data-language="nodejs" onClick={this.handleLanguageChange} type="button" className={'btn btn-default ' + (('nodejs' === this.state.language.value) ? 'active' : '')}>Node.js</button>
 					
 					<If test={false}>
 						<div>
-							<button name="language" data-language="nodejs" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('nodejs' === this.state.language.value) ? 'active' : '')}>Node.js</button>
 							<button name="language" data-language="python" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('python' === this.state.language.value) ? 'active' : '')}>Python</button>
 							<button name="language" data-language="java" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('java' === this.state.language.value) ? 'active' : '')}>Java</button>
 							<button name="language" data-language="ruby" onClick={this.handleFormChange} type="button" className={'btn btn-default ' + (('ruby' === this.state.language.value) ? 'active' : '')}>Ruby</button>
@@ -757,18 +775,19 @@ class DockunitjsonCreate extends React.Component {
 							<li>Git and Subversion</li>
 							<li>Composer</li>
 							<li>wget</li>
+							<li>PHPUnit</li>
 						</ul>
 					</div>
 				</If>
 
 				<If test={'nodejs' === this.state.language.value}>
 					<div>
-						<p><em>By default a PHP container will contain the following:</em></p>
+						<p><em>By default a Node.js container will contain the following:</em></p>
 						<ul>
 							<li>MongoDB</li>
 							<li>Git and Subversion</li>
 							<li>wget</li>
-							<li>PHPUnit</li>
+							<li>Mocha npm package</li>
 						</ul>
 					</div>
 				</If>
@@ -860,6 +879,20 @@ class DockunitjsonCreate extends React.Component {
 						multiple={true}
 						required={true}
 						options={['2.7.x', '3.5.x']}
+						errors={this.state.languageVersions.errors}
+					/>
+				</If>
+
+				<If test={'nodejs' === this.state.language.value}>
+					<SelectField
+						label="What Node.js versions do you want to test"
+						name="languageVersions"
+						onChange={this.handleFormChange}
+						className="form-control"
+						id="languageVersions"
+						multiple={true}
+						required={true}
+						options={['4.2.x', '0.12.x', '0.10.x']}
 						errors={this.state.languageVersions.errors}
 					/>
 				</If>
