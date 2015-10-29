@@ -6282,8 +6282,10 @@ h2 {
   z-index: 10000; }
 
 .dockunit-setup .menu {
-  display: table-cell;
-  width: 20%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
   border-right: 1px solid #ccc;
   list-style-type: none;
   padding: 5px 0;
@@ -6304,19 +6306,22 @@ h2 {
   text-decoration: underline; }
 
 .dockunit-setup .content {
-  display: table-cell;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 25%;
+  bottom: 0;
+  overflow-y: scroll;
   padding-left: 20px;
   padding-top: 10px;
   padding-bottom: 10px; }
 
-.dockunit-setup .wrap {
-  display: table-row; }
-
 .dockunit-setup .close {
   color: #555555;
   position: absolute;
-  top: 7px;
-  right: 14px; }
+  top: -24px;
+  right: -18px;
+  font-size: 150%; }
 
 .dockunit-setup .dialog {
   height: 500px;
@@ -6332,16 +6337,8 @@ h2 {
   position: absolute;
   background-color: #fff;
   z-index: 10001;
-  border-radius: 20px;
-  border: 20px solid #fff; }
-
-.dockunit-setup .box {
-  overflow: scroll;
-  height: 100%; }
-
-.dockunit-setup .table {
-  display: table;
-  height: 100%; }
+  border: 35px solid #fff;
+  border-radius: 4px; }
 
 .dockunit-setup .dialog .content h2 {
   margin-top: 0;
@@ -6394,6 +6391,10 @@ h2 {
 
 .dockunit-setup .generated .btn-primary {
   background-color: #28B62C; }
+
+.dockunit-setup .next {
+  float: right;
+  margin-top: 30px; }
 
 .builds {
   margin-top: 1.5em; }

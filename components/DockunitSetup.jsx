@@ -22,6 +22,8 @@ class Start extends React.Component {
 	changeSection(event) {
 		event.preventDefault();
 
+		console.log(event);
+
 		this.props.changeSection(event);
 	}
 
@@ -38,12 +40,26 @@ class Start extends React.Component {
 					<li><a data-handler="DockunitjsonCreate" onClick={this.changeSection} href="#DockunitjsonCreate">Setting up Dockunit on a project by creating a Dockunit.json file.</a></li>
 
 				</ul>
+
+				<a className="btn btn-primary next" data-handler="Introduction" onClick={this.changeSection} href="#Introduction">Introduction to Dockunit &rarr;</a>
 			</div>
 		);
 	}
 }
 
 class Introduction extends React.Component {
+	constructor(props, context) {
+        super(props, context);
+
+        this.changeSection = this.changeSection.bind(this);
+    }
+
+	changeSection(event) {
+		event.preventDefault();
+
+		this.props.changeSection(event);
+	}
+
 	render() {
 		return (
 			<div>
@@ -76,6 +92,8 @@ class Introduction extends React.Component {
 				files tell Dockunit what Docker containers to use and how to test your software. Once you've 
 				setup your project, you will want to add it to Dockunit.io. Dockunit.io is a continuous integration 
 				service for testing your software continuouly when there are pushes or merges on Github.</p>
+			
+				<a className="btn btn-primary next" data-handler="DockunitLocalSetup" onClick={this.changeSection} href="#DockunitLocalSetup">Setting Up Dockunit Locally &rarr;</a>
 			</div>
 		);
 	}
@@ -86,7 +104,14 @@ class DockunitLocalSetup extends React.Component {
         super(props, context);
 
         this.changeEnvironment = this.changeEnvironment.bind(this);
+        this.changeSection = this.changeSection.bind(this);
     }
+
+    changeSection(event) {
+		event.preventDefault();
+
+		this.props.changeSection(event);
+	}
 
     state = {
 		environment: 'osx'
@@ -516,6 +541,7 @@ class DockunitLocalSetup extends React.Component {
 					<p>That's it. You're done! Dockunit is now setup properly on your local machine.</p>
 				</div>
 
+				<a className="btn btn-primary next" data-handler="DockunitjsonCreate" onClick={this.changeSection} href="#DockunitjsonCreate">Creating a Dockunit.json File &rarr;</a>
 			</div>
 		);
 	}
@@ -1214,18 +1240,12 @@ class DockunitSetup extends React.Component {
 				<div className="overlay"></div>
 				<div className="dialog">
 					<button type="button" className="close" onClick={this.toggleShowDockunitSetup} aria-label="Close"><span aria-hidden="true">×</span></button>
-					<div className="box">
-						<div className="table">
-							<div className="wrap">
-								<ul className="menu">
-									{menuHTML}
-								</ul>
+					<ul className="menu">
+						{menuHTML}
+					</ul>
 
-								<div className="content">
-									<Handler repository={repository} changeSection={this.changeSection} />
-								</div>
-							</div>
-						</div>
+					<div className="content">
+						<Handler repository={repository} changeSection={this.changeSection} />
 					</div>
 				</div>
 			</div>

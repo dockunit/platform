@@ -18,8 +18,10 @@
 }
 
 .dockunit-setup .menu {
-	display: table-cell;
-	width: 20%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
 	border-right: 1px solid #ccc;
 	list-style-type: none;
 	padding: 5px 0;
@@ -44,21 +46,23 @@
 }
 
 .dockunit-setup .content {
-	display: table-cell;
+	position: absolute;
+	top: 0;
+	right: 0;
+	left: 25%;
+	bottom: 0;
+    overflow-y: scroll;
 	padding-left: 20px;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
-.dockunit-setup .wrap {
-	display: table-row; 
-}
-
 .dockunit-setup .close {
 	color: $text-color;
 	position: absolute;
-	top: 7px;
-	right: 14px;
+	top: -24px;
+    right: -18px;
+    font-size: 150%;
 }
 
 .dockunit-setup .dialog {
@@ -75,18 +79,8 @@
     position: absolute;
     background-color: #fff;
     z-index: 10001;
-    border-radius: 20px;
-    border: 20px solid #fff;
-}
-
-.dockunit-setup .box {
-	overflow: scroll;
-	height: 100%;
-}
-
-.dockunit-setup .table {
-	display: table;
-	height: 100%;
+    border: 35px solid #fff;
+    border-radius: 4px;
 }
 
 .dockunit-setup .dialog .content h2 {
@@ -155,5 +149,10 @@
 
 .dockunit-setup .generated .btn-primary {
 	background-color: $brand-success;
+}
+
+.dockunit-setup .next {
+	float: right;
+	margin-top: 30px; 
 }
 
