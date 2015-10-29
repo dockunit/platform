@@ -776,7 +776,7 @@ class DockunitjsonCreate extends React.Component {
 			<div className={wrapperClasses}>
 				<h2>Creating a Dockunit.json File</h2>
 
-				<p>This tutorial will ask you a number of questions to guide you in creating a Dockunit.json file. <em>Note: Dockunit supports ALL programming languages and environments. If your language or environment isn't shown below, you can easily just create your own Dockunit.json file.</em></p>
+				<p>This tool will ask you a number of questions to guide you in creating a Dockunit.json file. <em>Note: Dockunit supports ALL programming languages and environments. If your language or environment isn't shown below, you can easily just create your own Dockunit.json file.</em></p>
 
 				<p className="required"><strong>What is the primary coding language of your project?</strong></p>
 
