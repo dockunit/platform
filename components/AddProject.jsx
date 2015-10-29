@@ -17,7 +17,6 @@ import If from './If';
 import InputField from './InputField';
 import SelectField from './SelectField';
 import SubmitButton from './SubmitButton';
-import DockunitSetup from './DockunitSetup';
 import _ from 'lodash';
 import {connectToStores} from 'fluxible-addons-react';
 
@@ -277,8 +276,6 @@ class AddProject extends React.Component {
 
 		return (
 			<div className="container">
-				<DockunitSetup section="DockunitjsonCreate" />
-
 				<div className="page-header">
 					<div className="help-button-wrapper">
 						<HelpButton />

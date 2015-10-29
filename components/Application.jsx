@@ -7,9 +7,11 @@ import GithubAuthorize from './GithubAuthorize';
 import ApplicationStore from '../stores/ApplicationStore';
 import readMyProjects from '../actions/readMyProjects';
 import UserStore from '../stores/UserStore';
+import updateShowDockunitSetup from '../actions/updateShowDockunitSetup';
 import {connectToStores, provideContext} from 'fluxible-addons-react';
 import {handleHistory} from 'fluxible-router';
 import {navigateAction} from 'fluxible-router';
+import DockunitSetup from './DockunitSetup';
 
 @provideContext
 @handleHistory({enableScroll: false})
@@ -26,6 +28,12 @@ class Application extends React.Component {
     static contextTypes = {
         getStore: React.PropTypes.func,
         executeAction: React.PropTypes.func
+    }
+
+    componentDidMount() {
+        if(window.location.hash && '#guide' === window.location.hash) {
+            this.context.executeAction(updateShowDockunitSetup, { showDockunitSetup: true });
+        }
     }
 
     render() {
@@ -63,6 +71,8 @@ class Application extends React.Component {
 
         return (
             <div className={classes}>
+                <DockunitSetup />
+
                 <Nav selected={this.props.currentRoute.get('page')} redirectPath={redirectPath} />
                 
                 <Handler repository={repository} redirectPath={redirectPath} />

@@ -17,7 +17,6 @@ import createBuild from '../actions/createBuild';
 import readGithubRepoBranches from '../actions/readGithubRepoBranches';
 import SelectField from './SelectField';
 import _ from 'lodash';
-import DockunitSetup from './DockunitSetup';
 
 @connectToStores(['UserStore', 'ProjectsStore'], (context, props) => ({
     UserStore: context.getStore(UserStore).getState(),
@@ -243,7 +242,6 @@ class Project extends React.Component {
 
     	return (
             <div className="container">
-            	<DockunitSetup section="DockunitjsonCreate" />
             	<h1 className="page-header project-header">
 					<If test={this.props.UserStore.currentUser}>
 						<NavLink routeName="projects" className="breadcrumb-link">projects</NavLink> 
