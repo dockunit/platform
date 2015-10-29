@@ -788,6 +788,7 @@ class DockunitjsonCreate extends React.Component {
 							<li>Git and Subversion</li>
 							<li>wget</li>
 							<li>Mocha npm package</li>
+							<li>Jasmine npm package</li>
 						</ul>
 					</div>
 				</If>
