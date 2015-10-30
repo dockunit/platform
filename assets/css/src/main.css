@@ -5909,8 +5909,8 @@ h2 {
   margin-top: 40px; }
 
 .blog .post ul {
-  margin-top: 2em;
-  margin-bottom: 2em; }
+  margin-top: 1em;
+  margin-bottom: 1em; }
 
 .blog .post .aligncenter {
   margin-left: auto;
@@ -5918,7 +5918,7 @@ h2 {
   display: block; }
 
 .blog .post ul li {
-  margin-bottom: 1em; }
+  margin-bottom: .5em; }
 
 .blog .post .avatar {
   margin-right: 6px;
