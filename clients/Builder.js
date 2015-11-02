@@ -58,6 +58,10 @@ Builder.prototype.ping = function() {
 	this.lastPing = new Date();
 };
 
+/**
+ * This whole thing is a race condition. But that chances of a program containing after doing
+ * nothing for 30 minutes are extremely low.
+ */
 Builder.prototype.startProgressListener = function() {
 	var self = this;
 
@@ -72,6 +76,9 @@ Builder.prototype.startProgressListener = function() {
 			debug('Have not received progress ping in over 30 minutes. Shutting down....');
 
 			if (self.build) {
+				self.output += "\n\nProcess timed out.";
+				self.outputCode = 1;
+
 				self.finish().then(function(result) {
 					process.exit(1);
 				}, function(error) {
