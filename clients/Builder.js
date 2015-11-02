@@ -15,16 +15,19 @@ var Builder = function(user, project, buildId) {
 	var self = this;
 
 	self.socket = require('socket.io-client')('http://localhost:3000');
+	self.ping = self.ping.bind(this);
 
 	return new NPromise(function(fulfill, reject) {
 		self.project = project;
 		self.buildId = buildId;
 		self.user = user;
 		self.output = '';
+		self.ping();
 
 		var stepIndex = 0;
 
 		var steps = [
+			self.startProgressListener,
 			self.getBuild,
 			self.startContainer,
 			self.finish
@@ -49,6 +52,41 @@ var Builder = function(user, project, buildId) {
 	});
 };
 
+Builder.prototype.ping = function() {
+	debug('Ping!');
+
+	this.lastPing = new Date();
+};
+
+Builder.prototype.startProgressListener = function() {
+	var self = this;
+
+	debug('Start progress listener');
+
+	setInterval(function(){
+		var now = new Date();
+
+		debug('Checking progress...');
+
+		if (now.getTime() > self.lastPing.getTime() + (30 * 60 * 1000)) {
+			debug('Have not received progress ping in over 30 minutes. Shutting down....');
+
+			if (self.build) {
+				self.finish().then(function(result) {
+					process.exit(1);
+				}, function(error) {
+					process.exit(1);
+				});
+			} else {
+				// This is really bad but should really never happen unless the project was deleted
+				process.exit(1);
+			}
+		} else {
+			debug('Progress within last 30 minutes :)');
+		}
+	}, 4 * 60 * 1000); // Runs every four minutes
+};
+
 Builder.prototype.getBuild = function() {
 	var self = this;
 
@@ -57,6 +95,8 @@ Builder.prototype.getBuild = function() {
 	return new NPromise(function(fulfill, reject) {
 
 		Build.find({ _id: self.buildId }, function(error, builds) {
+			self.ping();
+
 			if (error || !builds.length) {
 				debug('Could not get build');
 
@@ -71,6 +111,8 @@ Builder.prototype.getBuild = function() {
 				self.build.outputCode = null;
 
 				self.build.save(function(error) {
+					self.ping();
+
 					if (error) {
 						reject(new Error('Could not save updated build'));
 					} else {
@@ -94,6 +136,8 @@ Builder.prototype.startContainer = function() {
 
 		debug('Start container');
 
+		self.ping();
+
 		var directory = '~';
 		if (constants.isDevelopment) {
 			directory = process.env.HOME + '/buildfiles'
@@ -116,33 +160,13 @@ Builder.prototype.startContainer = function() {
 
 		// Todo: This will need to be optmized later so it doesn't clone all the history
 		exec(cloneCommand, function(error, stdout, stderr) {
-			debug('Git clone finished');
-
-			var cmd;
-
-			if (constants.isDevelopment) {
-				debug('Running: dockunit ' + directory + '/' + repository + '/' + commit);
-
-				cmd = spawn('dockunit', [directory + '/' + repository + '/' + commit]);
-			} else {
-				debug('Running: ssh dockunit@worker-1 "dockunit ' + directory + '/' + repository + '/' + commit + ' --du-verbose"');
-
-				cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit + '\ --du-verbose']);
-			}
-
-			cmd.stdout.on('data', function(data) {
-				console.log('' + data);
-				self.output += '' + data;
-			});
-
-			cmd.stderr.on('data', function(data) {
-				console.log('' + data);
-				self.output += '' + data;
-			});
-
 			var called = false;
 
+			self.ping();
+
 			function dockunitCallback(code, signal) {
+				self.ping();
+
 				if (called) {
 					return false;
 				}
@@ -163,16 +187,57 @@ Builder.prototype.startContainer = function() {
 				debug('Executing: ' + removeCommand);
 
 				exec(removeCommand, function(error, stdout, stderr) {
-					debug('Removed repo files');
+					self.ping();
+
+					if (error) {
+						debug('Could not remove repo files successfully');
+					} else {
+						debug('Removed repo files');
+					}
+
 					fulfill(self.output);
 				});
 			}
 
-			cmd.on('exit', dockunitCallback);
-			cmd.on('disconnect', dockunitCallback);
-			cmd.on('close', dockunitCallback);
-			cmd.on('error', dockunitCallback);
+			if (error) {
+				debug('Git clone failed');
 
+				dockunitCallback(error, 1);
+			} else {
+
+				debug('Git clone finished');
+
+				var cmd;
+
+				if (constants.isDevelopment) {
+					debug('Running: dockunit ' + directory + '/' + repository + '/' + commit);
+
+					cmd = spawn('dockunit', [directory + '/' + repository + '/' + commit]);
+				} else {
+					debug('Running: ssh dockunit@worker-1 "dockunit ' + directory + '/' + repository + '/' + commit + ' --du-verbose"');
+
+					cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit + '\ --du-verbose']);
+				}
+
+				cmd.stdout.on('data', function(data) {
+					self.ping();
+
+					console.log('' + data);
+					self.output += '' + data;
+				});
+
+				cmd.stderr.on('data', function(data) {
+					self.ping();
+
+					console.log('' + data);
+					self.output += '' + data;
+				});
+
+				cmd.on('exit', dockunitCallback);
+				cmd.on('disconnect', dockunitCallback);
+				cmd.on('close', dockunitCallback);
+				cmd.on('error', dockunitCallback);
+			}
 		});
 	});
 };
@@ -183,12 +248,18 @@ Builder.prototype.finish = function() {
 	debug('Finish build');
 
 	return new NPromise(function(fulfill, reject) {
+		self.ping();
+
 		self.build.output = self.output;
 		self.build.finished = new Date();
 		self.build.result = self.outputCode;
 
 		self.build.save(function(error) {
+			self.ping();
+
 			if (error) {
+				debug('Could not save completed build');
+
 				reject();
 				return;
 			}
