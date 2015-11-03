@@ -122,7 +122,7 @@ class LatestBuildListItem extends React.Component {
 
 		
     	let buildDetailsButtonsClasses = "btn btn-default expand";
-    	if (!this.props.build.finished) {
+    	if (!this.props.build.output) {
     		buildDetailsButtonsClasses += ' disabled';
     	}
 
@@ -190,7 +190,7 @@ class LatestBuildListItem extends React.Component {
 							<a className="btn btn-default" href={githubUrl}>Repo <span className="icomoon icomoon-github"></span></a>
 							<a className={buildDetailsButtonsClasses} onClick={this.toggleBuildDetails}>
 								Build Details 
-								<If test={this.props.build.finished}>
+								<If test={this.props.build.output}>
 									<span>
 										<If test={this.state.showBuildDetails}>
 											<span className="glyphicon glyphicon-chevron-up" aria-hidden="true"></span>

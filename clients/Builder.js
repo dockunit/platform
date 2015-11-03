@@ -21,7 +21,6 @@ var Builder = function(user, project, buildId) {
 		self.project = project;
 		self.buildId = buildId;
 		self.user = user;
-		self.output = '';
 		self.ping();
 
 		var stepIndex = 0;
@@ -36,12 +35,16 @@ var Builder = function(user, project, buildId) {
 		function run() {
 			if (!steps[stepIndex]) {
 				debug('Build complete');
-				fulfill(self.output);
+				fulfill(self.build.output);
 			} else {
 				NPromise.resolve(steps[stepIndex].apply(self)).then(function(result) {
 					stepIndex++;
 					run();
 				}, function(error) {
+					if (self.progressInterval) {
+						clearInterval(self.progressInterval)
+					}
+
 					debug('Exiting from error: ' + error);
 					reject();
 				});
@@ -67,7 +70,7 @@ Builder.prototype.startProgressListener = function() {
 
 	debug('Start progress listener');
 
-	setInterval(function(){
+	self.progressInterval = setInterval(function(){
 		var now = new Date();
 
 		debug('Checking progress...');
@@ -76,10 +79,10 @@ Builder.prototype.startProgressListener = function() {
 			debug('Have not received progress ping in over 30 minutes. Shutting down....');
 
 			if (self.build) {
-				self.output += "\n\nProcess timed out.";
-				self.outputCode = 1;
+				self.build.output += "\n\nProcess timed out.";
+				self.build.result = 1;
 
-				self.finish().then(function(result) {
+				self.finish().then(function() {
 					process.exit(1);
 				}, function(error) {
 					process.exit(1);
@@ -90,8 +93,12 @@ Builder.prototype.startProgressListener = function() {
 			}
 		} else {
 			debug('Progress within last 30 minutes :)');
+
+			if (self.build) {
+				self.socket.emit('updatedBuild', { build: self.build, user: self.user.username, repository: self.project.repository });
+			}
 		}
-	}, 4 * 60 * 1000); // Runs every four minutes
+	}, 30 * 1000); // Runs every 30 seconds
 };
 
 Builder.prototype.getBuild = function() {
@@ -115,7 +122,6 @@ Builder.prototype.getBuild = function() {
 				self.build.result = 0;
 				self.build.finished = null;
 				self.build.started = new Date();
-				self.build.outputCode = null;
 
 				self.build.save(function(error) {
 					self.ping();
@@ -181,10 +187,7 @@ Builder.prototype.startContainer = function() {
 				called = true;
 
 				debug('Dockunit command exited with code ' + code);
-				self.outputCode = code;
-
-				var convert = new Convert();
-				self.output = convert.toHtml(self.output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(\r\n|\n|\r)$/g, ''));
+				self.build.result = code;
 				
 				var removeCommand = 'ssh dockunit@worker-1 "rm -rf ' + directory + '/' + repository + '/' + commit + '"';
 				if (constants.isDevelopment) {
@@ -202,7 +205,7 @@ Builder.prototype.startContainer = function() {
 						debug('Removed repo files');
 					}
 
-					fulfill(self.output);
+					fulfill();
 				});
 			}
 
@@ -214,7 +217,10 @@ Builder.prototype.startContainer = function() {
 
 				debug('Git clone finished');
 
-				var cmd;
+				var convert = new Convert();
+
+				var cmd,
+					lastWrite = new Date();
 
 				if (constants.isDevelopment) {
 					debug('Running: dockunit ' + directory + '/' + repository + '/' + commit);
@@ -230,14 +236,48 @@ Builder.prototype.startContainer = function() {
 					self.ping();
 
 					console.log('' + data);
-					self.output += '' + data;
+
+					self.build.output += convert.toHtml('' + data);
+
+					var now = new Date();
+
+					if (now.getTime() > lastWrite.getTime() + (1000 * 30)) {
+						lastWrite = new Date();
+
+						self.build.save(function(error) {
+							self.ping();
+
+							if (error) {
+								debug('Could not save build progress');
+							} else {
+								debug('Saved build progress');
+							}
+						});
+					}
 				});
 
 				cmd.stderr.on('data', function(data) {
 					self.ping();
 
 					console.log('' + data);
-					self.output += '' + data;
+
+					self.build.output += convert.toHtml('' + data);
+
+					var now = new Date();
+
+					if (now.getTime() > lastWrite.getTime() + (1000 * 30)) {
+						lastWrite = new Date();
+						
+						self.build.save(function(error) {
+							self.ping();
+
+							if (error) {
+								debug('Could not save build progress');
+							} else {
+								debug('Saved build progress');
+							}
+						});
+					}
 				});
 
 				cmd.on('exit', dockunitCallback);
@@ -257,12 +297,12 @@ Builder.prototype.finish = function() {
 	return new NPromise(function(fulfill, reject) {
 		self.ping();
 
-		self.build.output = self.output;
 		self.build.finished = new Date();
-		self.build.result = self.outputCode;
 
 		self.build.save(function(error) {
-			self.ping();
+			if (self.progressInterval) {
+				clearInterval(self.progressInterval)
+			}
 
 			if (error) {
 				debug('Could not save completed build');
@@ -291,7 +331,7 @@ Builder.prototype.finish = function() {
 			debug('Build finish saved to project');
 
 			fulfill();
-		})
+		});
 	});
 };
 
