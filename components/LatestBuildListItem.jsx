@@ -47,6 +47,14 @@ class LatestBuildListItem extends React.Component {
 		this.setState({ showBuildDetails: !this.state.showBuildDetails });
 	}
 
+	componentDidMount() {
+		let self = this;
+
+		setInterval(function() {
+			self.setState({lastRendered: new Date()});
+		}, 20 * 1000); // Re-render every 20 seconds
+	}
+
 	render() {
 		let statusClasses = 'status glyphicon ';
 		let githubUrl = 'https://github.com/' + this.props.repository;
