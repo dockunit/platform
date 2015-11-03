@@ -27,10 +27,13 @@ class ProjectListItem extends React.Component {
 
 		let commitUrl = githubUrl + '/commit/' + latestBuild.commit;
 
+		let commitUser = '';
+
 		if (!this.props.project.builds.length) {
 			statusClasses += 'glyphicon-option-horizontal';
 		} else {
-			userUrl = 'https://github.com/' + latestBuild.commitUser;
+			userUrl = (latestBuild.commitUser) ? 'https://github.com/' + latestBuild.commitUser : '';
+			commitUser = (latestBuild.commitUser) ? latestBuild.commitUser : 'Unknown';
 
 			if (latestBuild) {
 				if (latestBuild.finished) {
@@ -81,7 +84,7 @@ class ProjectListItem extends React.Component {
 
 						<If test={this.props.project.builds.length}>
 							<div className="item">
-								Commit <a href={commitUrl}><strong>{latestBuild && shortCommit}</strong></a> by <a href={userUrl}><strong>{latestBuild && latestBuild.commitUser}</strong></a>
+								Commit <a href={commitUrl}><strong>{latestBuild && shortCommit}</strong></a> by <a href={userUrl}><strong>{commitUser}</strong></a>
 							</div>
 						</If>
 
