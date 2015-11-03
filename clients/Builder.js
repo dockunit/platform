@@ -62,7 +62,7 @@ Builder.prototype.ping = function() {
 };
 
 /**
- * This whole thing is a race condition. But that chances of a program containing after doing
+ * This whole thing is a race condition. But the chances of a program continuing after doing
  * nothing for 30 minutes are extremely low.
  */
 Builder.prototype.startProgressListener = function() {
