@@ -75,7 +75,7 @@ class Introduction extends React.Component {
 
 				<p>Dockunit is an npm package that lets you run containerized tests. You can run Dockunit 
 				locally on your machine. Dockunit.io is a continuous integration service that works with 
-				Github to continouly run the Dockunit npm package on your projects as they receive 
+				Github to continuously run the Dockunit npm package on your projects as they receive 
 				updates and pull requests on Github.</p>
 
 				<p><strong>What is Docker?</strong></p>
