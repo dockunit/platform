@@ -1,17 +1,21 @@
 'use strict';
 
 import {BaseStore} from 'fluxible/addons';
+import _ from 'lodash';
 
 class PostsStore extends BaseStore {
 	constructor(dispatcher) {
 		super(dispatcher);
 
-		this.posts = null;
+		this.posts = {};
+		this.mainLoadComplete = false;
+		this.formatPostsObject = this.formatPostsObject.bind(this);
 	}
 
 	getState() {
 		return {
-			posts: this.posts
+			posts: this.posts,
+			mainLoadComplete: this.mainLoadComplete
 		};
 	}
 
@@ -21,16 +25,42 @@ class PostsStore extends BaseStore {
 
 	rehydrate(state) {
 		this.posts = state.posts;
+		this.mainLoadComplete = state.mainLoadComplete;
+	}
+
+	readPostSuccess(posts) {
+		this.posts = _.extend(this.posts, this.formatPostsObject(posts));
+
+		this.emitChange();
 	}
 
 	readPostsSuccess(posts) {
-		this.posts = posts;
+		this.mainLoadComplete = true;
+
+		this.posts = _.extend(this.posts, this.formatPostsObject(posts));
+
 		this.emitChange();
+	}
+
+	readPostsFailure() {
+		this.mainLoadComplete = true;
+	}
+
+	formatPostsObject(postsArray) {
+		let postsObject = {};
+
+		postsArray.forEach(function(post) {
+			postsObject[post.slug] = post;
+		});
+		
+		return postsObject;
 	}
 }
 
 PostsStore.handlers = {
-	'READ_POSTS_SUCCESS': 'readPostsSuccess'
+	'READ_POSTS_SUCCESS': 'readPostsSuccess',
+	'READ_POSTS_FAILURE': 'readPostsFailure',
+	'READ_POST_SUCCESS': 'readPostSuccess'
 };
 
 PostsStore.storeName = 'PostsStore';

@@ -40,6 +40,7 @@ class Application extends React.Component {
         let Handler = this.props.currentRoute.get('handler');
         let params = this.props.currentRoute.get('params');
         let repository = false;
+        let postSlug = params.get('postSlug');
         let redirectPath = false;
 
         let classes = '';
@@ -75,7 +76,7 @@ class Application extends React.Component {
 
                 <Nav selected={this.props.currentRoute.get('page')} redirectPath={redirectPath} />
                 
-                <Handler repository={repository} redirectPath={redirectPath} />
+                <Handler repository={repository} redirectPath={redirectPath} postSlug={postSlug}  />
 
 				<div className="container">
 					<hr />

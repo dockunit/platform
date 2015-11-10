@@ -3,14 +3,14 @@
 import React from 'react';
 import If from './If';
 import {connectToStores} from 'fluxible-addons-react';
-import readPosts from '../actions/readPosts';
+import readPost from '../actions/readPost';
 import PostsStore from '../stores/PostsStore';
 import Post from './Post';
 
 @connectToStores(['PostsStore'], (context, props) => ({
     PostsStore: context.getStore(PostsStore).getState()
 }))
-class Blog extends React.Component {
+class BlogPost extends React.Component {
 	constructor(props, context) {
         super(props, context);
     }
@@ -21,36 +21,28 @@ class Blog extends React.Component {
     }
 	
 	componentDidMount() {
-		if (false === this.props.PostsStore.mainLoadComplete) {
-			this.context.executeAction(readPosts);
+		if ('undefined' === typeof this.props.PostsStore.posts[this.props.postSlug]) {
+			this.context.executeAction(readPost, this.props.postSlug);
 		}
 	}
 
     render() {
-    	let posts = Object.keys(this.props.PostsStore.posts).map(function(key) {
-    		return this.props.PostsStore.posts[key];
-    	}, this);
-
     	return (
             <div className="container">
 				<div className="blog">
-					<If test={false === this.props.PostsStore.mainLoadComplete}>
+					<If test={'undefined' === typeof this.props.PostsStore.posts[this.props.postSlug]}>
 						<div className="loading-section">
 							<h3><span className="glyphicon glyphicon-refresh" aria-hidden="true"></span></h3>
 						</div>
 					</If>
 
-					<If test={this.props.PostsStore.mainLoadComplete && posts && !posts.length}>
-						<h3>Hey, no posts to show right now. Check back later!</h3>
+					<If test={false === this.props.PostsStore.posts[this.props.postSlug]}>
+						<h3>This post was not found.</h3>
 					</If>
 
-					<If test={this.props.PostsStore.mainLoadComplete && posts && posts.length}>
+					<If test={this.props.PostsStore.posts[this.props.postSlug]}>
 						<div className="posts">
-							{posts && posts.map(function(post) {
-								if (post) {
-									return <Post post={post} />
-								}   
-			                })}
+							<Post single={true} post={this.props.PostsStore.posts[this.props.postSlug]} /> 
 		                </div>
 					</If>
 				</div>
@@ -59,4 +51,4 @@ class Blog extends React.Component {
     }
 }
 
-export default Blog;
+export default BlogPost;

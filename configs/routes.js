@@ -40,6 +40,17 @@ export default {
             done();
         }
 	},
+	blogPost: {
+		path: '/blog/:postSlug',
+		method: 'get',
+		page: 'blogPost',
+		title: 'Blog Post',
+		handler: require('../components/BlogPost'),
+		action: (context, payload, done) => {
+            context.dispatch('UPDATE_PAGE_TITLE', { pageTitle: 'Dockunit.io - Blog' });
+            done();
+        }
+	},
 	login: {
 		path: '/login',
 		method: 'get',

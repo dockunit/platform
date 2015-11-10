@@ -25,7 +25,8 @@ class LatestBuildListItem extends React.Component {
     }
 
 	state = {
-		showBuildDetails: false
+		showBuildDetails: false,
+		rerunDisabled: false
 	}
 
 	toggleShowDockunitSetup(event) {
@@ -135,7 +136,15 @@ class LatestBuildListItem extends React.Component {
 			lastRan = 'Finished ' + timeago(this.props.build.started);
 		}
 
-    	let rerunDisabled = (this.props.build.started && this.props.build.finished) ? false : true;
+    	let rerunDisabled = false;
+
+    	if (!this.props.build.started || !this.props.build.finished) {
+    		rerunDisabled = true;
+    	} else {
+    		if (this.state.rerunDisabled) {
+    			rerunDisabled = true;
+    		} 
+    	}
 
 		return (
 			<div className="project-item latest-build jumbo">
