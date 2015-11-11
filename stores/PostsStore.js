@@ -9,7 +9,6 @@ class PostsStore extends BaseStore {
 
 		this.posts = {};
 		this.mainLoadComplete = false;
-		this.formatPostsObject = this.formatPostsObject.bind(this);
 	}
 
 	getState() {
@@ -28,8 +27,12 @@ class PostsStore extends BaseStore {
 		this.mainLoadComplete = state.mainLoadComplete;
 	}
 
-	readPostSuccess(posts) {
-		this.posts = _.extend(this.posts, this.formatPostsObject(posts));
+	readPostSuccess(payload) {
+		if (!payload.posts) {
+			this.posts[payload.slug] = false;
+		} else {
+			this.posts = _.extend(this.posts, this.formatPostsObject(payload.posts));
+		}
 
 		this.emitChange();
 	}
@@ -37,13 +40,15 @@ class PostsStore extends BaseStore {
 	readPostsSuccess(posts) {
 		this.mainLoadComplete = true;
 
-		this.posts = _.extend(this.posts, this.formatPostsObject(posts));
+		this.posts = this.formatPostsObject(posts);
 
 		this.emitChange();
 	}
 
 	readPostsFailure() {
 		this.mainLoadComplete = true;
+
+		this.emitChange();
 	}
 
 	formatPostsObject(postsArray) {

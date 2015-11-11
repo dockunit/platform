@@ -5924,6 +5924,10 @@ h2 {
   margin-right: 6px;
   border-radius: 100px; }
 
+.no-posts, .no-post {
+  text-align: center;
+  margin-top: 3.5em; }
+
 .submit-notification-icon {
   visibility: hidden;
   display: inline;

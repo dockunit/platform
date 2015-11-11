@@ -13,7 +13,11 @@ module.exports = function (context, payload, done) {
 			return;
 		}
 
-		context.dispatch('READ_POST_SUCCESS', posts);
+		if (!posts.length) {
+			posts = false;
+		}
+
+		context.dispatch('READ_POST_SUCCESS', { posts: posts, slug: payload });
 		done();
 	});
 };

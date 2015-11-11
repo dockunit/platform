@@ -33,6 +33,7 @@ var updateCsrfToken = require('./actions/updateCsrfToken');
 var updateCurrentUser = require('./actions/updateCurrentUser');
 var updateLoginHeaderStatus = require('./actions/updateLoginHeaderStatus');
 var updateLoginFormStatus = require('./actions/updateLoginFormStatus');
+var readPost = require('./actions/readPost');
 var constants = require('./constants');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
@@ -323,20 +324,39 @@ server.use(function(req, res, next) {
             return;
         }
 
-        debug('Exposing context state');
-        var exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+        if (req.url.match(/^\/blog\/.+$/i)) {
+        	context.executeAction(readPost, req.url.replace(/^\/blog\/(.+)\/?$/i, '$1'), function() {
+        		debug('Exposing context state');
+		        var exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
 
-        debug('Rendering Application component into html');
-        var html = React.renderToStaticMarkup(htmlComponent({
-            context: context.getComponentContext(),
-            state: exposed,
-            markup: React.renderToString(createElement(context))
-        }));
+		        debug('Rendering Application component into html');
+		        var html = React.renderToStaticMarkup(htmlComponent({
+		            context: context.getComponentContext(),
+		            state: exposed,
+		            markup: React.renderToString(createElement(context))
+		        }));
 
-        debug('Sending markup');
-        res.type('html');
-        res.write('<!DOCTYPE html>' + html);
-        res.end();
+		        debug('Sending markup');
+		        res.type('html');
+		        res.write('<!DOCTYPE html>' + html);
+		        res.end();
+        	})
+        } else {
+	        debug('Exposing context state');
+	        var exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';
+
+	        debug('Rendering Application component into html');
+	        var html = React.renderToStaticMarkup(htmlComponent({
+	            context: context.getComponentContext(),
+	            state: exposed,
+	            markup: React.renderToString(createElement(context))
+	        }));
+
+	        debug('Sending markup');
+	        res.type('html');
+	        res.write('<!DOCTYPE html>' + html);
+	        res.end();
+	    }
     });
 });
 

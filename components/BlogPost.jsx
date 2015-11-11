@@ -6,6 +6,7 @@ import {connectToStores} from 'fluxible-addons-react';
 import readPost from '../actions/readPost';
 import PostsStore from '../stores/PostsStore';
 import Post from './Post';
+import {NavLink} from 'fluxible-router';
 
 @connectToStores(['PostsStore'], (context, props) => ({
     PostsStore: context.getStore(PostsStore).getState()
@@ -37,7 +38,9 @@ class BlogPost extends React.Component {
 					</If>
 
 					<If test={false === this.props.PostsStore.posts[this.props.postSlug]}>
-						<h3>This post was not found.</h3>
+						<div className="no-post">
+							<h3>We couldn't find this post. Sorry!</h3>
+						</div>
 					</If>
 
 					<If test={this.props.PostsStore.posts[this.props.postSlug]}>

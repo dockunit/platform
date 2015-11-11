@@ -3,6 +3,7 @@
 import React from 'react';
 import If from './If';
 import timeago from 'timeago';
+import {NavLink} from 'fluxible-router';
 
 class Post extends React.Component {
 
@@ -14,7 +15,7 @@ class Post extends React.Component {
 		return (
 			<div id={post.slug} className="post">
 				<If test={!this.props.single}>
-					<h1><a href={singleUrl}>{post.title.rendered}</a></h1>
+					<h1><NavLink routeName="blogPost" navParams={{postSlug: post.slug}}>{post.title.rendered}</NavLink></h1>
 				</If>
 
 				<If test={this.props.single}>
