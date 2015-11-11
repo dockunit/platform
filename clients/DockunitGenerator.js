@@ -35,7 +35,7 @@ class Generator {
 			}
 
 			if ('java' == params.language) {
-				tag = 'java-maven-ant-gradle-openjdk-' + versionMap.java[version] + '-jdk';
+				tag = 'java-maven-ant-gradle-openjdk-' + versionMap.java[version];
 
 				if ('Gradle' === params.buildTool) {
 					testCommand = 'gradle build';
