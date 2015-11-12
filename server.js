@@ -340,7 +340,7 @@ server.use(function(req, res, next) {
 		        res.type('html');
 		        res.write('<!DOCTYPE html>' + html);
 		        res.end();
-        	})
+        	});
         } else {
 	        debug('Exposing context state');
 	        var exposed = 'window.App=' + serialize(app.dehydrate(context)) + ';';

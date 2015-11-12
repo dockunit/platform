@@ -34,7 +34,7 @@ class Home extends React.Component {
 					<div className="container">
 						<div className="text-wrapper">
 							<h1>Welcome to Dockunit.io</h1>
-							<p>Dockunit.io is a <strong>containerized</strong> continuous integration testing service for running Dockunit test suites hosted on <strong>Github</strong>.</p>
+							<p>Dockunit.io is a <strong>containerized</strong> continuous integration testing service for testing software written in any language across any type of environment.</p>
 							<div className="button-wrapper">
 								<NavLink className="btn btn-primary btn-lg" role="button" routeName="register">Sign up »</NavLink>
 							</div>
