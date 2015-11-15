@@ -232,7 +232,7 @@ Builder.prototype.startContainer = function() {
 					cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit]);
 				}
 
-				cmd.stdout.on('data', function(data) {
+				cmd.stdout.on('data',  function(data) {
 					self.ping();
 
 					console.log('' + data);
