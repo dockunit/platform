@@ -150,27 +150,40 @@ var branches = {
 
 			debug('Get github branches');
 
-			httpInvoke('https://api.github.com/repos/' + repository + '/branches?access_token=' + token, 'GET', {
-				headers: {
-					'User-Agent': 'Dockunit'
-				}
-			}, function(error, body, statusCode, headers) {
+			var branchesObject = {};
 
-				if (error) {
-					debug('Failed to get Github repository branches: ' + error);
-					reject(error);
-				} else {
-					var bodyObject = JSON.parse(body);
-
-					var branchesObject = {};
-
-					for (var i = 0; i < bodyObject.length; i++) {
-						branchesObject[bodyObject[i].name] = bodyObject[i];
+			function fetch(page) {
+				httpInvoke('https://api.github.com/repos/' + repository + '/branches?per_page=100&page=' + page + '&access_token=' + token, 'GET', {
+					headers: {
+						'User-Agent': 'Dockunit'
 					}
+				}, function(error, body, statusCode, headers) {
+					if (error) {
+						debug('Failed to get branches: ' + error);
+						reject(error);
+					} else {
+						debug('Found Github branches');
 
-					fulfill(branchesObject);
-				}
-			});
+						var parsedHeaders = (headers.link) ? parseLinkHeader(headers.link) : {};
+
+						var bodyObject = JSON.parse(body);
+
+						for (var i = 0; i < bodyObject.length; i++) {
+							branchesObject[bodyObject[i].name] = bodyObject[i];
+						}
+
+						if (parsedHeaders.next) {
+							fetch(parsedHeaders.next.page);
+						} else {
+							debug('Returning Github branches');
+							fulfill(branchesObject);
+							return;
+						}
+					}
+				});
+			}
+
+			fetch(1);
 		});
 	}
 };
