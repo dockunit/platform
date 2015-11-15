@@ -227,9 +227,9 @@ Builder.prototype.startContainer = function() {
 
 					cmd = spawn('dockunit', [directory + '/' + repository + '/' + commit]);
 				} else {
-					debug('Running: ssh dockunit@worker-1 "dockunit ' + directory + '/' + repository + '/' + commit + ' --du-verbose"');
+					debug('Running: ssh dockunit@worker-1 "dockunit ' + directory + '/' + repository + '/' + commit + '"');
 
-					cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit + '\ --du-verbose']);
+					cmd = spawn('ssh', ['dockunit@worker-1', 'dockunit\ ' + directory + '/' + repository + '/' + commit]);
 				}
 
 				cmd.stdout.on('data', function(data) {
