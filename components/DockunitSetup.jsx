@@ -800,6 +800,12 @@ class DockunitjsonCreate extends React.Component {
 			wrapperClasses = 'generated';
 		}
 
+		let beforeScripts = '';
+
+		if ('nodejs' === this.state.language.value) {
+			beforeScripts = 'npm install';
+		}
+
 		return (
 			<div className={wrapperClasses}>
 				<h2>Creating a Dockunit.json File</h2>
@@ -1052,6 +1058,7 @@ class DockunitjsonCreate extends React.Component {
 									className="form-control"
 									id="beforeScripts"
 									type="textarea"
+									value={beforeScripts}
 									rows={4}
 									errors={this.state.beforeScripts.errors}
 								/>
@@ -1079,6 +1086,7 @@ class DockunitjsonCreate extends React.Component {
 									id="beforeScripts"
 									type="textarea"
 									rows={4}
+									value={beforeScripts}
 									errors={this.state.beforeScripts.errors}
 								/>
 

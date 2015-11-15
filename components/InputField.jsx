@@ -24,6 +24,8 @@ class Field extends React.Component {
 			labelClasses += 'required';
 		}
 
+		let textareaValue = (this.props.value) ? this.props.value : '';
+
 		return (
 			<div className={groupClasses}>
 				<label className={labelClasses} for={this.props.id}>{this.props.label}:</label>
@@ -38,6 +40,7 @@ class Field extends React.Component {
 						required={this.props.required}
 						onChange={this.props.onChange}
 					>
+					{textareaValue}
 					</textarea>
 				</If>
 
@@ -48,6 +51,7 @@ class Field extends React.Component {
 						onBlur={this.props.onBlur}
 						name={this.props.name}
 						id={this.props.id}
+						value={this.props.value}
 						required={this.props.required}
 						onChange={this.props.onChange}
 					/>
