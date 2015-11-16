@@ -151,6 +151,9 @@ module.exports = {
 											projects.push(project);
 
 											getHotProject();
+										} else {
+											// Skip this project
+											getHotProject();
 										}
 									} else {
 										getHotProject();
