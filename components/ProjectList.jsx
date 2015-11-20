@@ -24,6 +24,8 @@ class ProjectList extends React.Component {
 	render() {
 		let projects = ProjectsStore.filterMyProjects(this.props.ProjectsStore.projects);
 
+		console.log(this.props.ProjectsStore);
+
 		return (
 			<div>
 				<Help>
@@ -56,12 +58,6 @@ class ProjectList extends React.Component {
 					</div>
 				</If>
 
-				<If test={null === projects}>
-					<div className="loading-section">
-						<span className="glyphicon glyphicon-refresh" aria-hidden="true"></span>
-					</div>
-				</If>
-
 				<If test={projects instanceof Object && Object.keys(projects).length > 0}>
 					<div className="projects">
 						{projects instanceof Object && Object.keys(projects).map(function(projectRepository) {
@@ -69,6 +65,12 @@ class ProjectList extends React.Component {
 		                })}
 	                </div>
                 </If>
+
+                <If test={this.props.ProjectsStore.loadingMyProjects || null === projects}>
+					<div className="loading-section">
+						<span className="glyphicon glyphicon-refresh" aria-hidden="true"></span>
+					</div>
+				</If>
 			</div>
 		);
 	}

@@ -5,6 +5,8 @@
 import updateShowHelp from './updateShowHelp';
 
 module.exports = function (context, payload, done) {
+	context.dispatch('READ_MY_PROJECTS_START');
+
 	context.service.read('projects', payload, {}, function (error, projects) {
 		if (error) {
 			context.dispatch('READ_MY_PROJECTS_FAILURE', payload);

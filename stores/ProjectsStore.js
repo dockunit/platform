@@ -9,8 +9,19 @@ class ProjectsStore extends BaseStore {
 		super(dispatcher);
 
 		this.projects = null;
+		this.loadingMyProjects = false;
 		this.hotProjects = null;
 		this.projectsNotFound = {};
+	}
+
+	readMyProjectsStart() {
+		this.loadingMyProjects = true;
+		this.emitChange();
+	}
+
+	readMyProjectsFailure() {
+		this.loadingMyProjects = false;
+		this.emitChange();
 	}
 
 	updateProjectBuild(payload) {
@@ -36,6 +47,7 @@ class ProjectsStore extends BaseStore {
 
 	readMyProjectsSuccess(projects) {
 		this.projects = projects;
+		this.loadingMyProjects = false;
 		this.emitChange();
 	}
 
@@ -95,7 +107,8 @@ class ProjectsStore extends BaseStore {
 		return {
 			projects: this.projects,
 			hotProjects: this.hotProjects,
-			projectsNotFound: this.projectsNotFound
+			projectsNotFound: this.projectsNotFound,
+			loadingMyProjects: this.loadingMyProjects
 		};
 	}
 
@@ -131,6 +144,7 @@ class ProjectsStore extends BaseStore {
 		this.projects = state.projects;
 		this.hotProjects = state.hotProjects;
 		this.projectsNotFound = state.projectsNotFound;
+		this.loadingMyProjects = state.loadingMyProjects;
 	}
 }
 
@@ -145,7 +159,9 @@ ProjectsStore.handlers = {
 	'UPDATE_PROJECT_SUCCESS': 'updateProjectSuccess',
 	'UPDATE_PROJECT_BUILD': 'updateProjectBuild',
 	'NEW_PROJECT_BUILD': 'newProjectBuild',
-	'RERUN_PROJECT_BUILD': 'rerunProjectBuild'
+	'RERUN_PROJECT_BUILD': 'rerunProjectBuild',
+	'READ_MY_PROJECTS_START': 'readMyProjectsStart',
+	'READ_MY_PROJECTS_FAILURE': 'readMyProjectsFailure'
 };
 
 ProjectsStore.storeName = 'ProjectsStore';
