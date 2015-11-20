@@ -113,11 +113,15 @@ class LatestBuildListItem extends React.Component {
     	let output = this.props.build.output
     		.replace(/\<span(.*?)\>/gi, '[#%span$1]')
     		.replace(/\<\/span\>/gi, '[#%/span]')
+    		.replace(/\<u(.*?)\>/gi, '[#%u$1]')
+    		.replace(/\<\/u\>/gi, '[#%/u]')
     		.replace(/&/g, '&amp;')
     		.replace(/\>/g, '&gt;')
     		.replace(/\</g, '&lt;')
     		.replace(/\[#%span(.*?)\]/g, '<span$1>')
-    		.replace(/\[#%\/span\]/g, '</span>');
+    		.replace(/\[#%\/span\]/g, '</span>')
+    		.replace(/\[#%u(.*?)\]/g, '<u$1>')
+    		.replace(/\[#%\/u\]/g, '</u>');
 
     	output = output.trim().replace(/^(\r\n|\n|\r)/g, '').replace(/(?:\r\n|\r|\n)/g, '<br />');
 
